@@ -1,0 +1,44 @@
+{% load i18n %}
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+{% block header %}
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %} | [Synclee]</title>
+    <link type="text/css" rel="stylesheet/less" href="/static/css/style.less"/>
+    <link rel="stylesheet/less" type="text/css" href="/static/css/bootstrap/bootstrap.less">
+    <script type="text/javascript" src="/static/js/less-1.1.5.min.js"></script>
+</head>
+<body>
+<header>
+<div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar" data-dropdown="dropdown">
+      <div class="topbar-inner">
+        <div class="container">
+          <h3><a href="#">Synclee</a></h3>
+          <ul class="nav">
+            <li class="active"><a href="#">首页</a></li>
+            <li><a href="#">文字</a></li>
+            <li><a href="#">漫画</a></li>
+            <li><a href="#">图集</a></li>
+          </ul>
+          <form class="pull-left" action="">
+            <input type="text" placeholder="Search">
+          </form>
+          <ul class="nav secondary-nav">
+            <li><a href="#">登录</a></li>
+            <li><a href="#">注册</a></li>
+          </ul>
+        </div>
+      </div><!-- /topbar-inner -->
+    </div><!-- /topbar -->
+  </div>
+</header>
+
+{% endblock %}
+
+{% block extrahead %}{% endblock %}
+
+{% block content %}{% endblock %}
+</body>
+</html>
