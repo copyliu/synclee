@@ -1,0 +1,6 @@
+Django
+easy_thumbnails
+django-relationships
+django-notification
+#registration
+
