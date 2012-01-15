@@ -2,5 +2,6 @@ Django
 easy_thumbnails
 django-relationships
 django-notification
+django-taggit
 #registration
 
