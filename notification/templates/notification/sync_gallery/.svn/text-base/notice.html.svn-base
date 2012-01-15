@@ -1,1 +1,0 @@
-<a href="/{{notice.sender.username}}/">{{ notice.sender.get_profile.get_name }}</a> 将图集 <a href="{{gallery.get_absolute_url}}">{{gallery.title}}</a> 同步到了 <a href="{{other_work.get_absolute_url}}">{{other_work.name}}</a>

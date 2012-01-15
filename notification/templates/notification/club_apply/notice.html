@@ -1,4 +1,0 @@
-{% load i18n %}
-<a href="{{from_user.get_absolute_url}}">{{ from_user.get_profile.get_name }}</a> 申请加入您的社团 <a href="{{club.get_absolute_url}}">{{club.name}}</a> <br>
-理由：{{membership.reason}}<br>
-<a href="{% url AcceptClubMember %}?membership_id={{membership.id}}">接受</a> <a href="{% url DenyClubMember %}?membership_id={{membership.id}}">拒绝</a>

@@ -1,9 +1,0 @@
-<div class="projects recommended">
-	<h3>推荐作品</h3>
-	{% include "inc/project-list/list.html" %}
-	<ul class="more">
-		<li>查看全部 <a href="/search/?query=&catalog=fiction">文字...</a></li>
-		<li><a href="/search/?query=&catalog=comic">漫画...</a></li>
-		<li><a href="/search/?query=&catalog=illust">图集...</a></li>
-	</ul>
-</div>

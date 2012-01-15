@@ -1,2 +1,0 @@
-{% load i18n %}
-创建了作品 <a href="{{work.get_absolute_url}}"  class="update">{{work.name}}</a>

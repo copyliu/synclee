@@ -1,3 +1,0 @@
-<div class="section" id="sec-01">
-        {% include "inc/view/text.html" %}
-</div>

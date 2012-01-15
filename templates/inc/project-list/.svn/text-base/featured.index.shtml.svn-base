@@ -1,4 +1,0 @@
-{% load thumbnail %}
-<div class="project featured box top">
-	<a href="{{feature.get_absolute_url}}"><img src="/uploads/{% thumbnail feature.cover 470x1000 %}" /><span><em>{{feature.name}}</em> <!--<q>{{feature.intro}}</q>--> <cite>by {{feature.founder.get_profile.get_name}}</cite></span></a>
-</div>

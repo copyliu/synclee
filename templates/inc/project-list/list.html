@@ -1,6 +1,0 @@
-{% load thumbnail %}
-<ul class="list">
-	{% for r in recommand %}
-	<li><a href="{{r.get_absolute_url}}"><img src="/uploads/{% thumbnail r.get_cover 200x200 %}"><span class="caption">{{r.name}}</span> <strong class="updates">{{r.push}}</strong></a></li>
-	{% endfor %}
-</ul>

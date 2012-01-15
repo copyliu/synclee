@@ -1,1 +1,0 @@
-{% load i18n %} {{ site.name }} 的注册确认邮件

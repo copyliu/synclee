@@ -1,4 +1,0 @@
-
-<a href="{{from_user.get_absolute_url}}">{{ from_user.get_profile.get_name }}</a> 邀请您加入作品 <a href="{{work.get_absolute_url}}">{{work.name}}</a> <br>
-理由：{{membership.reason}}<br>
-<a href="{% url AcceptWorkMember %}?membership_id={{membership.id}}">接受</a> <a href="{% url DenyWorkMember %}?membership_id={{membership.id}}">拒绝</a>

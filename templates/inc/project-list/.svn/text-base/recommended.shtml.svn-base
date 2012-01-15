@@ -1,3 +1,0 @@
-<div class="projects recommended">
-	{% include "inc/project-list/list.html" %}
-</div>

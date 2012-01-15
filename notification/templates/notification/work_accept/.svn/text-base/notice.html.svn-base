@@ -1,1 +1,0 @@
-<a href="{{from_user.get_absolute_url}}">{{ from_user.get_profile.get_name }}</a> 同意了您关于作品 <a href="{{work.get_absolute_url}}">{{work.name}}</a> 的申请/邀请<br>
