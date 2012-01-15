@@ -1,0 +1,36 @@
+{% extends "base.shtml" %}
+{% block title %}提醒 | 回复{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+	{% include "style-notification.html" %}
+{% endblock %}
+
+
+{% block content %}
+<body class="p-notifications si">
+{% include "inc/navi.html" %}
+{% include "notification/header.html" %}
+<div class="master" id="dm_general">        
+        <div id="dm11" class="notification-type timeline">
+        <h3>新的回复</h3>
+        <ol class="list">
+        {% for n in reply %}
+            {% if n.notice_type.label == "new_reply" and n.unseen %}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar}}"/></span>{{n.sender.get_profile.get_name}}</a> <strong>给您留言了</strong></cite>
+                    <span class="meta"><a href="{% url notification_notice n.id %}">查看</a> | {{n.added|timesince}}前</span>
+            </li>
+            {% endif %}
+	{% empty %}
+	    <blockquote>没有新回复</blockquote>
+        {% endfor %}
+        </ol>
+        </div>
+	
+	{% include "notification/rep_old.html" %}
+</div>
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

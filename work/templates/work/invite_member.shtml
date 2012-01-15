@@ -1,0 +1,40 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}邀请 {{to_user.get_profile.get_name}}{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">{% include "inc/navi.html" %}
+	<form class="master" method="post" action="">
+		<h2>邀请 {{to_user.get_profile.get_name}}</h2>
+                <label class="required">
+			<span>作品选择</span>
+			<select name="work_id" id="work_id">
+				{% for w in works %}
+                                    <option value={{w.id}}>{{w.name}}</option>
+                                {% endfor %}
+			</select>
+		</label>
+		<label class="required">
+			<span>能力选择</span>
+			<select name="ability_id" id="ability_id">
+				{% for a in f_ability %}
+                                    <option value={{a.id}}>{{a.tab_name}}</option>
+                                {% endfor %}
+			</select>
+		</label>
+		<label>
+			<span>邀请宣言</span>  <textarea name="reason" id="reason"></textarea>
+		</label>
+		<div class="label submit">
+			<input type="submit" value="邀请"/>
+		</div>
+	</form>
+{% include "inc/footer.html" %}</body>
+{% endblock %}
+

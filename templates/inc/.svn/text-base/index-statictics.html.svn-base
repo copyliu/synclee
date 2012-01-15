@@ -1,0 +1,7 @@
+<ul class="home statictics">
+	<li {% if user.get_profile.unread_notes == 0 %}class="zero"{% endif %}><a href="/notes/"><strong>{{user.get_profile.unread_notes}}</strong> 提醒</a></li>
+	<!-- <li><a href="notifications.shtml#updates"><strong>99+</strong> 更新</a></li> -->
+	<li {% if user.get_profile.get_unread_message == 0 %}class="zero"{% endif %}><a href="/message/"><strong>{{user.get_profile.get_unread_message}}</strong> 私信</a></li>
+	<li {% if user.get_profile.get_unread_inv == 0 %}class="zero"{% endif %}><a href="/notes/?cata=inv"><strong>{{user.get_profile.get_unread_inv}}</strong> 邀请</a></li>
+	<!-- <li><a href="notifications.shtml#issues"><strong>3</strong> 任务单</a></li> -->
+</ul>

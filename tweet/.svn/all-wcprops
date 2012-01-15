@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/mid/!svn/ver/479/synclee/tweet
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/mid/!svn/ver/214/synclee/tweet/admin.py
+END
+management.py
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/mid/!svn/ver/216/synclee/tweet/management.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/mid/!svn/ver/479/synclee/tweet/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/mid/!svn/ver/134/synclee/tweet/__init__.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/mid/!svn/ver/134/synclee/tweet/tests.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/mid/!svn/ver/216/synclee/tweet/models.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/mid/!svn/ver/216/synclee/tweet/urls.py
+END

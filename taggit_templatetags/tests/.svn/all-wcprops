@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/mid/!svn/ver/152/synclee/taggit_templatetags/tests
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/mid/!svn/ver/134/synclee/taggit_templatetags/tests/__init__.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/mid/!svn/ver/152/synclee/taggit_templatetags/tests/tests.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/mid/!svn/ver/152/synclee/taggit_templatetags/tests/models.py
+END

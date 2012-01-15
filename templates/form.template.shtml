@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>创建新作品 - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-form.inc"-->
+</head>
+<body class="p-project-create si"><!--#include file="inc/navi.html"-->
+	<!-- 如果需要，放 snav -->
+	<form class="master">
+		<h2>表单名称</h2>
+		<!-- 只有文本、密码、selsct 使用 <label>，其他用 <div class="label"> -->
+		<!-- 无论使用何种方式，用一个 <span> 把标签放在左边 -->
+		<label class="required">
+			<span>作品名称</span>
+			<input name="title" type="text" value="Project Eynfenia"/> <em>* 此项必须填写</em>
+		</label>
+		<label class="required">
+			<span>作品类型</span>
+			<select name="type">
+				<option value="manga">漫画</option>
+				<option value="illusts">图集</option>
+				<option value="novel">小说</option>
+			</select>
+		</label>
+		<label>
+			<span>作品描述</span>
+			<textarea name="description">只是些无聊的东西罢了</textarea>
+		</label>
+		<label><input name="private" type="checkbox" /> 不对外公开</label>
+		<div class="label">
+			<span><label><input name="asClub" type="checkbox" /> 以社团名义发表</label></span>
+			<select name="clubName" disabled>
+				<option value="areacyn">Areacyn</option>
+			</select>
+		</div>
+		<div class="label">
+			<span>取向</span>
+			<label><input type="radio" name="orientation"/> a</label>
+			<label><input type="radio" name="orientation"/> b</label>
+			<label><input type="radio" name="orientation"/> c</label>
+			<label><input type="radio" name="orientation"/> d</label>
+			<label><input type="radio" name="orientation"/> e</label>
+			<label><input type="radio" name="orientation"/> f</label>
+		</div>
+		<div class="label submit">
+			<input type="submit" value="创建"/>
+		</div>
+	</form>
+
+<!--#include file="inc/footer.html"--></body>
+</html>
+

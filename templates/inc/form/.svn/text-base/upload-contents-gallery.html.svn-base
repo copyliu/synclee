@@ -1,0 +1,13 @@
+<div id="pUploadedContents" class="control">
+	<div class="chapter gallery">
+		<ul class="hlist">
+                        {% for s in chapter.section.all %}
+			<li><a href="#" title="Image" name="{{s.id}}"><img src="/uploads/{{s.picture.url}}" alt="Image" /></a></li>
+                        {% empty %}
+                        <li>暂时还没有图片</li>
+                        {% endfor %}
+		</ul>
+	</div>
+	<!-- 当此按钮点击时，弹出【选择文件】的对话框，接着文件直接上传服务器 -->
+	<button id="btnUploadFile" >上传文件</button>
+</div>

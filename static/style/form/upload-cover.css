@@ -1,0 +1,9 @@
+#pUploadCover > button,
+#pUploadCover > img {
+	vertical-align: top;
+}
+#pUploadCover > img {
+	height: 112px;
+	min-width: 80px;
+	max-width: 300px;
+}

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/mid/!svn/ver/151/synclee/registration/management/commands
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/mid/!svn/ver/131/synclee/registration/management/commands/__init__.py
+END
+cleanupregistration.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/mid/!svn/ver/151/synclee/registration/management/commands/cleanupregistration.py
+END

@@ -1,0 +1,51 @@
+body {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1004px;
+	padding-top: 48px;
+}
+.clear { clear: both }
+
+.di .col { float: left; width: 470px; margin: 0 15px }
+.di .master, .di .slave { float: right; width: 720px; margin: 0 10px }
+.dr .master, .dr .slave { float: left }
+.di .slave { width: 240px }
+.di #footer { clear: both }
+.di .row { margin: 1.5em 0 }
+.col h3 { font-size: 1em; margin: 1.2em 0 0.4em}
+.col > div:first-child h3 { margin-top : 0 }
+
+body.p-view, body.si { width: auto }
+.p-view .master {
+	background: white;
+}
+.p-view > .slave, 
+.p-view > #footer, 
+.p-view > .master > .section > .view-content,
+.p-view > .master > .middle > .section > .view-content,
+.middle > .section > .view-content,
+.p-view > .master > .browse-path,
+.p-view > .master > .snav,
+.si > .slave, 
+.si > #footer,
+.si > .master,
+.si > .snav {
+	margin-left: auto;
+	margin-right: auto;
+	width: 720px
+}
+.p-view .master > .section > .view-content.gallery { 
+	width: auto;
+	margin: 0;
+}
+
+.col .half {
+	width: 235px;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+body.si > form.master {
+	margin-top: 1.5em;
+}

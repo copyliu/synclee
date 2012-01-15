@@ -1,0 +1,6 @@
+{% load i18n %}
+{{ site.name }} 欢迎您的注册:
+
+http://{{ site.domain }}{% url registration_activate activation_key %}
+
+点击以上链接或将其复制到浏览器地址栏中来完成注册。新岚欢迎您！

@@ -1,0 +1,32 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}关于新岚{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-view p-view-text" id="p-view-text">
+	{% if user.is_authenticated %}
+	{% include "inc/navi.html" %}
+	{% else %}
+	{% include "inc/navi.notlogin.html" %}
+        {% endif %}
+    
+        <div class="snav">
+			<ul class="browse-path">
+				<li><a href="/">新岚 - Synclee</a><ul>
+					<li><h1><a href="#">关于新岚</a></h1></li>
+				</ul></li>
+			</ul>
+		</div>
+	<div class="master">
+		<div class="section" id="sec-01">
+			{% include "inc/view/about.html" %}
+		</div>
+	</div>
+	{% include "inc/footer.html" %}
+</body>
+{% endblock %}

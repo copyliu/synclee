@@ -1,0 +1,11 @@
+{% load thumbnail %}
+<div class="projects joined">
+	<h3>随便看看</h3>
+	<ul class="list">
+	{% for r in rand %}
+	<li><a href="{{r.get_absolute_url}}"><img src="/uploads/{% thumbnail r.cover 200x200 %}"/><span class="caption">{{r.name}}</span></a></li>
+	{% endfor %}
+	</ul>
+
+	<a class="more" href="/search/?query=&catalog={{work_catalog}}">全部...</a>
+</div>

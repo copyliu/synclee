@@ -1,0 +1,10 @@
+<div class="projects recommended">
+	<h3>推荐作品</h3>
+	{% include "inc/project-list/list.html" %}
+	<ul class="more">
+		<li>查看全部 <a href="project-cat.shtml">小说...</a></li>
+		<li><a href="project-cat.shtml">漫画...</a></li>
+		<li><a href="project-cat.shtml">图集...</a></li>
+		<li><a href="project-cat.shtml">游戏...</a></li>
+	</ul>
+</div>

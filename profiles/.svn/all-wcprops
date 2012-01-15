@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/mid/!svn/ver/478/synclee/profiles
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/mid/!svn/ver/214/synclee/profiles/admin.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/mid/!svn/ver/478/synclee/profiles/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/mid/!svn/ver/131/synclee/profiles/__init__.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/mid/!svn/ver/131/synclee/profiles/tests.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/mid/!svn/ver/477/synclee/profiles/models.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/mid/!svn/ver/359/synclee/profiles/urls.py
+END

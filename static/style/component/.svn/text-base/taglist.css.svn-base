@@ -1,0 +1,11 @@
+.taglist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.taglist li {
+	display: inline-block;
+	white-space: nowrap;
+	font-size: smaller;
+	padding: 0.2em;
+}

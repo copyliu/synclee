@@ -1,0 +1,19 @@
+<div class="timeline history" id="history-timeline" url="{% url ReWorkHistory work.id %}">
+	<ol class="list">
+		{% for h in history.object_list reversed %}
+		{% ifchanged h.date.date %}
+			</ul>
+		</li>
+		<li>
+			{{h.date|date:"m月d日"}}
+			<ul class="updates">
+		{% endifchanged %}
+			<li class="{{h.mode}}"><cite><a href="{% url People h.user.username %}">{{h.user.get_profile.get_name}}</a></cite> {{h.get_history_message|removetags:"iframe input script body html head title div style table td tr span h1 h2 h3 h4 h5 h6"|safe}} </li>
+		{% empty %}
+		<li>
+			<ul class="updates">
+				<li class="add"><cite><a href="{% url People work.founder.username %}">{{work.founder.get_profile.get_name}}</a></cite> 创建了 <ins><a href="{{work.get_absolute_url}}">{{work.name}}</a></ins></li>
+		{% endfor %}
+	</ol>
+	{% include "inc/pager_history.html" %}
+</div>

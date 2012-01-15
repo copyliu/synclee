@@ -1,0 +1,39 @@
+.timeline.issues > h3 {
+	margin: 1.4em 0 0.2em;
+	color: #666;
+}
+.timeline.closed.issues > h3 {
+	color: #999;
+}
+
+.timeline.issues li .votes,
+.timeline.issues li .closed {
+	display: block;
+	text-align: center;
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 0.8em;
+	left: 8px;
+	font-size: smaller;
+	line-height: 1;
+	color: #999;
+}
+.timeline.issues li .votes > strong {
+	font-size: 150%;
+	display: block;
+	padding: 0.2em 0 0.2em;
+}
+
+
+.timeline.closed.issues .list li {
+	color: #999;
+	border-left-color: #999;
+	background: #f7f7f7;
+}
+.timeline.closed.issues .list li a {
+	color: #999
+}
+.timeline.closed.issues .list li span.closed {
+	line-height: 40px
+}

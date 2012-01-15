@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/mid/!svn/ver/476/synclee/relationships/templates/relationships
+END
+relationship_list.html
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/mid/!svn/ver/337/synclee/relationships/templates/relationships/relationship_list.html
+END
+confirm.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/mid/!svn/ver/476/synclee/relationships/templates/relationships/confirm.html
+END
+success.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/mid/!svn/ver/131/synclee/relationships/templates/relationships/success.html
+END
+list.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/mid/!svn/ver/337/synclee/relationships/templates/relationships/list.html
+END

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>小说频道 - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-index.inc"-->
+	<!--#include file="style-cat.inc"-->
+</head>
+<body class="p-index-cat di">
+	<!--#include file="inc/navi.html"-->
+	<div class="row">
+		<div class="col">
+			<div class="snav">
+				<h1>小说频道</h1>
+				<a href="new-project.shtml" class="button" id="lPostHere">我要发表</a>
+				<form id="catSearch">
+					<input name="query" type="text" /><input name="submit" type="submit" value="搜索" />
+				</form>
+				<ul class="links">
+					<li><a href="project-list.shtml">全部</a></li>
+					<li><a href="project-list.shtml">热评</a></li>
+					<li><a href="project-list.shtml">作者圈</a></li>
+					<li><a href="project-list.shtml">我的关注</a></li>
+				</ul>
+			</div>
+			<!--#include file="inc/project-list/featured.shtml"-->
+			<!--#include file="inc/project-list/recommended.shtml"-->
+		</div>
+		<div class="col">
+			<!--#include file="inc/project-list/newest.shtml"-->
+			<!--#include file="inc/project-list/random.shtml"-->
+			<!--#include file="inc/project-list/rank.shtml"-->
+			<!--#include file="inc/project-list/tags.shtml"-->
+		</div>
+	</div>
+
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>

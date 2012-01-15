@@ -1,0 +1,25 @@
+{% extends "base.shtml" %}
+{% block title %}提醒 | {% block Cata %}{% endblock %}{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+	{% include "style-notification.html" %}
+{% endblock %}
+
+
+{% block content %}
+<body class="p-notifications si">{% include "inc/navi.html" %}
+<div class="snav">
+ <ul class="browse-path">
+  <li><a href="{% url notification_notices %}?cata=app">申请{% if user.get_profile.get_unread_app %} <strong>({{ user.get_profile.get_unread_app }})</strong>{% endif %}</a></li>
+  <li><a href="{% url notification_notices %}?cata=inv">邀请{% if user.get_profile.get_unread_inv %} <strong>({{ user.get_profile.get_unread_inv }})</strong>{% endif %}</a></li>
+  <li><a href="{% url notification_notices %}?cata=agr">确认{% if user.get_profile.get_unread_agr %} <strong>({{ user.get_profile.get_unread_agr }})</strong>{% endif %}</a></li>
+  <li><a href="{% url notification_notices %}?cata=rep">回复{% if user.get_profile.get_unread_agr %} <strong>({{ user.get_profile.get_unread_rep }})</strong>{% endif %}</a></li>
+ </ul>
+</div>
+  {% block notice_body %}
+  {% endblock %}
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

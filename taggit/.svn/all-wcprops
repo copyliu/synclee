@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/mid/!svn/ver/152/synclee/taggit
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/mid/!svn/ver/152/synclee/taggit/admin.py
+END
+managers.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/mid/!svn/ver/151/synclee/taggit/managers.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/mid/!svn/ver/152/synclee/taggit/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/mid/!svn/ver/131/synclee/taggit/__init__.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/mid/!svn/ver/131/synclee/taggit/utils.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/mid/!svn/ver/131/synclee/taggit/models.py
+END
+forms.py
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/mid/!svn/ver/152/synclee/taggit/forms.py
+END

@@ -1,0 +1,13 @@
+{% load thumbnail %}
+<div class="projects" id="search-list" url="{% url ReSearch %}">
+
+<ul class="list recommand">
+	{% for r in result.object_list %}
+	<li><a href="{{r.get_absolute_url}}"><img src="/uploads/{% thumbnail r.get_cover 112x112 %}"/><span class="caption">{{r.get_name}}</span></a></li>
+	{% empty %}
+	<li>没有符合要求的结果</li>
+	{% endfor %}
+</ul>
+
+	{% include "inc/pager_search.html" %}
+</div>

@@ -1,0 +1,25 @@
+<div id="headarea">
+	<h1 id="branding"><a href="/">[Synclee]</a></h1>
+	<form id="navSearch" action="/search/">
+		<input name="query" type="text" /><input name="submit" type="submit" value="搜索" />
+	</form>
+
+	<ul id="navigation">
+		<li><a href="/work/fiction/">文字</a></li>
+		<li><a href="/work/comic/">漫画</a></li>
+		<li><a href="/work/illust/">图集</a></li>
+		<!--
+		<li><a href="/work/game/">游戏</a></li>
+		 <li><a href="project-cat.shtml">线下</a></li> 
+		<li><a href="/club/">社团</a></li>
+		<!-- <li><a href="activities.shtml">展会</a></li> -->
+	</ul>
+	<div id="userarea">
+		<div class="menu">
+			<div class="fn button"><a href="{% url registration_register %}">注册</a></div>
+		</div>
+		<div class="menu">
+			<div class="fn button"><a href="{% url auth_login %}">登录</a></div>
+		</div>
+	</div>
+</div>

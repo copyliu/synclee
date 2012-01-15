@@ -1,0 +1,60 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}修改 {{chapter.title}} {% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-chapter-edit si">{% include "inc/navi.html" %}
+	<!-- 新建图集页就不做了…… 都差不多 -->
+	<script type="text/javascript">
+	module.provide(['pageload', 'jQuery'], function(req){
+		var $ = req('jQuery').$;
+		$(document).ready(function(){
+			var myEditor = new nicEditor({maxHeight:250});
+			myEditor.panelInstance('text_content');
+		});
+		
+	});
+	</script>
+	<div class="snav">
+		<div class="project-info">
+		{% include "inc/project/info.shtml" %}
+		</div>
+		<ul class="browse-path">
+			<li><a href="{{work.get_absolute_url}}">{{work.name}}</a><ul>
+			<li><a href="{{chapter.get_absolute_url}}">{{chapter.title}}</a><ul>
+				<li><h1><a href=".">修改</a></h1></li>
+			</ul></li>
+			</ul></li>
+		</ul>
+	</div>
+
+	<form class="master">
+		<h2>修改 {{chapter.title}}  <a href="#" class="remove" id="del_text">删除章节</a></h2>	
+		{% include "inc/form/upload-contents-chapter.html"  %}
+		<div id="pUploadTextContent" class="overlay control" style="display: none">
+			<label><span>标题</span> <input id="title" type="text" value="" placeholder="请输入标题"/></label>
+			<label><span>正文</span>
+				<textarea id="text_content" style="height: 320px;" placeholder="请输入内容"></textarea>
+			</label>
+			<input id="sid" type="hidden" name="sid" value=""/>
+			<input id="tid" type="hidden" value="{{chapter.id}}"/>
+			<input id="wid" type="hidden" value="{{chapter.work.id}}"/>
+			<div class="label">
+				<button id="btnCommitText">确认</button>
+				<button id="btnCancelText">取消</button>
+				<a href="#" class="remove" id="del_text_section" >删除</a>
+			</div>
+		</div>
+		<div class="label submit">
+			<input type="submit" value="确认"/>
+		</div>
+	</form>
+
+{% include "inc/footer.html" %}</body>
+{% endblock %}

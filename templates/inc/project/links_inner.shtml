@@ -1,0 +1,6 @@
+<ul class="project-links">
+	<li class="issues"><a href="{% url ShowWorkIssue work.id %}">任务单 ({{work.get_active_issue.count}})</a></li>
+	<li class="history"><a href="{% url ShowWorkHistory work.id %}">更新历史</a></li>
+	<li class="authors"><a href="{% url ShowWorkMember work.id %}">作者团队</a></li>
+	<!-- <li class="external"><a href="project.shtml">购买实体</a></li> -->
+</ul>

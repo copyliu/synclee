@@ -1,0 +1,133 @@
+.profile {
+	margin: 0 auto;
+}
+.profile > h2 {
+	font-size: 24px;
+	font-weight: 200;
+	line-height: 49px;
+	height: 48px;
+	margin: 0;
+	padding: 0;
+}
+.profile > h2 > a {
+	color: #333
+}
+.profile > h2 > a:hover { color: #002C92 }
+.profile > h2 > a > .avatar {
+	height: 40px;
+	float: left;
+	margin: 4px 8px 4px 4px;
+}
+
+.profile .statictics {
+	position: absolute;
+	top: 48px;
+	right: 0;
+	margin: 0;
+	padding: 0;
+}
+.profile .statictics li { line-height:1; font-size: 12px; width: 60px }
+.profile .statictics a { border-left: 1px solid #eee; height: 48px }
+.profile .statictics strong { padding-top: 8px; padding-bottom:4px }
+
+.profile .meta {
+	font-size: smaller;
+	margin: 0;
+	border-top: 1px solid #eee;
+	width: 225px;
+	padding: 5px;
+	float: left;
+
+}
+
+.profile ul.abilities {
+	height: 48px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.profile ul.abilities > li {
+	float: left;
+	width: 32px;
+	height: 48px;
+	text-indent: -999em;
+	position: relative;
+	background: white url(image/icon/mu-abilities.gif) no-repeat 0px 0px;
+}
+.profile ul.abilities > li.illust[class~="lv1"] { background-position:  0px -128px}
+.profile ul.abilities > li.litera[class~="lv1"] { background-position: -32px -128px}
+.profile ul.abilities > li.layout[class~="lv1"] { background-position: -64px -128px}
+.profile ul.abilities > li.web[class~="lv1"]    { background-position: -96px -128px}
+.profile ul.abilities > li.music[class~="lv1"]  { background-position: -128px -128px}
+.profile ul.abilities > li.sing[class~="lv1"]   { background-position: -160px -128px}
+.profile ul.abilities > li.prog[class~="lv1"]   { background-position: -192px -128px}
+.profile ul.abilities > li.keng[class~="lv1"]   { background-position: -224px -128px}
+.profile ul.abilities > li.shui[class~="lv1"]   { background-position: -256px -128px-96px}
+
+.profile ul.abilities > li.illust[class~="lv2"] { background-position:  0px -96px}
+.profile ul.abilities > li.litera[class~="lv2"] { background-position: -32px -96px}
+.profile ul.abilities > li.layout[class~="lv2"] { background-position: -64px -96px}
+.profile ul.abilities > li.web[class~="lv2"]    { background-position: -96px -96px}
+.profile ul.abilities > li.music[class~="lv2"]  { background-position: -128px -96px}
+.profile ul.abilities > li.sing[class~="lv2"]   { background-position: -160px -96px}
+.profile ul.abilities > li.prog[class~="lv2"]   { background-position: -192px -96px}
+.profile ul.abilities > li.keng[class~="lv2"]   { background-position: -224px -96px}
+.profile ul.abilities > li.shui[class~="lv2"]   { background-position: -256px -96px}
+
+.profile ul.abilities > li.illust[class~="lv3"] { background-position:  0px -64px}
+.profile ul.abilities > li.litera[class~="lv3"] { background-position: -32px -64px}
+.profile ul.abilities > li.layout[class~="lv3"] { background-position: -64px -64px}
+.profile ul.abilities > li.web[class~="lv3"]    { background-position: -96px -64px}
+.profile ul.abilities > li.music[class~="lv3"]  { background-position: -128px -64px}
+.profile ul.abilities > li.sing[class~="lv3"]   { background-position: -160px -64px}
+.profile ul.abilities > li.prog[class~="lv3"]   { background-position: -192px -64px}
+.profile ul.abilities > li.keng[class~="lv3"]   { background-position: -224px -64px}
+.profile ul.abilities > li.shui[class~="lv3"]   { background-position: -256px -64px}
+
+.profile ul.abilities > li.illust[class~="lv4"] { background-position:  0px -32px}
+.profile ul.abilities > li.litera[class~="lv4"] { background-position: -32px -32px}
+.profile ul.abilities > li.layout[class~="lv4"] { background-position: -64px -32px}
+.profile ul.abilities > li.web[class~="lv4"]    { background-position: -96px -32px}
+.profile ul.abilities > li.music[class~="lv4"]  { background-position: -128px -32px}
+.profile ul.abilities > li.sing[class~="lv4"]   { background-position: -160px -32px}
+.profile ul.abilities > li.prog[class~="lv4"]   { background-position: -192px -32px}
+.profile ul.abilities > li.keng[class~="lv4"]   { background-position: -224px -32px}
+.profile ul.abilities > li.shui[class~="lv4"]   { background-position: -256px -32px}
+
+.profile ul.abilities > li.illust[class~="lv5"] { background-position:  0px 0px}
+.profile ul.abilities > li.litera[class~="lv5"] { background-position: -32px 0px}
+.profile ul.abilities > li.layout[class~="lv5"] { background-position: -64px 0px}
+.profile ul.abilities > li.web[class~="lv5"]    { background-position: -96px 0px}
+.profile ul.abilities > li.music[class~="lv5"]  { background-position: -128px 0px}
+.profile ul.abilities > li.sing[class~="lv5"]   { background-position: -160px 0px}
+.profile ul.abilities > li.prog[class~="lv5"]   { background-position: -192px 0px}
+.profile ul.abilities > li.keng[class~="lv5"]   { background-position: -224px 0px}
+.profile ul.abilities > li.shui[class~="lv5"]   { background-position: -256px 0px}
+
+
+
+
+
+
+.profile ul.abilities > li > strong {
+	display: block;
+	font-size: 12px;
+	line-height: 1.5;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-indent: 0;
+	background: white;
+	text-align: center;
+	padding-bottom: 2px;
+}
+.profile ul.abilities > li.lv1 > strong { color: #036 }
+.profile ul.abilities > li.lv2 > strong { color: #60a532 }
+.profile ul.abilities > li.lv3 > strong { color: #c39832 }
+.profile ul.abilities > li.lv4 > strong { color: #f33298 }
+.profile ul.abilities > li.lv5 > strong { color: #002C92 }
+
+.profile dl.meta dt { font-weight: bold; margin-top: 0.4em }
+.profile dl.meta dd { margin: 0; padding: 0 }
+.profile dl.meta dd.chief a { font-weight: bold }

@@ -1,0 +1,20 @@
+{% load i18n %}{% load thumbnail %}
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+{% block header %}
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %} | [Synclee]</title>
+	{% block extra_include %}{% include "style.html" %}{% include "style-index.html" %}{% endblock %}
+</head>
+{% endblock %}
+
+{% block extrahead %}{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+</html>
+
+
+

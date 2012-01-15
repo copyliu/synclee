@@ -1,0 +1,12 @@
+*.pyc
+*~
+*.psd
+*.bak
+.project
+.pydevproject
+.settings
+*.swp
+*.db
+.git
+.tmp*
+migrations

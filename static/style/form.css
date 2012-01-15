@@ -1,0 +1,67 @@
+@import url(form/upload-contents.css);
+@import url(form/upload-cover.css);
+form.master {
+	font-size: 14px;
+}
+
+form.master > h2 {
+	margin: 0.4em;
+	font-size: medium;
+	color: #002C92;
+}
+
+form.master > label,
+form.master > .label,
+.control > label,
+.control > .label {
+	clear: both;
+	display: block;
+	border-top: 1px dotted #eee;
+	padding: 4px 0 4px 180px;
+	line-height: 1.4;
+}
+form.master > label:first-child,
+form.master > .label:first-child,
+form.master > .control + label,
+form.master > .control + .label { border-top: none }
+
+form.master > label > span,
+form.master > .label > span,
+.control > label > span,
+.control > .label > span {
+	color: #002C92;
+	display: block;
+	float: left;
+	width: 170px;
+	text-align: right;
+	margin: 0 0 0 -180px;
+	padding: 5px 0;
+	line-height: 1.4;
+}
+
+form.master > label > em,
+form.master > .label > em,
+.control > label > em,
+.control > .label > em {
+	display: block;
+	font-size: smaller;
+	color: #f33298;
+	margin: 0.4em 0;
+}
+form.master > label > span + input[type=text],
+form.master > label > span + input[type=password],
+form.master > label > span + textarea,
+form.master > label > span + select,
+form.master > label > span + .field {
+	width: 320px;
+}
+form.master > label > span + select { width: auto; }
+form.master > label > span + textarea {
+	width: 320px;
+	min-height: 120px
+}
+
+.control > label, .control > .label { border: none }
+
+a.remove { color: #666; font-size: smaller; font-weight: normal; }
+a.remove:hover { color: #f33298 }

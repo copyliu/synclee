@@ -1,0 +1,51 @@
+{% load thumbnail %}
+{% for chapter in work.text_chapter.all reversed %}
+<div class="chapter text">
+	<h3><a href="{% url ShowWorkText work.id %}?text_id={{chapter.id}}&section_id={{chapter.get_first}}">{{chapter.title}}</a></h3>
+	<blockquote>
+		<p>{{chapter.abstract}}</p>
+	</blockquote>
+	<blockquote>
+		{% if chapter.from_work %}由<a href="{% url WorkHome chapter.from_work.id %}">{{chapter.from_work.name}}</a>同步而来{% endif %}
+		<a href="{% url People chapter.auther.username%}">{{chapter.auther.get_profile.get_name}}</a> {{chapter.date|date:"m月d日"}}
+	</blockquote>
+
+	<ul class="clist">
+		{% for section in chapter.section.all %}
+		<li><a href="{% url ShowWorkText work.id %}?text_id={{chapter.id}}&section_id={{section.id}}">{{section.title}}</a></li>
+		{% empty %}
+		<li>暂时还没有文字</li>
+		{% endfor %}
+	</ul>
+	<!--#if expr="${author}" -->
+	{% ifequal user chapter.auther %}
+		<a class="edit" href="{% url EditWorkText work.id %}?action=edit&text_id={{chapter.id}}">编辑...</a>
+	{% endifequal %}
+	<!--#endif -->
+</div>
+{% endfor %}
+
+{% for chapter in work.gallery_chapter.all %}
+<div class="chapter gallery">
+	<h3><a href="{% url ShowWorkGallery work.id %}?gallery_id={{chapter.id}}&section_id={{chapter.get_first}}">{{chapter.title}}</a></h3>
+	<blockquote>{{chapter.abstract}}</blockquote>
+	<blockquote>
+		{% if chapter.from_work %}由<a href="{% url WorkHome chapter.from_work.id %}">{{chapter.from_work.name}}</a>同步而来{% endif %}
+		<a href="{% url People chapter.auther.username%}">{{chapter.auther.get_profile.get_name}}</a> {{chapter.date|date:"m月d日"}}
+	</blockquote>
+	<ul class="hlist">
+		{% for section in chapter.section.all %}
+		<li><a href="{{chapter.get_absolute_url}}" title="Image"><img src="/uploads/{% thumbnail section.picture 120x120 %}" alt="Image" /></a></li>
+		{% empty %}
+		<li>暂时还没有图片</li>
+		{% endfor %}
+	</ul>
+	<!--#if expr="${author}" -->
+	{% ifequal user chapter.auther %}
+		<a class="edit" href="{% url EditWorkGallery work.id %}?action=edit&gallery_id={{chapter.id}}">编辑...</a>
+		<a class="edit" href="{% url EditWorkGallery work.id %}?action=edit&gallery_id={{chapter.id}}">编辑...</a>
+	{% endifequal %}
+	<!--#endif -->
+
+</div>
+{% endfor %}

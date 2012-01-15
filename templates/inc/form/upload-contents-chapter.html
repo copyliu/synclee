@@ -1,0 +1,18 @@
+<div class="control" id="pUploadedContents">
+	{% for section in chapter.section.all reversed %}
+	<div class="chapter text">
+		<h3><a href="#" id="pSection_{{section.id}}" name="{{section.id}}" work="{{chapter.work.id}}">{{section.title}}</a> <a href="#" class="remove" id="del_text_section" the_url="/work/{{chapter.work.id}}/del_text_section/?section_id={{section.id}}">删除</a></h3>
+		<h3>
+			
+		</h3>
+	</div>
+	{% empty %}
+	<div class="chapter text">
+		<blockquote>
+			还没有任何段落
+		</blockquote>
+	</div>
+	{% endfor %}
+	<button id="btnAddText">增加文字段落</button>
+
+</div>

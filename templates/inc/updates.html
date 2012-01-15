@@ -1,0 +1,12 @@
+{% load thumbnail %}
+<div class="projects own">
+	<h3>主创作品 ({{user.own_work.all.count}})</h3>
+	<ul class="list recommended">
+		{% for work in user.own_work.all %}
+		{% if forloop.counter < 5 %}
+		<li><a href="{{work.get_absolute_url}}"><img src="/uploads/{% thumbnail work.cover 200x200 %}"><span class="caption">{{work.name}}</span></a></li>
+		{% endif %}
+		{% endfor %}
+	</ul>
+	<a class="more" href="/search/?query=&author={{user.get_profile.get_name}}">全部...</a>
+</div>

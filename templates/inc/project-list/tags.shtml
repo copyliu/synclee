@@ -1,0 +1,8 @@
+<div class="half tags">
+	<h3>标签</h3>
+	<ul class="taglist">
+	{% for t in tags %}
+		<li><a href="{% url showObject 'work' %}?tab={{t.sub_name}}">{{t.sub_name}}</a></li>
+	{% endfor %}
+	</ul>
+</div>

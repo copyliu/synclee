@@ -1,0 +1,32 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}社团{% endblock %}
+
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-person.html" %}
+    {% include "forms.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">
+	{% include "inc/navi.html" %}
+	<form class="master" method="post" action="" enctype="multipart/form-data">
+		<h2>创建新社团</h2>
+		<label class="required">
+			<span>社团名称</span>
+			<input name="name" type="text" placeholder="请输入社团名称" class="validate[required]"/> <em>* 此项必须填写</em>
+		</label>
+		<label>
+			<span>社团简介</span>  <textarea name="intro" id="intro" placeholder="请输入社团简介" class="validate[required]"></textarea>
+		</label>
+		<div class="label submit">
+			<input type="submit" value="创建"/>
+		</div>
+	</form>
+	{% include "inc/footer.html" %}
+</body>
+
+{% endblock %}

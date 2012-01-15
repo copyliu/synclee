@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>排行 - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-project.inc"-->
+	<!--#include file="style-notification.inc"-->
+</head>
+<body class="p-notifications si"><!--#include file="inc/navi.html"-->
+	<div class="snav">
+		<ul class="browse-path">
+			<li><h2><a href="rank.shtml">排行榜</a></h2><ul>
+				<li>全部</li>
+			</ul></li>
+		</ul>
+	</div>
+	<div class="master">
+		<div id="updates" class="notification-type projects">
+			<h3>每日</h3>
+			<!--#include file="inc/rank/daily.shtml"-->
+		</div>
+	</div>
+
+<!--#include file="inc/footer.html"--></body>
+</html>
+

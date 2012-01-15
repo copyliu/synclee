@@ -1,0 +1,84 @@
+{% extends "base.shtml" %}
+{% block title %}提醒列表{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+	{% include "style-notification.html" %}
+{% endblock %}
+
+
+{% block content %}
+<body class="p-notifications si">{% include "inc/navi.html" %}
+<div class="master"> 
+        <div id="dm1" class="notification-type timeline">
+        <h3>新的站内信</h3>
+        <ol class="list">
+        {% for n in mail %}
+            {% ifequal n.notice_type.label 'new_message' %}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar}}"/></span>{{n.sender.get_profile.get_name}}</a></cite>
+                    <span class="meta"><a href={% url notification_notice n.id %}>查看</a> | {{n.added|timesince}}前</span>
+                    <blockquote>向你发送了站内信</blockquote>
+            </li>
+            {% endifequal %}
+	{% empty %}
+	    <blockquote>没有新邮件</blockquote>
+        {% endfor %}
+        </ol>
+        </div>
+        
+        <div id="dm11" class="notification-type timeline">
+        <h3>新的确认</h3>
+        <ol class="list">
+        {% for n in accept %}
+            {% if n.notice_type.label == "work_accept" or n.notice_type.label == "club_accept"%}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar}}"/></span>{{n.sender.get_profile.get_name}}</a></cite>
+                    <span class="meta"><a href={% url notification_notice n.id %}>查看</a> | {{n.added|timesince}}前</span>
+                    <blockquote>同意了你的申请/邀请</blockquote>
+            </li>
+            {% endif %}
+	{% empty %}
+	    <blockquote>没有新确认</blockquote>
+        {% endfor %}
+        </ol>
+        </div>
+               
+        <div id="dm2" class="notification-type timeline">
+        <h3>新的申请</h3>
+        <ol class="list">
+        {% for n in apply %}
+            {% if n.notice_type.label == "work_apply" or n.notice_type == "club_apply" %}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar}}"/></span>{{n.sender.get_profile.get_name}}</a></cite>
+                    <span class="meta"><a href={% url notification_notice n.id %}>查看</a> | {{n.added|timesince}}前</span>
+                    <blockquote>向你发送了申请</blockquote>
+            </li>
+            {% endif %}
+	{% empty %}
+	    <blockquote>没有新申请</blockquote>
+        {% endfor %}
+        </ol>
+        </div>
+        
+        <div id="dm3" class="notification-type timeline">
+        <h3>新的邀请</h3>
+        <ol class="list">
+        {% for n in invite %}
+            {% if n.notice_type.label == "work_invite" or n.notice_type == "club_invite" %}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar}}"/></span>{{n.sender.get_profile.get_name}}</a></cite>
+                    <span class="meta"><a href={% url notification_notice n.id %}>查看</a> | {{n.added|timesince}}前</span>
+                    <blockquote>向你发送了邀请</blockquote>
+            </li>
+            {% endif %}
+	{% empty %}
+	    <blockquote>没有新邀请</blockquote>
+        {% endfor %}
+        </ol>
+        </div>
+</div>
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

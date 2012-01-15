@@ -1,0 +1,39 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}同步图集 - {{chapter.title}}{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">{% include "inc/navi.html" %}
+	<form class="master" method="post" action="">
+		<h2>同步图集</h2>
+                    <label>
+                        <span>你发起或参与的其他作品</span>
+                        <select name="other_work_id" id="other_work_id">
+                        {% for w in other_work %}
+                            {% ifnotequal w.id work.id %}
+                                <option name="{{w.name}}" value="{{w.id}}"/>{{w.name}}</option>
+                            {% endifnotequal %}
+                        {% empty %}
+                            <option />无</option>
+                        {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        <span>同步说明</span>
+                        <h4>同步将把本章节/图集的所有段落和图片重现在目标作品中</h4>
+                        <h4>但并不会实时更新</h4>
+                        <h4>删除本章节并不会删除被同步的那个章节</h4>
+                        <h4>你拥有删除任何由你发起同步的章节的权力</h4>
+                    </label>
+		<div class="label submit">
+			<input type="submit" value="保存"/>
+		</div>
+	</form>
+{% include "inc/footer.html" %}</body>
+{% endblock %}

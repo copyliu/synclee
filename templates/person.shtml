@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>Belleve Invis - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-index.inc"-->
+	<!--#include file="style-person.inc"-->
+</head>
+<body class="p-person di">
+	<!--#include file="inc/navi.html"-->
+	<div class="row clear">
+		<div class="col">
+			<!--#include file="inc/person/profile.html"-->
+			<!--#include file="inc/person/timeline.html"-->
+		</div>
+		<div class="col">
+			<!--#include file="inc/project-list/person-watching.shtml"-->
+			<!--#include file="inc/project-list/person-own.shtml"-->
+			<!--#include file="inc/project-list/person-joined.shtml"-->
+		</div>
+	</div>
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>

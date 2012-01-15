@@ -1,0 +1,14 @@
+<div class="master" id="relationship-list" url="{% url refresh_relations user.username status_slug %}">
+        <div id="dm" class="notification-type timeline">
+        <h3>{{slug}}列表</h3>
+        <ol class="list">
+            {% for u in relations.object_list %}
+              <li class="dm">
+                  <cite><a href="/{{u.username}}/"><span class="image"><img class="avatar" src="/uploads/{{u.get_profile.avatar}}"></span>{{u.get_profile.get_name}}</a></cite>
+                  <span class="meta"><a href="{% url WriteMessage %}?username={{u.username}}">写信</a> | {% if not u in user.relationships.following %}<a href="{% url relationship_add u.username 'following' %}">关注他</a>{% else %}<a href="{% url relationship_remove u.username 'following' %}">取消关注</a>{% endif %}</span> 
+              </li>
+            {% endfor %}
+        </ol>
+        </div>
+        {% include "inc/pager_list.html" %}
+</div>

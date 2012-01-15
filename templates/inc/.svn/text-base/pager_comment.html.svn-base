@@ -1,0 +1,24 @@
+<ol class="pager">
+	{% if comments.has_previous %}
+	<li id="pre_page_comment" url="?page={{ comments.previous_page_number }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">«前一页</a></li>
+	{% else %}
+	<li class="prev disabled">«前一页</li>
+	{% endif %}
+	{% if comments.has_previous %}
+	<li class="pages" url="?page={{ comments.previous_page_number }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">{{ comments.previous_page_number }}</a></li>
+	{% endif %}
+	<li class="current"><a href="#">{{ comments.number }}</a></li>
+	{% if comments.next_page_number <= comments.paginator.num_pages %}
+	<li class="pages" url="?page={{ comments.next_page_number }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">{{ comments.next_page_number }}</a></li>
+	{% endif %}
+	{% if comments.next_page_number|add:1 <= comments.paginator.num_pages %}
+	<li class="pages" url="?page={{ comments.next_page_number|add:1 }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">{{ comments.next_page_number|add:1 }}</a></li>
+	{% endif %}
+	<li class="ellipsis">...</li>
+	<li class="pages" url="?page={{ comments.paginator.num_pages }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">{{ comments.paginator.num_pages }}</a></li>
+	{% if comments.has_next %}
+	<li class="next" id="next_page_comment"  url="?page={{ comments.next_page_number }}&text_id={{ object.get_text_id }}&gallery_id={{ object.get_gallery_id }}"><a href="#">后一页»</a></li>
+	{% else %}
+	<li class="prev disabled">后一页»</li>
+	{% endif %}
+</ol>

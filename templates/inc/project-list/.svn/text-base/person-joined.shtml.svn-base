@@ -1,0 +1,10 @@
+{% load thumbnail %}
+<div class="projects joined">
+	<h3>参与创作 ({{in_work|length}})</h3>
+	<ul class="list recommended">
+		{% for w in in_work %}{% if forloop.counter < 6 %}
+		<li><a href="{{w.get_absolute_url}}"><img src="/uploads/{% thumbnail w.cover 200x200 %}"/><span class="caption">{{w.name}}</span></a></li>
+		{% endif %}{% endfor %}
+	</ul>
+	<a class="more" href="{% url Joint the_user.username %}">全部...</a
+</div>

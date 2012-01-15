@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>作者群 - Project Eynfenia - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-project.inc"-->
+	<!--#include file="style-person.inc"-->
+</head>
+<body class="p-authors si">
+	<!--#include file="inc/navi.html"-->
+	<div class="slave">
+		<div class="snav">
+		<!--#include file="inc/project/info.shtml"-->
+		<!--#include file="inc/project/links.shtml"-->
+		</div>
+	</div>
+	<div class="master">
+		<ul class="authors">
+			<li class="chief">
+				<h3>主创</h3>
+				<!--#include file="inc/person/profile.html"-->
+			</li>
+			<li>
+				<h3>参与</h3>
+				<!--#include file="inc/person/profile.html"-->
+			</li>
+			<li><!--#include file="inc/person/profile.html"--></li>
+			<li><!--#include file="inc/person/profile.html"--></li>
+		</ul>
+		<div class="clear actions">
+			<a href="#" class="button">申请加入</a>
+		</div>
+	</div>
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>

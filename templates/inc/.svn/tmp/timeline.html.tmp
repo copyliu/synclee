@@ -1,0 +1,48 @@
+{% load thumbnail %}
+<div class="timeline"  id="tweet_list">
+	<!--#if expr="${nopost}" -->
+	<!--#else -->
+	<form class="timeline-update"  id="timeline-update" method="post">
+		<textarea name="tweet_content" rows="10" cols="30" id="tweet_content"></textarea>
+		<input name="submit" type="submit" value="刷屏"/>
+	</form>
+	<!--#endif -->
+	<ol class="list">
+		{% for n in notices %}
+		<li class="status">
+			<cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar.url}}/"/></span>{{n.sender.get_profile.get_name}}</a></cite>: <q>{{n.message|safe}}</q>
+			<span class="meta"><a id="show_reply" class="show_reply" href="#">回复</a> | {{n.added|timesince}}</span>
+			
+			<form class="timeline-reply" method="post" style="display:none">
+				<input id="the_id" type="hidden" value="{{n.get_the_object.get_reply_url}}"/>
+				<input name="reply_tweet" id="reply_tweet" rows="10" cols="30" type="text"/>
+				<input name="submit" type="submit" value="回复"/>
+			</form>
+			
+			{% if n.get_comments.count > 0 %}
+			<ol class="many replies">
+				{% for c in n.get_comments %}
+<<<<<<< .mine
+				<li><cite><a href="{% url People username=c.user.username %}"><span class="image"><img class="avatar" src="/uploads/{{n.sender.get_profile.avatar.url}}/"/></span></a></cite></li>
+=======
+				<li><cite><a href="{% url People username=c.user.username %}"><span class="image"><img class="avatar" src="/uploads/{{c.user.get_profile.avatar.url}}/"/></span></a></cite></li>
+>>>>>>> .r166
+				{% endfor %}
+				<li class="all"><a href="#">所有回复 »</a></li>
+			</ol>
+			{% endif %}
+		
+			<ol class="replies" id="reply_sheet" style="display:none">
+				{% for c in n.get_comments %}
+				<li><cite><a href="/{{c.user.username}}/"><span class="image"><img class="avatar" src="/uploads/{{c.user.get_profile.avatar.url}}/"/></span>{{c.user.get_profile.get_name}}</a></cite>: <q>{{c.content|safe}}</q></li>
+				{% endfor %}
+			</ol>
+		</li>
+		{% empty %}
+		<li class="status">
+			还没有什么新鲜事
+		</li>
+		{% endfor %}
+	</ol>
+	{% include "inc/pager.html" %}
+</div>

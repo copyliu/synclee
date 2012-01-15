@@ -1,0 +1,15 @@
+<div class="projects">
+	<h2>推荐作品</h2>
+	<ul class="list recommended">		
+		<li><a href="project.shtml"><img src="rc/112x112.gif"/><span class="caption">112px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/112x112.gif"/><span class="caption">112px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/112x112.gif"/><span class="caption">112px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/112x112.gif"/><span class="caption">112px demo</span></a></li>
+
+		<li><a href="project.shtml"><img src="rc/88x112.gif"/><span class="caption">88px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/88x112.gif"/><span class="caption">88px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/88x112.gif"/><span class="caption">88px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/88x112.gif"/><span class="caption">88px demo</span></a></li>
+		<li><a href="project.shtml"><img src="rc/88x112.gif"/><span class="caption">88px demo</span></a></li>
+	</ul>
+</div>

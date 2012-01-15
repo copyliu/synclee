@@ -1,0 +1,5 @@
+<div class="view-content text">
+<h2>{{section.title}}</h2>
+{{section.content|removetags:"input iframe button script"|safe}}
+</div>
+

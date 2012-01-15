@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>作品 - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-index.inc"-->
+	<!--#include file="style-project-list.inc"-->
+</head>
+<body class="p-project-list di">
+	<!--#include file="inc/navi.html"-->
+	<!--#include file="inc/project-list/query.shtml"-->
+	<div class="row">
+		
+		<!--#include file="inc/project-list/list.shtml"-->
+	</div>
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>
+

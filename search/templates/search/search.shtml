@@ -1,0 +1,22 @@
+{% extends "base.shtml" %}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+
+{% block title %}搜索作品{% endblock %}
+
+{% block extra_include %}{% include "style.html" %}{% include "style-index.html" %}{% include "style-project-list.html" %}{% endblock %}
+
+{% block content %}
+<body class="p-project-list di">
+        {% if user.is_authenticated %}
+            {% include "inc/navi.html" %}
+        {% else %}
+            {% include "inc/navi.notlogin.html" %}
+        {% endif %}
+	{% include "inc/project-list/query.shtml" %}
+	<div class="row">
+		{% include "inc/project-list/list.shtml" %}
+	</div>
+	{% include "inc/footer.html" %}
+</body>
+{% endblock %}
+

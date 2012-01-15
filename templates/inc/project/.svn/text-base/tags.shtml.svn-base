@@ -1,0 +1,11 @@
+<ul class="project-tags">
+	{% for tab in work.tab.all %}
+	<li><a href="{% url showObject 'work' %}?tab={{tab.sub_name}}">{{tab.sub_name}}</a></li>
+	{% endfor %}
+</ul>
+<!--#if expr="${author}"-->
+{% ifequal user work.founder %}
+	<a href="{% url EditWorkTab work.id %}" class="more">管理 标签...</a>
+{% endifequal %}
+<!--#else -->
+<!--#endif -->

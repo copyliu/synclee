@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/mid/!svn/ver/131/synclee/notification/templates/notification/following
+END
+full.txt
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/full.txt
+END
+email_body.txt
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/email_body.txt
+END
+email_subject.txt
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/email_subject.txt
+END
+notice.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/notice.html
+END
+full.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/full.html
+END
+short.txt
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/mid/!svn/ver/131/synclee/notification/templates/notification/following/short.txt
+END

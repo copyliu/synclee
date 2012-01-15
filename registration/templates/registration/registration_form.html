@@ -1,0 +1,39 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}注册{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-person.html" %}
+    {% include "forms.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">{% include "inc/navi.notlogin.html" %}
+	<form class="master" method="post" action="." id="vform">
+		<h2>注册</h2>
+                <label class="required">
+			<span>Email 地址</span>
+			<input class="validate[required,custom[email]]" id="id_email" type="text" class="required" name="email" maxlength="75" /> <em>* 此项必须填写</em>
+		</label>
+                <label class="required">
+			<span>新岚域名</span>
+			http://synclee.net/<input class="validate[required,custom[onlyLetterNumber]]" id="id_username" type="text" class="required" name="username" maxlength="30"/> <em>* 不能更改</em>
+		</label>
+		<label class="required">
+			<span>密码</span>
+			<input class="validate[required]" id="id_password1" type="password" class="required" name="password1" /> <em>* 此项必须填写</em>
+		</label>                                
+                <label class="required">
+			<span>密码（重复）</span>
+			<input class="validate[required,equals[id_password1]]" id="id_password2" type="password" class="required" name="password2" />  <em>* 此项必须填写</em>
+		</label>
+
+		<div class="label submit">
+			<input type="submit" value="注册"/>
+		</div>
+	</form>
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

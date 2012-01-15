@@ -1,0 +1,523 @@
+[
+  {
+    "pk" : 1,
+    "model": "club.Catalog",
+    "fields": {
+      "name": "线上活动"
+    }
+  },
+  {
+    "pk": 2, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体小说本"
+    }
+  },
+  {
+    "pk": 3, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体漫画本"
+    }
+  },
+  {
+    "pk": 4, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体插画本"
+    }
+  },
+  {
+    "pk": 5, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体音乐CD/DVD"
+    }
+  },
+  {
+    "pk": 6, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体游戏"
+    }
+  },
+  {
+    "pk": 7, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "实体周边"
+    }
+  },
+  {
+    "pk": 8, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "文字",
+      "label": "fiction"
+    }
+  },
+  {
+    "pk": 9, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "漫画",
+      "label": "comic"
+    }
+  },
+  {
+    "pk": 10, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "图集",
+      "label": "illust"
+    }
+  },
+  {
+    "pk": 11, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "在线/个人音乐"
+    }
+  },
+  {
+    "pk": 12, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "在线/个人游戏"
+    }
+  },
+  {
+    "pk": 13, 
+    "model": "club.Catalog", 
+    "fields": {
+      "name": "同人新闻"
+    }
+  },
+  {
+    "pk": 1, 
+    "model": "work.Option", 
+    "fields": {
+      "name": "页数",
+      "catalog": 2
+    }
+  },
+  {
+    "pk": 2,
+    "model": "work.Option",
+    "fields": {
+      "name": "大小",
+      "type": "choice",
+      "catalog": 2
+    }
+  },
+  {
+    "pk" : 1,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A4（298*210mm）",
+      "option": 2
+    }
+  }, 
+  {
+    "pk" : 2,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "大度16开（285*210mm）",
+      "option": 2
+    }
+  },
+  {
+    "pk" : 3,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "正度16开（260*185mm）",
+      "option": 2
+    }
+  },
+  {
+    "pk" : 4,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A5（210*148mm）",
+      "option": 2
+    }
+  },
+  {
+    "pk" : 5,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "B5（257*182mm）",
+      "option": 2
+    }
+  },
+  {
+    "pk" : 6,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "其他（请在简介中说明）",
+      "option": 2
+    }
+  },
+  {
+    "pk": 3,
+    "model": "work.Option",
+    "fields": {
+      "name": "纸张",
+      "catalog": 2
+    }
+  },
+  {
+    "pk": 4,
+    "model": "work.Option",
+    "fields": {
+      "name": "印数",
+      "catalog": 2
+    }
+  },
+  {
+    "pk": 5,
+    "model": "work.Option",
+    "fields": {
+      "name": "定价",
+      "catalog": 2
+    }
+  },
+  {
+    "pk": 6, 
+    "model": "work.Option", 
+    "fields": {
+      "name": "页数",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 7,
+    "model": "work.Option",
+    "fields": {
+      "name": "大小",
+      "type": "choice",
+      "catalog": 3
+    }
+  },
+  {
+    "pk" : 7,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A4（298*210mm）",
+      "option": 7
+    }
+  }, 
+  {
+    "pk" : 8,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "大度16开（285*210mm）",
+      "option": 7
+    }
+  },
+  {
+    "pk" : 9,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "正度16开（260*185mm）",
+      "option": 7
+    }
+  },
+  {
+    "pk" : 10,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A5（210*148mm）",
+      "option": 7
+    }
+  },
+  {
+    "pk" : 11,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "B5（257*182mm）",
+      "option": 7
+    }
+  },
+  {
+    "pk" : 12,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "其他（请在简介中说明）",
+      "option": 7
+    }
+  },
+  {
+    "pk": 8,
+    "model": "work.Option",
+    "fields": {
+      "name": "纸张",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 9,
+    "model": "work.Option",
+    "fields": {
+      "name": "印数",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 10,
+    "model": "work.Option",
+    "fields": {
+      "name": "定价",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 11, 
+    "model": "work.Option", 
+    "fields": {
+      "name": "页数",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 12,
+    "model": "work.Option",
+    "fields": {
+      "name": "大小",
+      "type": "choice",
+      "catalog": 3
+    }
+  },
+  {
+    "pk" : 13,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A4（298*210mm）",
+      "option": 12
+    }
+  }, 
+  {
+    "pk" : 14,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "大度16开（285*210mm）",
+      "option": 12
+    }
+  },
+  {
+    "pk" : 15,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "正度16开（260*185mm）",
+      "option": 12
+    }
+  },
+  {
+    "pk" : 16,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "A5（210*148mm）",
+      "option": 12
+    }
+  },
+  {
+    "pk" : 17,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "B5（257*182mm）",
+      "option": 12
+    }
+  },
+  {
+    "pk" : 18,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "其他（请在简介中说明）",
+      "option": 12
+    }
+  },
+  {
+    "pk": 13,
+    "model": "work.Option",
+    "fields": {
+      "name": "纸张",
+      "catalog": 4
+    }
+  },
+  {
+    "pk": 14,
+    "model": "work.Option",
+    "fields": {
+      "name": "印数",
+      "catalog": 4
+    }
+  },
+  {
+    "pk": 15,
+    "model": "work.Option",
+    "fields": {
+      "name": "定价",
+      "catalog": 4
+    }
+  },
+  {
+    "pk": 16,
+    "model": "work.Option",
+    "fields": {
+      "name": "曲目数",
+      "catalog": 5
+    }
+  },
+  {
+    "pk": 17,
+    "model": "work.Option",
+    "fields": {
+      "name": "载体",
+      "type": "choice",
+      "catalog": 5
+    }
+  },
+  {
+    "pk" : 19,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "CD-ROM",
+      "option": 17
+    }
+  },
+  {
+    "pk" : 20,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "DVD-ROM",
+      "option": 17
+    }
+  },
+  
+  {
+    "pk": 18,
+    "model": "work.Option",
+    "fields": {
+      "name": "装订",
+      "type": "choice",
+      "catalog": 2
+    }
+  },
+  {
+    "pk": 19,
+    "model": "work.Option",
+    "fields": {
+      "name": "装订",
+      "type": "choice",
+      "catalog": 3
+    }
+  },
+  {
+    "pk": 20,
+    "model": "work.Option",
+    "fields": {
+      "name": "装订",
+      "type": "choice",
+      "catalog": 4
+    }
+  },
+  
+  {
+    "pk" : 21,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "骑马钉",
+      "option": 18
+    }
+  },
+  {
+    "pk" : 22,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "无线胶装",
+      "option": 18
+    }
+  },
+  {
+    "pk" : 23,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "锁线胶装",
+      "option": 18
+    }
+  },
+  {
+    "pk" : 24,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "精装硬皮",
+      "option": 18
+    }
+  },
+  
+  {
+    "pk" : 25,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "骑马钉",
+      "option": 19
+    }
+  },
+  {
+    "pk" : 26,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "无线胶装",
+      "option": 19
+    }
+  },
+  {
+    "pk" : 27,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "锁线胶装",
+      "option": 19
+    }
+  },
+  {
+    "pk" : 28,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "精装硬皮",
+      "option": 19
+    }
+  },
+  
+  {
+    "pk" : 29,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "骑马钉",
+      "option": 20
+    }
+  },
+  {
+    "pk" : 30,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "无线胶装",
+      "option": 20
+    }
+  },
+  {
+    "pk" : 31,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "锁线胶装",
+      "option": 20
+    }
+  },
+  {
+    "pk" : 32,
+    "model": "work.OptionChoice",
+    "fields": {
+      "name": "精装硬皮",
+      "option": 20
+    }
+  }  
+]

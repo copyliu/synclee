@@ -1,0 +1,31 @@
+.project-action {
+	display: block;
+	font-size: 85%;
+	color: #999;
+	line-height: 1.5;
+	height: 2.3em;
+}
+.project-action button {
+	font-size: 100%;
+	line-height: 1.5;
+	padding: 0.4em 0.7em 0.4em 2.0em;
+	margin: 0 0.4em 0 0;
+	border: none;
+	background: #002C92 0.4em 50% no-repeat;
+	color: white;
+	cursor: pointer;
+}
+.project-action .watch {
+	background-image: url(../image/icon/w-tick.png);
+}
+.project-action .hasten {
+	background-image: url(../image/icon/w-clock.png);
+}
+.project-action .add {
+	background-image: url(../image/icon/w-add.png);
+}
+.project-action .manage {
+	background-image: url(../image/icon/w-gear.png);
+}
+.project-action .add.gallery { background-color: #609532 }
+.project-action .add.links { background-color: #a56032 }

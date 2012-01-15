@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<!--#set var="watch" value="true" -->
+<!-- 去掉这一行查看未关注时的页面 -->
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Eynfenia - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-project.inc"-->
+</head>
+<body class="p-project-info di">
+	<!--#include file="inc/navi.html"-->
+	<div class="master">
+		<!--#include file="inc/project/chapters.shtml"-->
+		<!--#include file="inc/comments.html"-->
+	</div>
+	<div class="slave">
+		<!--#include file="inc/project/actions.shtml"-->
+		<!--#include file="inc/project/info.shtml"-->
+		<!--#include file="inc/project/links.shtml"-->
+		<!--#include file="inc/project/tags.shtml"-->
+	</div>
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>

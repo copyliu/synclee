@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/mid/!svn/ver/164/synclee/registration/backends/default
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/mid/!svn/ver/162/synclee/registration/backends/default/__init__.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/mid/!svn/ver/164/synclee/registration/backends/default/urls.py
+END

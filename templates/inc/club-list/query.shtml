@@ -1,0 +1,24 @@
+<form class="snav query-form" action=".">
+	<fieldset>
+		<select name="order">
+			<option value="date">更新时间</option>
+			<option value="release">创建时间</option>
+			<option value="approves">支持数</option>
+			<option value="watchers">关注数</option>
+		<select>
+		<input type="text" name="query" />
+		<input type="submit" name="submit" value="搜索"/>
+	</fieldset>
+	<ul class="filters">
+		<li>作者 <input type="text" class="inactive" name="author" /></a> <button>×</button></li>
+		<li>
+			<select name="catalog" class="inactive">
+				<option value="">不限</option>
+				<option value="comic">漫画</option>
+				<option value="illust">图集</option>
+				<option value="fiction" selected>小说</option>
+			</select>
+			<button>×</button>
+		</li>
+	</ul>
+</form>

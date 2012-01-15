@@ -1,0 +1,23 @@
+{% extends "base.shtml" %}
+{% block title %}Messaging{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+	{% include "style-notification.html" %}
+{% endblock %}
+
+
+{% block content %}
+<body class="p-notifications si">{% include "inc/navi.html" %}
+<div class="snav">
+ <ul class="browse-path">
+  <li><a href="{% url Inbox %} ">收件箱{% if user.get_profile.get_unread_message %} <strong>({{ user.get_profile.get_unread_message }})</strong>{% endif %}</a></li>
+  <li><a href="{% url Sent %}">发件箱</a></li>
+ </ul>
+</div>
+  {% block messagebody %}
+  {% endblock %}
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

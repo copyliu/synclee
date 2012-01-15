@@ -1,0 +1,38 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}修改个人资料{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-person.html" %}
+    {% include "forms.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">{% include "inc/navi.html" %}
+	<form class="master" method="post" id="vform">
+		<h2>修改个人资料</h2>
+		<label class="required">
+			<span>昵称</span>
+			<input class="validate[required]" name="nickname" id="nickname" type="text" placeholder="{{user.get_profile.get_name}}" {% if user.get_profile.get_name %}value="{{user.get_profile.get_name}}"{% endif %}"> <em>* 此项必须填写</em>
+		</label>
+		<label class="required">
+			<span>地点</span>
+			<input class="validate[required]" name="location" id="location" type="text" placeholder="{{user.get_profile.location}}" {% if user.get_profile.location %}value="{{user.get_profile.location}}"{% endif %}> <em>* 此项必须填写</em>
+		</label>
+		<label>
+			<span>自我介绍</span>
+			<textarea name="intro" id="intro" placeholder="{{user.get_profile.intro}}">{% if user.get_profile.intro %}{{user.get_profile.intro}}{% endif %}</textarea>
+		</label>
+		<div class="label submit">
+			<input type="button" value="编辑技能" onclick="window.location.href='{% url EditAbility %}'"/>
+			<input type="button" value="编辑头像" onclick="window.location.href='{% url EditAvatar %}'"/>
+		</div>
+		<div class="label submit">
+			<input  type="submit" value="保存"/>
+		</div>
+	</form>
+{% include "inc/footer.html" %}
+</body>
+{% endblock %}

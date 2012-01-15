@@ -1,0 +1,25 @@
+{% load thumbnail %}
+<div class="comments timeline" id="comments_timeline">
+	<ol class="list">
+		{% for c in comments.object_list %}
+		<li>
+			<cite><a href="{% url People c.user.username %}"><span class="image"><img class="avatar" src="/uploads/{% thumbnail c.user.get_profile.avatar 40x40 %}"></span>{{c.user.get_profile.get_name}}</a></cite>: <q>{{c.content|removetags:"input button iframe script body html head title div style table td tr span h1 h2 h3 h4 h5 h6"|safe}}</q>
+			<span class="meta">{{c.date|timesince}}前<!-- {% if c.user == user or user == c.work.founder or c.text in c.text_chapter.all or c.gallery in c.gallery_chapter.all %} | <a id="del_comment" class="del_comment" href="#" del_url="{{n.get_the_object.get_del_url}}">删除</a>{% endif %} --></span>
+		</li>
+		{% endfor %}
+	</ol>
+	{% include "inc/pager_comment.html" %}
+	<div id="quoteFloatBox" class="box bottom" style="display: none">
+		选择文字以引用
+		<button id="lActQuote">引用</button>
+		<a id="lCancelQuote" href="#">取消</a>
+	</div>
+	<form id="form-post-comment" class="timeline-update" work="{{object.get_work_id}}" url="{{object.get_reply_url}}" refresh_url="{{object.get_refresh_url}}">
+		<textarea name="status" id="status" rows="10" cols="30"></textarea>
+		<ul class="actions">
+			<li><a href="#" id="lCommentQuote">引用</a></li>
+		</ul>
+
+		<input name="submit" type="submit" value="评论"/>
+	</form>
+</div>

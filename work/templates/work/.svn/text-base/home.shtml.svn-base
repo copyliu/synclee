@@ -1,0 +1,38 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}{{work.name}}{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-info di">
+	{% if user.is_authenticated %}
+            {% include "inc/navi.html" %}
+        {% else %}
+            {% include "inc/navi.notlogin.html" %}
+        {% endif %}
+	<div class="master">
+            {% ifequal user work.founder %}
+                {% include "inc/project/admin-actions.html" %}
+            {% endifequal %}
+            {% if user in work.get_members %}
+                {% include "inc/project/admin-actions.html" %}
+            {% endif %}
+		{% include "inc/project/chapters.shtml" %}
+		{% include "inc/comments.html" %}
+	</div>
+	<div class="slave">
+		
+		{% include "inc/project/actions.shtml" %}
+		<div class="project-info personal novel" id="project-info-01">
+		{% include "inc/project/info.shtml" %}
+		</div>
+		{% include "inc/project/links.shtml" %}
+		{% include "inc/project/tags.shtml" %}
+	</div>
+	{% include "inc/footer.html" %}
+</body>
+{% endblock %}

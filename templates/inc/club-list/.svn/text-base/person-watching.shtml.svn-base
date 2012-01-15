@@ -1,0 +1,10 @@
+{% load thumbnail %}
+<div class="projects joined">
+	<h3>关注 ({{the_user.get_profile.shares.count}})</h3>
+	<ul class="list recommended">
+		{% for w in the_user.get_profile.shares.all %}
+		<li><a href="{{w.get_absolute_url}}"><img src="/uploads/{% thumbnail w.cover 200x200 %}"><span class="caption">{{w.name}}</span></a></li>
+		{% endfor %}
+	</ul>
+	<a class="more" href="project-list.shtml">全部...</a>
+</div>

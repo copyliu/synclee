@@ -1,0 +1,35 @@
+@import url(featured.css);
+.col .snav { 
+	margin: -1.5em 0 1.5em -0.4em;
+	border-bottom-right-radius: 0;
+}
+.p-index-cat .snav h1 {
+	font-size: 24px;
+	margin: 0;
+	line-height: 48px;
+	padding: 0 0 0 0.3em;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 2px;
+}
+#lPostHere {
+	position: absolute;
+	top: 4px;
+	right: 0;
+	color: white;
+	padding: 0 1em 0 32px;
+	line-height: 40px;
+	border: none;
+	background: #002C92 url(image/icon/w-add.png) no-repeat 8px center;
+}
+
+.snav .links {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: inline-block
+}
+
+.snav .links > li a { display: block; padding: 5px 0.75em }
+.snav > form { margin: 0; padding: 0; line-height: 30px; float: right; }
+.snav .links li, .snav > form { display: inline-block; font-size: smaller; line-height: 30px}
+.snav .links li a { padding: 0 0.75em }

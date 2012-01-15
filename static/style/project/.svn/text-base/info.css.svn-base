@@ -1,0 +1,126 @@
+.project-info { 
+	padding: 5px;
+}
+.project-info h2 { font-size: 1.5em; margin-top: 0; margin-bottom: 0.3em; padding: 0 }
+.author { font-size: smaller; margin: 0.6em 0 }
+.project-info h2 > a, .project-info .author > a { color: #666 }
+.project-info .author > a { white-space: nowrap }
+.project-info .author > a.invite, .project-info .author > a > em { color: #002C92 }
+.project-info .cover {
+	display: block;
+	width: 240px;
+	margin: -0.26666666em -5px 5px;
+	box-shadow: rgba(0,0,0,0.1) 0 1px 10px;	
+}
+.project-info blockquote {
+	margin: 0.82353em 0;
+	line-height: 1.5;
+	padding: 0;
+	font-size: smaller;
+}
+
+
+.project-links, .project-tags {
+	list-style: none;
+	margin: 1em 0;
+	padding: 0;
+	font-size: 90%;
+}
+.project-links > li {
+	border-top: 1px solid #eee;
+}
+.project-links > li:first-child {
+	border: none
+}
+.project-links > li a {
+	display: block;
+	padding: 0.6em 0.4em;
+}
+
+.project-tags { overflow: hidden }
+.project-tags > li {
+	padding: 0.6em 0.4em;
+	float: left;
+	max-width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+
+.project-stats {
+	margin: 0.6em -0.4em;
+	padding: 0.4em 0;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+}
+.project-stats li {
+	float: left;
+	width: 60px
+}
+.project-stats li a {
+	display: block;
+	border-left: 1px solid #eee
+}
+.project-stats li:first-child a { border-left: none }
+
+/* when project-info is shown in .snav
+ * this occurs in view-text and view-gallery */
+
+.snav .project-tags { display: none }
+.snav .project-info .author.invite { display: none }
+.snav .project-info { 
+	height: 64px; 
+	padding: 0;
+	border-top: none;
+	border-left: 3px solid #002C92;
+	box-shadow: rgba(0,0,0,0.05) 0 0 0 1px;
+}
+.snav .project-info blockquote { display: none }
+.snav .project-info .cover { margin: 0 0.4em 0 -0.4em; width: auto; max-width: 128px; height: 64px; float: left }
+.snav .project-info h2 { 
+	font-size: 18px;
+	float: left; 
+	margin: 0;
+	padding: 0 0 0 0.4em;
+	line-height: 48px;
+	height: 48px; 
+	max-width: 400px;
+
+}
+.snav .project-info .author { 
+	margin: 0;
+	padding: 0 0 0 0.8em;
+	position: absolute;
+	left: 64px;
+	bottom: 0;
+	line-height: 32px;
+}
+.snav .project-info .project-stats {
+	float: right;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+.snav .project-info .project-stats li { line-height:1; font-size: 12px }
+.snav .project-info .project-stats a { height: 64px }
+.snav .project-info .project-stats li:first-child a { border-left: 1px solid #eee }
+.snav .project-info .project-stats strong { padding-top: 15px; padding-bottom:4px }
+
+.snav .project-links {
+	margin: 0;
+	border-top: none;
+	overflow: auto;
+}
+.snav .project-links li { float: left; border: none; font-size: smaller; }
+.snav .project-links li a { padding: 5px 0.75em }
+.snav .project-links .external { display: none }
+
+body.p-issues .snav .project-links li.issues > a,
+body.p-history .snav .project-links li.history > a,
+body.p-authors .snav .project-links li.authors > a 
+{
+	padding-bottom: 2px;
+	border-bottom: 3px solid #002C92;
+}

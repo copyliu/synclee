@@ -1,0 +1,651 @@
+[
+  {
+    "pk" : 1,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "写手",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 2,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "画师",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 3,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "设计美工",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 4,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "程序员",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 5,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "音乐制作",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 6,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "地域",
+      "tab_model_name": "work"
+    }
+  },
+  {
+    "pk" : 7,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "取向",
+      "tab_model_name": "work"
+    }
+  },
+  {
+    "pk" : 8,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "年份",
+      "tab_model_name": "work"
+    }
+  },
+  {
+    "pk" : 9,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "主题",
+      "tab_model_name": "work"
+    }
+  },
+  {
+    "pk" : 10,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "风格",
+      "tab_model_name": "work"
+    }
+  },
+  {
+    "pk" : 11,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "语种",
+      "tab_model_name": "work"
+    }
+  },
+
+  {
+    "pk" : 1,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "长篇",
+      "parent_tab": 1
+    }
+  }, 
+  {
+    "pk" : 2,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "中篇",
+      "parent_tab": 1
+    }
+  }, 
+  {
+    "pk" : 3,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "短篇",
+      "parent_tab": 1
+    }
+  },
+  {
+    "pk" : 4,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "文案",
+      "parent_tab": 1
+    }
+  }, 
+  {
+    "pk" : 5,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "漫画",
+      "parent_tab": 2
+    }
+  }, 
+  {
+    "pk" : 6,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "厚涂",
+      "parent_tab": 2
+    }
+  },
+  {
+    "pk" : 7,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "平涂",
+      "parent_tab": 2
+    }
+  }, 
+  {
+    "pk" : 8,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "赛璐璐",
+      "parent_tab": 2
+    }
+  }, 
+  {
+    "pk" : 9,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "排版",
+      "parent_tab": 3
+    }
+  }, 
+  {
+    "pk" : 10,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "平面/网页设计",
+      "parent_tab": 3
+    }
+  },
+  {
+    "pk" : 11,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "网页设计",
+      "parent_tab": 3
+    }
+  }, 
+  {
+    "pk" : 11,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "网站编程",
+      "parent_tab": 4
+    }
+  }, 
+  {
+    "pk" : 12,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "游戏编程",
+      "parent_tab": 4
+    }
+  }, 
+  {
+    "pk" : 13,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "系统编程",
+      "parent_tab": 4
+    }
+  }, 
+  {
+    "pk" : 14,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "作曲",
+      "parent_tab": 5
+    }
+  }, 
+  {
+    "pk" : 15,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "编曲",
+      "parent_tab": 5
+    }
+  }, 
+  {
+    "pk" : 16,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "作词",
+      "parent_tab": 5
+    }
+  }, 
+  {
+    "pk" : 17,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "母带/录音制作",
+      "parent_tab": 5
+    }
+  }, 
+  {
+    "pk" : 18,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "歌姬",
+      "parent_tab": 5
+    }
+  }, 
+  {
+    "pk" : 19,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "帝都",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 20,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "魔都",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 21,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "妖都",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 22,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "成都",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 23,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "南京",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 24,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "武汉",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 25,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "福州",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 26,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "香港",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 27,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "台湾",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 28,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "11区",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 29,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "海外其他地点",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 30,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "跨地域",
+      "parent_tab": 6
+    }
+  }, 
+  {
+    "pk" : 31,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "宅/男性向",
+      "parent_tab": 7
+    }
+  }, 
+  {
+    "pk" : 32,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "腐/女性向",
+      "parent_tab": 7
+    }
+  }, 
+  {
+    "pk" : 33,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "综合向",
+      "parent_tab": 7
+    }
+  }, 
+  {
+    "pk" : 41,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "家庭教师Reborn",
+      "parent_tab": 9
+    }
+  }, 
+  {
+    "pk" : 43,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "银魂",
+      "parent_tab": 9
+    }
+  }, 
+  {
+    "pk" : 35,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "东方Project",
+      "parent_tab": 9
+    }
+  }, 
+  {
+    "pk" : 42,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "VOCALOID系列",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 34,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "不重要1",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 36,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "APH",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 37,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "拟人类",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 38,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "魔法少女",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 39,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "盗墓笔记",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 40,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "战国BASARA",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 44,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "无头骑士异闻录",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 45,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "闪电十一人",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 46,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "网球王子",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 47,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "火影忍者",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 48,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "死神",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 49,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "其他",
+      "parent_tab": 9
+    }
+  },
+  {
+    "pk" : 50,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2011",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 51,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2010",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 52,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2009",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 53,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2008",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 54,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2007",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 55,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "2006或更早",
+      "parent_tab": 8
+    }
+  },
+  {
+    "pk" : 56,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "不重要2",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 57,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "我是报社的小行家",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 58,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "你所看见的就是哈哈哈",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 59,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "你是风儿我是沙",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 60,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "今天穿越到你家",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 61,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "算了我还是选其他",
+      "parent_tab": 10
+    }
+  },
+  {
+    "pk" : 62,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "中文-简体",
+      "parent_tab": 11
+    }
+  },
+    {
+    "pk" : 63,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "中文-繁体",
+      "parent_tab": 11
+    }
+  },
+    {
+    "pk" : 64,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "日语",
+      "parent_tab": 11
+    }
+  },
+    {
+    "pk" : 65,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "英语",
+      "parent_tab": 11
+    }
+  },
+    {
+    "pk" : 66,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "其他语言",
+      "parent_tab": 11
+    }
+  },
+      {
+    "pk" : 67,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "国内其他地区",
+      "parent_tab": 6
+    }
+  },
+    {
+    "pk" : 68,
+    "model": "tab.TabClass",
+    "fields": {
+      "tab_name": "围观",
+      "tab_model_name": "profiles"
+    }
+  },
+  {
+    "pk" : 69,
+    "model": "tab.SubTabClass",
+    "fields": {
+      "sub_name": "围观的能力",
+      "parent_tab": 68
+    }
+  }
+]

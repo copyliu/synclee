@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/mid/!svn/ver/334/synclee/notification
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/151/synclee/notification/admin.py
+END
+lockfile.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/mid/!svn/ver/131/synclee/notification/lockfile.py
+END
+atomformat.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/mid/!svn/ver/131/synclee/notification/atomformat.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/305/synclee/notification/views.py
+END
+.gitignore
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/mid/!svn/ver/131/synclee/notification/.gitignore
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/mid/!svn/ver/131/synclee/notification/__init__.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/mid/!svn/ver/141/synclee/notification/models.py
+END
+decorators.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/mid/!svn/ver/131/synclee/notification/decorators.py
+END
+engine.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/mid/!svn/ver/151/synclee/notification/engine.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/mid/!svn/ver/299/synclee/notification/urls.py
+END
+context_processors.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/mid/!svn/ver/151/synclee/notification/context_processors.py
+END
+feeds.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/151/synclee/notification/feeds.py
+END

@@ -1,0 +1,143 @@
+.p-view .section {
+	border-bottom: 1px solid #eee
+}
+
+
+.view-content {
+	font-size: medium;
+	background: white;
+	text-align: justify;
+	font-family: 
+		/* TBD */ "Chisen Hakurei LGCR", "PT Serif", "Cambria", "Georgia",
+		/* TBD */ "Chisen Hakurei ME", "Times New Roman", "Chisen Hakurei EE", "Sylfean",
+		/* Released */ "Chisen Hakurei AZD";
+}
+
+.view-content a.action {
+	display: block;
+	font-size: small;
+	text-align: right;
+}
+
+/* Chinese Traditional */
+.p-view .master *:lang(zh-CHT), .p-view .master *[lang=zh-CHT],
+/* Hong Kong */
+.p-view .master *:lang(zh-HK), .p-view .master *[lang=zh-HK],
+/* Macau */
+.p-view .master *:lang(zh-MO), .p-view .master *[lang=zh-ML],
+/* Taiwan */
+.p-view .master *:lang(zh-TW), .p-view .master *[lang=zh-TW] {
+	font-family: 
+		/* TBD */ "Chisen Hakurei LGCR", "PT Serif", "Cambria", "Georgia",
+		/* TBD */ "Chisen Hakurei ME", "Times New Roman", "Chisen Hakurei EE", "Sylfean",
+		/* Released */ "Chisen Hakurei ATD", "PMingLiu";
+}
+/* Japanese */ 
+.p-view .master *:lang(ja-JP),
+.p-view .master *:lang(ja),
+.p-view .master *:lang(JP),
+.p-view .master *[lang^=ja] {
+	font-family: 
+		/* TBD */ "Chisen Hakurei LGCR", "PT Serif", "Cambria", "Georgia",
+		/* TBD */ "Chisen Hakurei ME", "Times New Roman", "Chisen Hakurei EE", "Sylfean",
+		/* Released */ "Chisen Hakurei AJD", "Kozuka Mincho Pro", "MS Mincho";
+}
+/* Korean, using Batang for hanguls */
+.p-view .master *:lang(ko-KR),
+.p-view .master *:lang(ko),
+.p-view .master *[lang^=ko] {
+	font-family: 
+		/* TBD */ "Chisen Hakurei LGCR", "PT Serif", "Cambria", "Georgia",
+		/* TBD */ "Chisen Hakurei ME", "Times New Roman", "Chisen Hakurei EE", "Sylfean",
+		/* Released */ "Chisen Hakurei AKD", "Batang";
+}
+
+.view-content.gallery {
+	text-align: center;
+	vertical-align: top;
+}
+.view-content.gallery.RTL {	direction: rtl }
+.view-content.gallery > .imagebox {
+	direction: ltr;
+	padding: 0.4em;
+	min-width: 15em;
+	max-width: 100%;
+	display: inline-block;
+	vertical-align: bottom;
+	position: relative;
+}
+.view-content.gallery > .imagebox > img {
+	display: block;
+	margin: 0 auto;
+	max-width: 100%;
+}
+.view-content.gallery > .imagebox > h2{
+	height: 1.5em;
+	font-size: 1em;
+	margin: 0;
+	padding: 0.4em 0;
+	line-height: 1.5em;
+	border-top: 1px dotted #ddd;
+}
+.view-content.gallery > .imagebox > .description {
+	position: absolute;
+	bottom: 2.7em;
+	left: 0.4em;
+	right: 0.4em;
+	text-align: justify;
+	background: white;
+	background: rgba(255, 255, 255, 0.8);
+	border-top: 1px dotted #ddd;
+}
+
+.p-view .section.pending .view-content > h2 {
+	color: #999;
+	font-size: 1em;
+	margin: 0.4em 0;
+}
+
+.p-view .section.loadMore.next,
+.p-view .section.pending
+	{ border-bottom-color: white }
+.p-view .section.pending:last-child { border-bottom-color: #eee }
+.p-view .section.loadMore >  button {
+	display: block;
+	padding: 7px;
+	width: 450px;
+	margin: 0.4em auto;
+	border-radius: 4px;
+}
+
+.p-view.p-view-issue .section > .view-content {
+	width:656px;
+	padding-left: 64px;
+	margin-top: 0;
+}
+.p-view.p-view-issue .section > cite {
+	display: block;
+	width: 656px;
+	margin: 0.6em auto;
+	padding-left: 64px;
+	position: relative;
+	font-size: smaller;
+	font-style: normal;
+	color: #666;
+}
+.p-view.p-view-issue .section > cite img.avatar {
+	width: 40px;
+	position: absolute;
+	left: 8px;
+	top: 0;
+	box-shadow: rgba(0,0,0,0.05) 0 0 0 1px, rgba(0,0,0,0.1) 0 1px 10px;
+}
+
+#quoteFloatBox {
+	position: fixed;
+	z-index: 10000;
+	left: 50%;
+	width: 720px;
+	margin-left: -365px;
+	top: 0;
+	font-size: smaller;
+	padding: 5px
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>第一章图集 - Project Eynfenia - [Synclee]</title>
+	<!--#include file="style.inc"-->
+	<!--#include file="style-project.inc"-->
+</head>
+<body class="p-view p-view-gallery">
+	<!--#include file="inc/navi.html"-->
+	<div class="master">
+		<div class="snav">
+		<!--#include file="inc/project/info.shtml"-->
+			<ul class="browse-path">
+				<li><a href="project.shtml">Project Eynfenia</a><ul>
+					<li><h1><a href="view-gallery.rtl.shtml">第一章图集</a></h1></li>
+				</ul></li>
+			</ul>
+		</div>
+		<div class="section">
+			<div class="view-content gallery RTL">
+				<!--#include file="inc/view/gallery.html"-->
+			</div>
+		</div>
+	</div>
+	<div class="slave">
+		<!--#include file="inc/comments.html"-->
+	</div>
+	<!--#include file="inc/footer.html"-->
+</body>
+</html>

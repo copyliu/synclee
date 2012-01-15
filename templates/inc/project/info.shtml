@@ -1,0 +1,26 @@
+{% load thumbnail %}
+	<h2><a href="{{work.get_absolute_url}}"><img src="/uploads/{% thumbnail work.cover 420x420 %}" class="cover"/>{{work.name}}</a></h2>
+	<div class="author">
+		<a href="{% url People username=work.founder.username %}">{{work.founder.get_profile.get_name}}</a>
+	</div>
+	<div class="author invite">
+	<!--#if expr="${author}"-->
+	{% ifequal user work.founder%}
+		<!-- <a href="person.shtml"><em>Toney</em> 申请加入</a>
+		<a href="invite-project-member.shtml" class="invite">管理...</a> -->
+	{% else %}
+		{% if not user in work.members.all %}
+	<!--#else -->
+		<a href="{% url ApplyWorkMember work.id %}" class="invite">申请参与...</a>
+		{% endif %}
+	{% endifequal %}
+	<!--#endif -->
+	</div>
+	<ul class="project-stats statictics">
+		<li><a href="#"><strong>{{work.be_shared.count}}</strong>关注</a></li>
+		<!-- <li><a href="#"><strong>{{work.support}}</strong>支持</a></li> -->
+		<li><a href="#"><strong>{{work.comment.count}}</strong>评论</a></li>
+		<li><a href="#"><strong>{{work.push}}</strong>支持</a></li>
+	</ul>
+
+	<blockquote>{{work.intro}}</blockquote>

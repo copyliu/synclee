@@ -1,0 +1,28 @@
+.p-authors .master { position: relative }
+ul.authors {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.authors > li {
+	width: 470px;
+	padding: 0 125px 1em;
+	position: relative;
+}
+ul.authors > li > h3 {
+	margin: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 50%;
+	color: #666;
+	border-bottom: 1px solid #ddd;
+	font-size: 1em;
+}
+.authors + .actions {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 120px;
+}

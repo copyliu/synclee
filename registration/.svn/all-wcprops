@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/mid/!svn/ver/547/synclee/registration
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/151/synclee/registration/admin.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/541/synclee/registration/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/mid/!svn/ver/131/synclee/registration/__init__.py
+END
+signals.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/mid/!svn/ver/131/synclee/registration/signals.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/mid/!svn/ver/547/synclee/registration/models.py
+END
+fake_auth_views.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/mid/!svn/ver/235/synclee/registration/fake_auth_views.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/mid/!svn/ver/164/synclee/registration/urls.py
+END
+auth_urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/mid/!svn/ver/195/synclee/registration/auth_urls.py
+END
+forms.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/mid/!svn/ver/131/synclee/registration/forms.py
+END

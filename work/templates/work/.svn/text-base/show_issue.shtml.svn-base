@@ -1,0 +1,30 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}任务单 - {{work.name}}{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+    <body class="p-issues si">
+	{% if user.is_authenticated %}
+	{% include "inc/navi.html" %}
+	{% else %}
+	{% include "inc/navi.notlogin.html" %}
+	{% endif %}
+	<div class="slave">
+		<div class="snav">
+				<div class="project-info">
+		{% include "inc/project/info.shtml" %}
+		</div>
+		{% include "inc/project/links_inner.shtml" %}
+		</div>
+	</div>
+	<div class="master">
+		{% include "inc/project/issues.shtml" %}
+	</div>
+	{% include "inc/footer.html" %}
+</body>
+{% endblock %}

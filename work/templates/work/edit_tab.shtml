@@ -1,0 +1,54 @@
+{% extends "base.shtml"%}
+{% load i18n %}{% load comments %}{% load thumbnail %}{% load taggit_extras %}
+{% block title %}编辑作品标签{% endblock %}
+
+{% block extra_include %}
+	{% include "style.html" %}
+	{% include "style-form.html" %}
+	{% include "style-project.html" %}
+{% endblock %}
+
+{% block content %}
+<body class="p-project-create si">{% include "inc/navi.html" %}
+	<form class="master" method="post" action="">
+		<h2>{{work.name}}的标签</h2>
+                    {% for op in options %}
+                        {% ifequal op.type 'text'%}
+                            <label for="{{op.name}}">{{op.name}}</label>
+                            {% for v in values %}
+                                {% ifequal v.option.id op.id %}
+                                    <input type="text" name="{{op.name}}" id="{{op.name}}" value="{{v.value}}" />
+                                {% endifequal %}
+                            {% empty %}
+                                <input type="text" name="{{op.name}}" id="{{op.name}}" />
+                            {% endfor %}
+                        {% else %}
+                            <label for="{{op.name}}">{{op.name}}</label>
+                            <select name="{{op.name}}" id="{{op.name}}">
+                            {% for c in op.choice.all %}
+                                <option value={{c.name}} {% for v in values %}{% ifequal v.option.id op.id %} selected="selected" {% endifequal %}{% endfor %}>{{c.name}}</option>
+                            {% endfor %}
+                            </select>
+                        {% endifequal %}
+                    {% endfor %}
+                    
+
+                    {% for f in f_tab %}
+                    <label>
+                        <span>{{f.tab_name}}</span>
+                        <select name="select_{{f.id}}" id="{{f.id}}">
+                        {% for tab in tabs %}
+                            {% ifequal tab.parent_tab.tab_name f.tab_name %}
+                                <option {% if tab in work.tab.all %}selected="true"{% endif %}/>{{tab.sub_name}}</option>
+                            {% endifequal %}
+                        {% endfor %}
+                        </select>
+                    </label>
+                    {% endfor %}
+                
+		<div class="label submit">
+			<input type="submit" value="保存"/>
+		</div>
+	</form>
+{% include "inc/footer.html" %}</body>
+{% endblock %}

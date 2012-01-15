@@ -1,0 +1,19 @@
+{% load thumbnail %}
+<div id="dm_old">
+<div class="notification-type timeline" ><h3>以往邀请</h3>
+        <ol class="list">
+        {% for n in notices.object_list %}
+            {% if n.notice_type.label == "work_invite" or n.notice_type == "club_invite" %}
+            <li class="dm">
+                    <cite><a href="/{{n.sender.username}}/"><span class="image"><img class="avatar" src="/uploads/{% thumbnail n.sender.get_profile.avatar 100x100 %}"/></span>{{n.sender.get_profile.get_name}}</a> {% if n.unseen %}<strong>{% endif %}向你发送了邀请{% if n.unseen %}</strong>{% endif %}</cite>
+                    <span class="meta"><a href="{% url notification_notice n.id %}">查看</a> | {{n.added|timesince}}前</span>
+            </li>
+            {% endif %}
+	{% empty %}
+	    <blockquote>没有以往邀请</blockquote>
+        {% endfor %}
+        </ol>
+</div>
+
+{% include "inc/pager_note.html" %}
+</div>

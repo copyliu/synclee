@@ -1,0 +1,2 @@
+{% load i18n %}
+<a href="{{from_user.get_absolute_url}}">{{ from_user.get_profile.get_name }}</a> 同意了您关于社团 <a href="{{club.get_absolute_url}}">{{club.name}}</a> 的申请/邀请<br>

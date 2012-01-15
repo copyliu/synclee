@@ -1,0 +1,3 @@
+
+<a href="{{from_user.get_absolute_url}}">
+    {{ from_user.get_profile.get_name }}</a> 给你发送了信件! (查看 <a href="/message/view/?mail_id={{mail.id}}">信件</a>)
