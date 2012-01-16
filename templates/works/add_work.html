@@ -1,0 +1,82 @@
+{% extends "base.html"%}
+
+{% block title %}创建新作品{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="container-fluid">
+    <div class="sidebar">
+      Summary
+    </div>
+    <div class="content">
+      <form ation="" method="post"  enctype="multipart/form-data">
+        {% csrf_token %}
+          <fieldset>
+          <legend>Create</legend>
+          <div class="clearfix">
+            <label for="id_name">NAME</label>
+            <div class="input">
+              <input class="span4" id="id_name" name="name" size="30" type="text">
+              <span class="help-inline error">{{form.name.errors.0}}</span>
+            </div>
+          </div>
+          <div class="clearfix">
+            <label for="normalSelect">Catelog</label>
+            <div class="input">
+              <select name="normalSelect" id="normalSelect">
+                <option>COMIC</option>
+                <option>WORD</option>
+                <option>GALLERY</option>
+              </select>
+            </div>
+          </div><!-- /clearfix -->
+          <div class="clearfix">
+            <label for="errorInput">Cover</label>
+            <div class="input">
+              <button type="reset" class="btn" onclick="document.getElementById('id_cover').click();">UPLOAD</button>
+              <input type="file" class="btn" value="Upload" name="cover" id="id_cover" style="width:0px;"/>
+              <span class="help-inline">Small snippet of help text</span>
+            </div>
+          </div><!-- /clearfix -->
+        </fieldset>
+        <div class="clearfix">
+            <label for="id_intro">Intro</label>
+            <div class="input">
+              <textarea class="span4" id="id_intro" name="intro" rows="3"></textarea>
+              <span class="help-block">
+                Block of help text to describe the field above if need be.
+              </span>
+            </div>
+          </div>
+        <div class="actions">
+          <input type="submit" class="btn primary" value="Save changes">&nbsp;
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+	<form  id="vform" class="master" method="post" action="">
+		
+		<label class="required">
+			<span>作品名称</span>
+			<input name="name" id="id_name" type="text" placeholder="请输入作品名称"/> <em>* 此项必须填写</em>
+		</label>
+		<label class="required">
+			<span>作品类型</span>
+			<select name="catalog_id" id="catalog_id">
+				{% for c in catalogs %}
+				<option value="{{c.id}}">{{c.name}}</option>
+				{% endfor %}
+			</select>
+		</label>
+		<label class="required">
+			<span>隐私设置</span>
+			<select name="privacy" id="privacy">
+				{% for p in privacy %}
+				<option value={{p.0}} {% ifequal p.0 work.privacy %}selected="true"{% endifequal %}>{{p.1}}</option>
+				{% endfor %}
+			</select>
+	</form>
+</body>
+{% endblock %}
+

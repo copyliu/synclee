@@ -11,5 +11,5 @@ from django import forms
 class WorkForm(forms.Form):
     name = forms.CharField(error_messages = {'required': u'名称不能为空'}, max_length = 30)
     intro = forms.CharField(required = False)
-    catalog = forms.CharField(error_messages = {'required':u'这个字段是必填的'}, required = True)
+    #catalog = forms.CharField(error_messages = {'required':u'这个字段是必填的'}, required = True)
     

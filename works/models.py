@@ -19,15 +19,18 @@ class Work(models.Model):
     #founder = models.ForeignKey(User, related_name='own_work')
     #members = models.ManyToManyField(User, through='Membership', related_name='in_work')
     date = models.DateTimeField(auto_now_add=True)
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES)
+    #privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES)
     #catalog = models.ForeignKey(Catalog, related_name='work')
     #tab = models.ManyToManyField(SubTabClass, limit_choices_to={'parent_tab__tab_model_name':'work'}, related_name='work')
     tags = TaggableManager()
+
+    puship = models.ManyToManyField(User, related_name='pushed')
+    closed = models.BooleanField(default=False)
+    intro = models.TextField()
+ 
+class WorkAction(models.Model):
     support = models.IntegerField(default=0) #支持
     collected = models.IntegerField(default=0) #关注
     push = models.IntegerField(default=0) #催稿
     #push_today = models.IntegerField(default=0)
-    puship = models.ManyToManyField(User, related_name='pushed')
-    closed = models.BooleanField(default=False)
-    intro = models.TextField()
     
