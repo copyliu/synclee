@@ -24,13 +24,26 @@ class Work(models.Model):
     #tab = models.ManyToManyField(SubTabClass, limit_choices_to={'parent_tab__tab_model_name':'work'}, related_name='work')
     tags = TaggableManager()
 
-    puship = models.ManyToManyField(User, related_name='pushed')
     closed = models.BooleanField(default=False)
     intro = models.TextField()
  
-class WorkAction(models.Model):
-    support = models.IntegerField(default=0) #支持
-    collected = models.IntegerField(default=0) #关注
-    push = models.IntegerField(default=0) #催稿
+class Action(models.Model):
+    ACTION_CHOICES = (
+        ('support', u'支持'),
+        ('follow', u'关注'), #TODO : Power by django-follow
+        ('push', u'催稿')
+    )
+    user = models.ForeignKey(User)
+    action = models.CharField(max_length=8, choices=ACTION_CHOICES)
+    work = models.ForeignKey(Work)
     #push_today = models.IntegerField(default=0)
-    
+
+class Element(models.Model):
+    CATEGORY_CHOICE = (
+        ('word', u'文字'),
+        ('comic', u'漫画'),
+        ('gallery', u'图集')
+    )
+    category = models.CharField(max_length=8, choices=CATEGORY_CHOICE)
+    content = models.TextField()
+    work = models.ForeignKey(Work)

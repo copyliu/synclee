@@ -41,10 +41,14 @@ def add_work(request):
         #object_type = ContentType.objects.get(name='work')
         #object_id = new_work.id
         #notification.send([user], "new_work", {"from_user": user, "work":new_work}, sender=user, object_type=object_type, object_id=object_id)
-            return HttpResponseRedirect('/work/%s/edit/tab/' % work.id)
+            return HttpResponseRedirect('/works/write_work/%s' % work.id)
         else:
             return TemplateResponse(request, 'works/add_work.html', {'form': form})
 
     else:
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
+
+def write_work(request, work_id):
+    work = Work.objects.get(pk=int(work_id))
+    return TemplateResponse(request, 'works/write_work.html', {'work' : work})

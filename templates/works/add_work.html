@@ -55,28 +55,5 @@
     </div>
   </div>
 </div>
-	<form  id="vform" class="master" method="post" action="">
-		
-		<label class="required">
-			<span>作品名称</span>
-			<input name="name" id="id_name" type="text" placeholder="请输入作品名称"/> <em>* 此项必须填写</em>
-		</label>
-		<label class="required">
-			<span>作品类型</span>
-			<select name="catalog_id" id="catalog_id">
-				{% for c in catalogs %}
-				<option value="{{c.id}}">{{c.name}}</option>
-				{% endfor %}
-			</select>
-		</label>
-		<label class="required">
-			<span>隐私设置</span>
-			<select name="privacy" id="privacy">
-				{% for p in privacy %}
-				<option value={{p.0}} {% ifequal p.0 work.privacy %}selected="true"{% endifequal %}>{{p.1}}</option>
-				{% endfor %}
-			</select>
-	</form>
-</body>
 {% endblock %}
 
