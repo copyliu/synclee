@@ -4,4 +4,4 @@ django-relationships
 django-notification
 django-taggit
 #registration
-
+PIL
