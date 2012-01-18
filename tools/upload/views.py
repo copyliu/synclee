@@ -13,7 +13,7 @@ def check_existing(request):
 @csrf_exempt
 def upload_image(request):
     file_name = str(request.FILES['Filedata'].name);
-    file_path = 'static/'
+    file_path = 'media/'
     try:
         open(file_path+file_name, 'w')
     except:

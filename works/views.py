@@ -31,7 +31,7 @@ def add_work(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             intro = form.cleaned_data['intro']
-            work = Work.objects.create(name=name, intro=intro)
+            work = Work.objects.create(name=name, intro=intro,cover=request.FILES.get('cover', ''))
             work.save()
             #uploaded = request.FILES.get('cover', '')
             #catalog_id = request.POST.get('catalog_id')

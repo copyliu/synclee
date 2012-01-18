@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 #from synclee.club.models import Club, Project, Catalog
 #from synclee.tab.models import SubTabClass, TabClass
 from taggit.managers import TaggableManager
+from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.comments.moderation import CommentModerator, moderator
 
 class Work(models.Model):
@@ -14,7 +15,12 @@ class Work(models.Model):
         (u'Pri', u'私人'),
     )
     name = models.CharField(max_length=48)
-    cover = models.ImageField(blank=True, upload_to='cover', default='cover/default_cover.gif')
+    cover = ThumbnailerImageField(
+        blank=True,
+        upload_to='cover',
+        resize_source=dict(size=(100, 100), crop='smart'),
+        default='cover/default_cover.gif'
+    )
     #project = models.ForeignKey(Project, related_name='work', null=True)
     #founder = models.ForeignKey(User, related_name='own_work')
     #members = models.ManyToManyField(User, through='Membership', related_name='in_work')
@@ -40,9 +46,9 @@ class Action(models.Model):
 
 class Element(models.Model):
     CATEGORY_CHOICE = (
-        ('word', u'文字'),
-        ('comic', u'漫画'),
-        ('gallery', u'图集')
+        ('text', u'文字'),
+        ('image', u'图片'),
+        ('line', u'分割线')
     )
     category = models.CharField(max_length=8, choices=CATEGORY_CHOICE)
     content = models.TextField()
