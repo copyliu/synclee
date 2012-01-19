@@ -26,8 +26,8 @@
             <input type="text" placeholder="Search">
           </form>
           <ul class="nav secondary-nav">
-            <li><a href="#">登录</a></li>
-            <li><a href="#">注册</a></li>
+            <li><a href="{%url login %}">登录</a></li>
+            <li><a href="{%url register %}">注册</a></li>
           </ul>
         </div>
       </div><!-- /topbar-inner -->
@@ -40,7 +40,7 @@
 {% block extrahead %}{% endblock %}
 
 {% block content %}{% endblock %}
-<script type="text/javascript" src="/static/js/jquery-min-1.6.1.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="/static/js/knockout-2.0.0.debug.js"></script>
 {% block script %}{% endblock %}
 </body>

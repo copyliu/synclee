@@ -14,8 +14,8 @@
     </div>
     <div class="content">
       <div class="row">
-        <article class="span12" data-bind="foreach:workElements">
-          <div class="row">
+        <article class="span12" data-bind="foreach:workElements" ondragenter="return false" ondrop="console.log(2)">
+          <div class="row" draggable="true">
             <div class="span1"><span class="label success" data-bind="text: category"></span></div>
             <img data-bind="if: src, attr: {src:src}" />
             <p class="span11" data-bind="text: content"></p>
@@ -49,15 +49,16 @@
 
 {% block script %}
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
 
 <script>
 $(document).ready(function(){
+  $( "article" ).sortable();
     //批量上传按钮
 	$('#id_story_upload').uploadify ({
 		'swf'		: '/static/uploadify.swf',
 		'uploader' 	: '{%url upload_image %}', 
-		'script'	: '{%url upload_image %}', 
 		'cancelImage' : '/static/images/icons/cancel.png',
     'buttonClass' : 'btn',
 		'checkExisting' : '{%url check_existing %}',
@@ -86,6 +87,8 @@ function addImage(name){
   this.workElements.push({'category':'图片', 'content': null, 'src' : '/media/'+name})
   console.log(1)
 }
+
+var workElement = {};
 
 var mainViewModel = function(){
   var self = this;
