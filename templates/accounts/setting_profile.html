@@ -1,0 +1,50 @@
+{% extends "accounts/settings.html"  %}
+{% block content_content %}
+		<div class="page-header">
+			<h3>基础设置</h3>
+		</div>
+		<form ation="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<fieldset>
+		<div class="row"> 
+			<div class="span2">
+				<img src="/{{profile.avatar.name}}" width="126px" height="126px" />
+				<input class="input-file" id="fileInput" name="fileInput" type="file" style="width:126px;">
+				<h3>{{profile.user}}</h3>
+			</div>
+			
+			<div class="span9">
+				<div class="clearfix">
+            		<label for="id_name">真实姓名</label>
+		        	<div class="input">
+		          		<input class="span4" id="id_true_name" name="true_name" size="14" type="text" value="{{profile.true_name}}">
+		          		<span class="help-inline error">{{form.true_name.errors.0}}</span>
+		        	</div>
+		      	</div>
+		      	<div class="clearfix">
+            		<label for="id_name">地址</label>
+		        	<div class="input">
+		          		<textarea class="span4" id="id_location" name="location" rows="2">{{profile.location}}</textarea>
+		        	</div>
+		      	</div>
+		      	<div class="clearfix">
+            		<label for="id_email">email</label>
+		        	<div class="input">
+		          		<input class="span4" id="id_email" name="email" size="75" type="text" value="{{profile.email}}">
+		          		<span class="help-inline error">{{form.email.errors.0}}</span>
+		        	</div>
+		      	</div>
+		      	<div class="clearfix">
+            		<label for="id_name">自我介绍</label>
+		        	<div class="input">
+		          		<textarea class="span4" id="id_intro" name="intro" rows="5">{{profile.intro}}</textarea>
+		        	</div>
+		      	</div>
+			</div>
+		</div>
+		</fieldset>
+		<div class="actions">
+          <input type="submit" class="btn primary" value="Save changes">&nbsp;
+        </div>
+	</form>
+{% endblock %}

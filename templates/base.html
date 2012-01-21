@@ -27,7 +27,8 @@
           </form>
           <ul class="nav secondary-nav">
             {% if user.is_authenticated %}
-            <li><a href="#">{{request.user.username}}</a></li>
+            <li><a href="{%url profile request.user.username%}">{{request.user.username}}</a></li>
+            <li><a href="{%url settings "profile"%}">个人设置</a></li>
             <li><a href="{%url logout %}">登出</a></li>
             {% else %}
             <li><a href="{%url login %}">登录</a></li>
