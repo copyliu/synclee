@@ -3,7 +3,7 @@
 {% block title %}创建新作品{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container" >
   <div class="container-fluid">
     <div class="sidebar">
       <img src="/media/{{work.cover}}" width="100%" height="200" />
@@ -14,17 +14,13 @@
     </div>
     <div class="content">
       <div class="row">
-        <article class="span12" data-bind="foreach:workElements" ondragenter="return false" ondrop="console.log(2)">
-          <div class="row" draggable="true">
-            <div class="span1"><span class="label success" data-bind="text: category"></span></div>
-            <img data-bind="if: src, attr: {src:src}" />
-            <p class="span11" data-bind="text: content"></p>
-          </div>
+        <article class="span12">
+
         </article>
         <div class="span12" id="tool_bar">
           <button class="btn" data-controls-modal="id_add_text" data-backdrop="true" data-keyboard="true">添加文字</button>
           <input type="file" name="story_upload" id="id_story_upload" class="btn"/>
-          <button class="btn" data-bind="click: addLine">分割线</button>
+          <input type="text" id="id_line_name" /><button class="btn">添加分割线</button>
         </div>
       </div>
     </div>
@@ -42,7 +38,7 @@
     <textarea id="id_text" rows="5" cols="100"></textarea>
   </div>
   <div class="modal-footer">
-    <a href="#" data-bind="click: addText" class="btn primary">Dmyz</a>
+    <a href="#" class="btn primary" onclick="Controller.addElement.text()">Submit</a>
   </div>
 </div>
 {% endblock %}
@@ -54,7 +50,26 @@
 
 <script>
 $(document).ready(function(){
-  $( "article" ).sortable();
+  $("article" ).sortable();
+  
+  $("article .element").live('mouseover', function(){
+    $(this).children("toolbar").show()
+  }).live('mouseout', function(){
+    $(this).children("toolbar").hide()
+  })
+  
+  $('article .element toolbar [name="delete"]').live('click',function(){
+    var answer = confirm('Delete?');
+    if (answer) $(this).parent().parent().remove();
+  })
+  
+  $('article .element toolbar [name="edit"]').live('click',function(){
+    if (answer) $(this).parent().parent().remove();
+  })
+  
+  $("#id_line_name").next().bind('click', function(){
+    Controller.addElement.line()
+  })
     //批量上传按钮
 	$('#id_story_upload').uploadify ({
 		'swf'		: '/static/uploadify.swf',
@@ -68,37 +83,58 @@ $(document).ready(function(){
     'auto'    : true,
 		'buttonText': '添加图片',
 		'onUploadComplete' : function (data) {
-      KO.addImage(data.name)
+      Controller.addElement.image(data.name)
 		}
 	});
 })
 
-function addText(){
-  var v = $('#id_text').val();
-  this.workElements.push({'category':'文字', 'content' : v, 'src' : null})
-  $('#id_add_text').modal('hide')
+var View = {
+  text : function(content){
+    return '<div class="row element">'+
+  '<div class="span1"><span class="label success">文字</span></div>'+
+  '<p class="span11">'+content+'</p>'+
+  '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+  '</div>'},
+  image : function(name){
+    return '<div class="row element">'+
+  '<div class="span1"><span class="label success">图片</span></div>'+
+  '<img class="span11" src="/media/'+name+'"></p>'+
+  '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+  '</div>'},
+  line : function(name){
+    return '<div class="row element">'+
+  '<div class="span1"><span class="label success">分割线</span></div>'+
+  '<p class="span11">'+name+'</p>'+
+  '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+  '</div>'},
 }
 
-function addLine(){
-  this.workElements.push({'category':'分割线', 'content' : '----------------------------------', 'src' : null})
-}
-
-function addImage(name){
-  this.workElements.push({'category':'图片', 'content': null, 'src' : '/media/'+name})
-  console.log(1)
-}
-
-var workElement = {};
-
-var mainViewModel = function(){
-  var self = this;
-  self.workElements = ko.observableArray([]);
+var Controller = {
+  addElement : {
+    text : function(){
+      var v = $('#id_text').val();
+      $('article').append(View.text(v));
+      $('#id_add_text').modal('hide');
+    },
+    image : function(name){
+      $('article').append(View.image(name));
+    },
+    line : function(){
+      var v = $('#id_line_name').val();
+      $('article').append(View.line(v));
+    }
+  },
   
-  self.addText = addText;
-  self.addLine = addLine;
-  self.addImage = addImage;
+  toolbar : {
+    show : function(){
+      
+    },
+    hide : function(){
+      
+    }
+  }
 }
-KO = new mainViewModel();
-ko.applyBindings(KO);
+
+
 </script>
 {% endblock %}
