@@ -4,17 +4,17 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 class UserProfiles(models.Model):
-	user = models.ForeignKey(User, related_name='profile')
-	avatar = models.ImageField(upload_to='avatar', default='avatar/default_avatar')
-	website = models.URLField(blank = True)
-	intro = models.TextField()
-	location = models.CharField(max_length = 50, blank = True)
-	true_name = models.CharField(max_length = 14, blank = True)
-	email = models.EmailField()
+    user = models.ForeignKey(User, related_name='profile')
+    avatar = models.ImageField(upload_to='avatar', default='avatar/default_avatar')
+    website = models.URLField(blank = True)
+    intro = models.TextField()
+    location = models.CharField(max_length = 50, blank = True)
+    true_name = models.CharField(max_length = 14, blank = True)
+    email = models.EmailField()
     
-    #¼¼ÄÜ
-    #È¨ÏŞ
-    #×÷Æ·
-    #¹Ø×¢×÷Æ·
-    #²ÎÓë×÷Æ·
-    #¡£¡£¡£
+    #æŠ€èƒ½
+    #æƒé™
+    #ä½œå“
+    #å…³æ³¨ä½œå“
+    #å‚ä¸ä½œå“
+    #ã€‚ã€‚ã€‚

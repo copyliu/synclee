@@ -29,57 +29,57 @@ def register(request):
     return TemplateResponse(request, 'accounts/register.html', {'form': form})
 
 def user2profile(user):
-	profile = user.profile.all()
-	if len(profile) == 0: #≥ı ºªØƒ¨»œprofile
-		profile = UserProfiles(user = user)
-		profile.save()
-	elif len(profile) > 1:
-		raise Http404("something wrong with the username")
-	else:
-		profile = profile[0]
-	return profile
+    profile = user.profile.all()
+    if len(profile) == 0: #ÂàùÂßãÂåñÈªòËÆ§profile
+        profile = UserProfiles(user = user)
+        profile.save()
+    elif len(profile) > 1:
+        raise Http404("something wrong with the username")
+    else:
+        profile = profile[0]
+    return profile
 
 def profile(request, user = None):
-	if user is None: #∑√Œ /accounts/profile/
-		if request.user.is_authenticated():
-			user = request.user
-		else:
-			raise Http404("Login is required")
-	else: #∑√Œ /accounts/profile/(”√ªß√˚)/
-		print user
-		try:
-			user = User.objects.get(username = user)
-		except Exception as ex:
-			raise Http404(type(ex))  #fix later ”√ªß≤ª¥Ê‘⁄
+    if user is None or user == '': #ËÆøÈóÆ/accounts/profile/
+        if request.user.is_authenticated():
+            user = request.user
+        else:
+            raise Http404("Login is required")
+    else: #ËÆøÈóÆ/accounts/profile/(Áî®Êà∑Âêç)/
+        print user
+        try:
+            user = User.objects.get(username = user)
+        except Exception as ex:
+            raise Http404(type(ex))  #fix later Áî®Êà∑‰∏çÂ≠òÂú®
 
-	return TemplateResponse(request, 'accounts/profile.html', {'profile':user2profile(user)})
+    return TemplateResponse(request, 'accounts/profile.html', {'profile':user2profile(user)})
 
 #login required
 def settings(request, item):
-	if item == "profile":
-		if not request.user.is_authenticated():
-			raise Http404("Login is required")
-		profile = user2profile(request.user)
-	
-		if request.method == 'POST':
-			form = UserProfileForm(request.POST)
-			if form.is_valid():
-				profile.true_name = form.cleaned_data['true_name']
-				profile.email = form.cleaned_data['email']
-				profile.location = form.cleaned_data['location']
-				profile.intro = form.cleaned_data['intro']
-				profile.save()
-				return HttpResponseRedirect('/accounts/settings/profile/')
-			else:
-				return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':item})
-		else:
-			form = UserProfileForm()
-			return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':item})
-	elif item == "skill":
-		if not request.user.is_authenticated():
-			raise Http404("Login is required")
-		profile = user2profile(request.user)
-		#TODO
-	else:
-		raise Http404("no setting")
-			
+    if item == "profile":
+        if not request.user.is_authenticated():
+            raise Http404("Login is required")
+        profile = user2profile(request.user)
+
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST)
+            if form.is_valid():
+                profile.true_name = form.cleaned_data['true_name']
+                profile.email = form.cleaned_data['email']
+                profile.location = form.cleaned_data['location']
+                profile.intro = form.cleaned_data['intro']
+                profile.save()
+                return HttpResponseRedirect('/accounts/settings/profile/')
+            else:
+                return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':item})
+        else:
+            form = UserProfileForm()
+            return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':item})
+    elif item == "skill":
+        if not request.user.is_authenticated():
+            raise Http404("Login is required")
+        profile = user2profile(request.user)
+        #TODO
+    else:
+        raise Http404("no setting")
+            
