@@ -18,7 +18,7 @@ class Work(models.Model):
     cover = ThumbnailerImageField(
         blank=True,
         upload_to='cover',
-        resize_source=dict(size=(100, 100), crop='smart'),
+        resize_source=dict(size=(300, 300), crop='smart'),
         default='cover/default_cover.gif'
     )
     #project = models.ForeignKey(Project, related_name='work', null=True)

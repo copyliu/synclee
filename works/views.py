@@ -9,12 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
-from .models import Work
+from .models import Work, Element
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
-import string, random
+#import string, random
 from django.utils import simplejson
 
 PRIVACY_CHOICES = (
@@ -31,13 +31,16 @@ def add_work(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             intro = form.cleaned_data['intro']
-            work = Work.objects.create(name=name, intro=intro,cover=request.FILES.get('cover', ''))
+            work = Work.objects.create(name=name, intro=intro)
+            #handle cover
+            cover = request.FILES.get('cover', '')
+            if cover:
+                cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
+            work.cover = cover
             work.save()
             #uploaded = request.FILES.get('cover', '')
             #catalog_id = request.POST.get('catalog_id')
             
-        #if uploaded:
-        #    work.cover.save('work_%s_cover.jpg' % work.id, ContentFile(uploaded.read()), save=True)
         #object_type = ContentType.objects.get(name='work')
         #object_id = new_work.id
         #notification.send([user], "new_work", {"from_user": user, "work":new_work}, sender=user, object_type=object_type, object_id=object_id)
@@ -48,7 +51,15 @@ def add_work(request):
     else:
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
-
+    
+@csrf_exempt
 def write_work(request, work_id):
-    work = Work.objects.get(pk=int(work_id))
-    return TemplateResponse(request, 'works/write_work.html', {'work' : work})
+    if request.method == 'POST':
+        category = request.POST.get('category', '')
+        content = request.POST.get('content', '')
+        element = Element.objects.create(work_id=work_id, category=category, content=content)
+        element.save()
+        return HttpResponse(element.id)
+    else:
+        work = Work.objects.get(pk=int(work_id))
+        return TemplateResponse(request, 'works/write_work.html', {'work' : work})
