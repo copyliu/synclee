@@ -161,4 +161,9 @@ LOGGING = {
     }
 }
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+AUTH_PROFILE_MODULE = 'accounts.UserProfiles'
+LOGIN_REDIRECT_URL = '/accounts/settings/profile/'
+
+DEFAULT_FROM_EMAIL = 'admin@doujinstg.cn'
+EMAIL_HOST = 'smtp.exmail.qq.com'
+EMAIL_PORT = 25

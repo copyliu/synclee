@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
 from django.contrib.auth.models import User
-# Create your models here.
+
+from easy_thumbnails.fields import ThumbnailerImageField
+
 class UserProfiles(models.Model):
     user = models.ForeignKey(User, related_name='profile')
-    avatar = models.ImageField(upload_to='avatar', default='avatar/default_avatar')
+    avatar = ThumbnailerImageField(upload_to='avatar', default='avatar/default_avatar', resize_source=dict(size=(200, 200), crop='big'),)
     website = models.URLField(blank = True)
     intro = models.TextField()
     location = models.CharField(max_length = 50, blank = True)
