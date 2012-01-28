@@ -83,8 +83,9 @@
 					<div class="span6">
 						<h4>技能</h4>
 						<ul class="abilities">
-							<li class="shui lv1" title="围观">围观 <strong>Lv1</strong></li>
-							<li class="prog lv1" title="程">程 <strong>Lv1</strong></li>
+							{% for category, lv, name in profile_skill%}
+							<li class="{{category}} lv{{lv}}" title="{{name}}">{{name}} <strong>Lv{{lv}}</strong></li>
+							{% endfor %}
 						</ul>
 					</div>
 				</div>

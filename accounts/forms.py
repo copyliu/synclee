@@ -53,6 +53,7 @@ class RegistrationForm(forms.Form):
         exists = User.objects.filter(email = email).count() > 0
         if exists:
             raise forms.ValidationError(u'邮箱已经被使用，请更换邮箱')
+        return email
         
     def clean_username(self):
         username = self.cleaned_data['username']

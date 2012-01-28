@@ -4,10 +4,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect #, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from accounts.forms import RegistrationForm, UserProfileForm
 from accounts.models import UserProfiles
 from django.http import Http404, HttpResponseRedirect
+
+from accounts.skill import set_skill, int2skill
 
 def register(request):
     if request.method == 'POST':
@@ -30,37 +33,33 @@ def register(request):
 
 def user2profile(user):
     profile = user.profile.all()
-    if len(profile) == 0: #初始化默认profile
-        profile = UserProfiles(user = user)
-        profile.save()
-    elif len(profile) > 1:
+    if len(profile) != 1:
         raise Http404("something wrong with the username")
     else:
         profile = profile[0]
     return profile
 
 def profile(request, user = None):
-    if user is None or user == '': #访问/accounts/profile/
+    if not user: #访问/accounts/profile/
         if request.user.is_authenticated():
             user = request.user
         else:
             raise Http404("Login is required")
     else: #访问/accounts/profile/(用户名)/
-        print user
         try:
             user = User.objects.get(username = user)
         except Exception as ex:
             raise Http404(type(ex))  #fix later 用户不存在
+    
+    profile = user2profile(user)
+    profile_skill = int2skill(profile.skill)
+    return TemplateResponse(request, 'accounts/profile.html', {'profile':profile, 'profile_skill':profile_skill})
 
-    return TemplateResponse(request, 'accounts/profile.html', {'profile':user2profile(user)})
-
-#login required
+@login_required
 def settings(request, item):
+    profile = user2profile(request.user)
+    
     if item == "profile":
-        if not request.user.is_authenticated():
-            raise Http404("Login is required")
-        profile = user2profile(request.user)
-
         if request.method == 'POST':
             form = UserProfileForm(request.POST)
             if form.is_valid():
@@ -76,10 +75,7 @@ def settings(request, item):
             form = UserProfileForm()
             return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':item})
     elif item == "skill":
-        if not request.user.is_authenticated():
-            raise Http404("Login is required")
-        profile = user2profile(request.user)
-        #TODO
+        return set_skill(request, profile)
     else:
         raise Http404("no setting")
             
