@@ -13,8 +13,15 @@ class UserProfiles(models.Model):
     email = models.EmailField()
     
     #技能
+    skill = models.PositiveIntegerField(default = 0)
     #权限
     #作品
     #关注作品
     #参与作品
     #。。。
+
+def create_user_profile(sender = None, instance = None, created = False, **kwargs):
+    if created:
+        UserProfiles.objects.create(user = instance)
+   
+models.signals.post_save.connect(create_user_profile, sender = User)
