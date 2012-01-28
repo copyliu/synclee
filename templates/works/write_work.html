@@ -198,9 +198,8 @@ var Controller = {
       }
       
       $.ajax({ type: 'post', data: {'category': type, content: content}});
-
-      console.log(type);
     })
+    location.href = '{%url show_work work.id %}';
   },
   get : {
     type : function(){
