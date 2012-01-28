@@ -1,0 +1,13 @@
+{% extends "base.html"%}
+
+{% block title %} {{element.content}} {% endblock %}
+
+{% block content %}
+<div class="container">
+  <div>
+    <span class="label success">{{ element.category }}</span>
+    <p>{{element.content}}</p>
+  </div>
+</div>
+{% endblock %}
+

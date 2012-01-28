@@ -81,17 +81,17 @@ $(document).ready(function(){
   $('article .element toolbar [name="edit"]').live('click',function(){
     var type = $(this).parent().parent().children('.span1').text();
     switch(type) {
-	    case '分割线':
+      case '分割线':
         var dom = $(this).parent().parent().children('p');
-	      Controller.editElement.line(dom);
-		    break;
+        Controller.editElement.line(dom);
+        break;
       case '文字':
         window.tempTextElement = $(this).parent().parent().children('p');
         //html(dom.text())
         $('#id_edit_text_content').val(window.tempTextElement.text());
         break;
-	    default: 
-		    break;
+      default: 
+        break;
     };
   });
   
@@ -106,17 +106,18 @@ $(document).ready(function(){
     //批量上传按钮
 	$('#id_story_upload').uploadify ({
 		'swf'		: '/static/uploadify.swf',
-		'uploader' 	: '{%url upload_image %}', 
+		'uploader' 	: '{%url upload_image request.user.id %}', 
+    'script'  :  '{%url upload_image request.user.id %}', 
 		'cancelImage' : '/static/images/icons/cancel.png',
     'buttonClass' : 'btn',
 		'checkExisting' : '{%url check_existing %}',
 		'removeCompleted': true,
-		'fileExt'     : '*.jpg;*.gif;*.png',
+    'fileExt'     : '*.jpg;*.gif;*.png',
 		'multi'		: true,
     'auto'    : true,
 		'buttonText': '添加图片',
-		'onUploadComplete' : function (data) {
-      Controller.addElement.image(data.name)
+		'onUploadSuccess' : function (file, data, response) {
+      Controller.addElement.image(data)
 		}
 	});
 })
@@ -132,7 +133,7 @@ var View = {
     image : function(name){
       return '<div class="row element">'+
     '<div class="span1"><span class="label success">图片</span></div>'+
-    '<img class="span11" src="/media/'+name+'"></p>'+
+    '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
     '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
     '</div>'},
     line : function(name){
@@ -180,10 +181,10 @@ var Controller = {
       var type = $(".element").eq(i).children('.span1').text();
       var content = '';
       switch(type) {
-	      case '分割线':
+        case '分割线':
           content = $(".element").eq(i).children('p').text();
           type = 'line';
-		      break;
+          break;
         case '文字':
           content = $(".element").eq(i).children('p').text();
           type = 'text';

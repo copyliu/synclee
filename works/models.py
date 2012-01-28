@@ -21,6 +21,7 @@ class Work(models.Model):
         resize_source=dict(size=(300, 300), crop='smart'),
         default='cover/default_cover.gif'
     )
+    author = models.ForeignKey(User)
     #project = models.ForeignKey(Project, related_name='work', null=True)
     #founder = models.ForeignKey(User, related_name='own_work')
     #members = models.ManyToManyField(User, through='Membership', related_name='in_work')

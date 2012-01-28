@@ -1,0 +1,26 @@
+{% extends "base.html"%}
+
+{% block title %} {{work.name}} {% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="container-fluid">
+    <div class="sidebar">
+      Workname: {{work.name}}
+    </div>
+    <div class="content">
+      {% if elements %}
+        {% for element in elements %}
+        <div>
+          <span class="label success">{{ element.category }}</span>
+          <p><a href="{%url show_element element.id %}">{{element.content}}</a></p>
+        </div>
+        {% endfor %}
+      {% else %}
+        当前work没有任何element
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

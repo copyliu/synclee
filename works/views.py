@@ -31,7 +31,7 @@ def add_work(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             intro = form.cleaned_data['intro']
-            work = Work.objects.create(name=name, intro=intro)
+            work = Work.objects.create(name=name, intro=intro, author=request.user)
             #handle cover
             cover = request.FILES.get('cover', '')
             if cover:
@@ -51,7 +51,15 @@ def add_work(request):
     else:
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
-    
+
+def show_work(request, work_id):
+    work = Work.objects.get(pk=work_id)
+    try:
+        elements = Element.objects.filter(work=work)
+    except:
+        elements = None
+    return TemplateResponse(request, 'works/show_work.html', {'work': work, 'elements' : elements})
+
 @csrf_exempt
 def write_work(request, work_id):
     if request.method == 'POST':
@@ -63,3 +71,7 @@ def write_work(request, work_id):
     else:
         work = Work.objects.get(pk=int(work_id))
         return TemplateResponse(request, 'works/write_work.html', {'work' : work})
+    
+def show_element(request, element_id):
+    element = get_object_or_404(Element, pk=element_id)
+    return TemplateResponse(request, 'works/show_element.html', {'element' : element})
