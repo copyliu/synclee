@@ -117,7 +117,8 @@ $(document).ready(function(){
     'auto'    : true,
 		'buttonText': '添加图片',
 		'onUploadSuccess' : function (file, data, response) {
-      Controller.addElement.image(data)
+      console.log(file)
+      Controller.addElement.image(data);
 		}
 	});
 })

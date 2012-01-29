@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django.db.transaction import commit_on_success
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -74,4 +74,11 @@ def write_work(request, work_id):
     
 def show_element(request, element_id):
     element = get_object_or_404(Element, pk=element_id)
-    return TemplateResponse(request, 'works/show_element.html', {'element' : element})
+    prev = Element.objects.filter(work=element.work).filter(id__lt=element.id)
+    next = Element.objects.filter(work=element.work).filter(id__gt=element.id)
+    
+    nav = {
+        'prev' : prev or False,
+        'next' : next or False
+    }
+    return TemplateResponse(request, 'works/show_element.html', {'element' : element, 'nav' : nav})
