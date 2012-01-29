@@ -5,8 +5,18 @@
 {% block content %}
 <div class="container">
   <div>
+    {%if nav.prev %}
+    <a href="{%url show_element element.id|add:"-1" %}"><button class="btn span6">上一个</button></a>
+    {% endif %}
     <span class="label success">{{ element.category }}</span>
-    <p>{{element.content}}</p>
+       {%  if element.category == "image" %}
+       <p><img src="{{element.content}}" /></p>
+       {% else %}
+       <p>{{element.content}}</p>
+       {% endif %}
+    {%if nav.next %}
+    <a href="{%url show_element element.id|add:"1" %}"><button class="btn span6">下一个</button></a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
