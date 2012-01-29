@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.template.response import TemplateResponse
 
+SKILL_CHOICES = (
+    (u'write', u'写手'),
+    (u'paint', u'画师'),
+    (u'design', u'设计美工'),
+    (u'prog', u'程序员'),
+    (u'music', u'音乐制作'),
+    (u'_other', u'其他'),
+)
+
 skills = {
     'write' : (u'写手', u'写',
                 [(u'长篇', 0), (u'中篇', 1), (u'短篇', 2), (u'文案', 3)]

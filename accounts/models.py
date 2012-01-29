@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from easy_thumbnails.fields import ThumbnailerImageField
 
+from accounts.skills import SKILL_CHOICES
+
 class UserProfiles(models.Model):
     user = models.ForeignKey(User, related_name='profile')
     avatar = ThumbnailerImageField(upload_to='avatar', default='avatar/default_avatar.jpg', resize_source=dict(size=(200, 200), crop='big'),)
@@ -26,3 +28,9 @@ def create_user_profile(sender = None, instance = None, created = False, **kwarg
         UserProfiles.objects.create(user = instance)
    
 models.signals.post_save.connect(create_user_profile, sender = User)
+
+class UserSkills(models.Model):
+    user = models.ForeignKey(User, related_name='skills')
+    skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
+    exp = models.IntegerField(default = 0)
+    today_exp = models.IntegerField(default = 0)
