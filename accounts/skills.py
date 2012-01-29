@@ -21,17 +21,21 @@ skills = {
                [(u'围观的能力', 23)]
                ),
 }
-total_skill = 23
+total_skill = 24
 
-def int2skill(skill):
+def skill2str(skill):
     if not skill:
         skill = 0
+    return (("%%%ds" % total_skill) % bin(skill)[2:])
+
+def int2skill(skill):
+    skill = skill2str(skill)
     
     profile_skill = []
     for i, (_, abbreviation, list) in skills.items():
         tem = False
         for _, sid in list:
-            if skill & (1<<sid):
+            if skill[sid] == '1':
                 tem = True
                 break
         
@@ -40,15 +44,13 @@ def int2skill(skill):
     return profile_skill
     
 def set_skill(request, profile):
-    skill = profile.skill
-    if not skill:
-        skill = 0
+    skill = skill2str(profile.skill)
     
     skill_list = []
     for i, (category, abbreviation, list) in skills.items():
         tem = []
         for item, sid in list:
-            if skill & (1<<sid):
+            if skill[sid] == '1':
                 checked = "checked"
             else: checked = ""
             
@@ -56,19 +58,19 @@ def set_skill(request, profile):
         skill_list.append((category, tem))
     
     if request.method == 'POST':
-        skill = 0
+        skill = ['0' for _ in range(total_skill)]
         for i, _ in request.POST.items():
             if i.startswith("skill_"):
                 sid = int(i[6:])
                 if sid > total_skill or sid < 0: continue
-                skill = (skill | (1<<sid))
-        profile.skill = skill
+                skill[sid] = '1'
+        profile.skill = int(''.join(skill), 2)
         profile.save()
         
         for category, list in skill_list:
             for i in xrange(len(list)):
                 item, sid, checked = list[i]
-                if skill & (1<<int(sid[6:])):
+                if skill[int(sid[6:])] == '1':
                     list[i] = (item, sid, "checked")
                 else:
                     list[i] = (item, sid, "")

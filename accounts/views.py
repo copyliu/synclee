@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect, get_object_or_404#, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 
 from accounts.forms import RegistrationForm, UserProfileForm
 from accounts.models import UserProfiles
@@ -37,20 +38,30 @@ def profile(request, username):
     
     profile = UserProfiles.objects.get(user=user)
     profile_skill = int2skill(profile.skill)
-    return TemplateResponse(request, 'accounts/profile.html', {'profile':profile, 'profile_skill':profile_skill})
+    work_set = user.work_set.all()
+    
+    context = {
+        'profile':profile, 
+        'profile_skill':profile_skill,
+        'work_set' : work_set,
+        'user' : user,
+    }
+    return TemplateResponse(request, 'accounts/profile.html', context)
 
 @login_required
 def settings(request, item):
     profile = UserProfiles.objects.get(pk=request.user.id)
     
     if item == "profile":
-        return _set_profile(request)
+        return _set_profile(request, profile)
     elif item == "skill":
         return set_skill(request, profile)
+    elif item == "psw":
+        return set_psw(request)
     else:
         raise Http404("no setting")
             
-def _set_profile(request):
+def _set_profile(request, profile):
     if request.method == 'POST':
         form = UserProfileForm(request.POST)
         if form.is_valid():
@@ -68,3 +79,13 @@ def _set_profile(request):
     else:
         form = UserProfileForm()
         return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':'profile'})
+
+def set_psw(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user = request.user, data = request.POST)
+        if form.is_valid():
+            form.save()
+        else: 
+            return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})  
+    form = PasswordChangeForm(user = request.user)
+    return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})

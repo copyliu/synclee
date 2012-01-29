@@ -1,5 +1,5 @@
 {% extends "base.html"  %}
-
+{% block title %}{{user.username}}{% endblock %}
 {% block content %}
   
 <style type='text/css'>
@@ -45,6 +45,21 @@
 				<div class="page-header">
 					<h3>主创作品</h3>
 			  	</div>
+			  	<div class="row">
+				  	{% for work in work_set%}
+					<div class="span2">
+						<li><a href="{%url show_work work.pk%}">
+							<img src="/media/{{work.cover}}" width="100px" height="100px">
+						</a></li>
+						<li><a href="{%url show_work work.pk%}">
+							{{work.name}}
+						</a></li>
+						<li> <a href="{%url profile user.username%}">
+							by {{user.username}}
+						</a> </li>
+					</div>
+					{% endfor %}
+				</div>
 			</section> <!-- section work -->
 			<section id = "focus">
 				<div class="page-header">
@@ -64,7 +79,7 @@
 		    	<a href = "{%url profile request.user.username%}">
 				<div class="row ">
 					<div class="span1">
-						<img src="/{{profile.avatar.name}}" width="55px" height="55px" />
+						<img src="/media/{{profile.avatar.name}}" width="55px" height="55px" />
 					</div>
 					<div class="span2">
 						<h3>{{profile.user}}</h3>
