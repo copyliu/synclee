@@ -34,3 +34,8 @@ class UserSkills(models.Model):
     skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
     exp = models.IntegerField(default = 0)
     today_exp = models.IntegerField(default = 0)
+
+class AccountTempPassword(models.Model):
+    user = models.ForeignKey(User, related_name='tmp_psw')
+    tmp_psw = models.CharField(max_length = 20)
+    datetime = models.DateTimeField(auto_now_add = True)

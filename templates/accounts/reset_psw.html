@@ -1,10 +1,9 @@
 {% extends "base.html"  %}
-
+{% block title %}重置密码{% endblock %}
 {% block content %}
 <form action="" method="post">
   {% csrf_token %}
 {{form.as_p}}
-<button class="btn">Submit</button>
-<a href="{%url reset_psw %}"><U>忘记密码？</U></a>
+<button class="btn">Reset</button>
 </form>
 {% endblock %}

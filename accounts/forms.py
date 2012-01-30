@@ -75,6 +75,11 @@ class RegistrationForm(forms.Form):
     
 class GetPasswordForm(forms.Form):
     email = forms.EmailField(max_length = 75, widget = forms.TextInput())
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email = email).count() != 1:
+            raise forms.ValidationError("这个邮箱不对应特定帐号!")
+        return email
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(error_messages = {'required': u'原始密码不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是16个字符'}, min_length = 6, max_length = 16)

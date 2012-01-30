@@ -164,6 +164,11 @@ LOGGING = {
 AUTH_PROFILE_MODULE = 'accounts.UserProfiles'
 LOGIN_REDIRECT_URL = '/accounts/settings/profile/'
 
-DEFAULT_FROM_EMAIL = 'admin@doujinstg.cn'
-EMAIL_HOST = 'smtp.exmail.qq.com'
+#DEFAULT_FROM_EMAIL = 'admin@doujinstg.cn'
+#EMAIL_HOST = 'smtp.exmail.qq.com'
+#EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'james0zan_tmp@163.com'
+EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
+EMAIL_HOST_PASSWORD = 'fdhlkshafsdf'
+EMAIL_HOST_USER = 'james0zan_tmp'
