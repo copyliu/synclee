@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-
+{% load comments %}
 {% block title %} {{element.content}} {% endblock %}
 
 {% block content %}
@@ -18,6 +18,48 @@
     <a href="{%url show_element element.id|add:"1" %}"><button class="btn span6">下一个</button></a>
     {% endif %}
   </div>
+
+{% get_comment_list for element as comment_list %}
+<ul id="comment">
+{% for comment in comment_list %}
+    <li>{{comment}}</li>
+{% endfor %}
+</ul>
+{% get_comment_form for element as form %}
+<table>
+  <form action="{% comment_form_target %}" method="post">
+    {% csrf_token %}
+
+    CONTENT: {{form.comment}}
+    <tr>
+      <td colspan="2">
+        <input type="hidden" name="honeypot" id="id_honeypot">
+        <input id="id_name" type="hidden" name="name" value="{{request.user.username|default:"游客"}}">
+        <input type="hidden" name="email" id="id_email" value="{{request.user.email|default:"guest@doujinstg.cn"}}">
+        {{form.timestamp}} {{form.content_type}} {{form.object_pk}} {{form.security_hash}} 
+        <input type="submit" name="submit" value="Post">
+      </td>
+    </tr>
+  </form>
+</table>
 </div>
 {% endblock %}
 
+{% block script %}
+<script>
+$(document).ready(function(){
+  $('.container form').bind('submit', function(){
+    $.ajax({
+      type : 'post',
+      url : '/comments/post/',
+      data : $(this).serialize(),
+      success : $("#comment").append("<li>"+$("#id_name").val()+":"+$("#id_comment").val()+"</li>")
+    })
+    return false;
+  })
+  
+  //console.log($('form').serialize());
+})
+
+</script>
+{% endblock %}
