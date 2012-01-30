@@ -23,7 +23,10 @@ def upload_image(request, user_id):
     
     upload_path = os.path.join('media', 'upload')
     user_upload_folder = os.path.join(upload_path, user_id)
-
+    
+    if not os.path.exists(upload_path):
+        os.mkdir(upload_path)
+    
     if not os.path.exists(user_upload_folder):
         os.mkdir(user_upload_folder)
         

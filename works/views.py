@@ -72,6 +72,20 @@ def write_work(request, work_id):
         work = Work.objects.get(pk=int(work_id))
         return TemplateResponse(request, 'works/write_work.html', {'work' : work})
     
+@csrf_exempt
+def edit_work(request, work_id):
+    if request.method == 'POST':
+        category = request.POST.get('category', '')
+        content = request.POST.get('content', '')
+        element = Element.objects.create(work_id=work_id, category=category, content=content)
+        element.save()
+        return HttpResponse(element.id)
+    else:
+        work = Work.objects.get(pk=int(work_id))
+        elements = Element.objects.filter(work=work)
+        print elements
+        return TemplateResponse(request, 'works/edit_work.html', {'work' : work, 'elements' : elements})
+    
 def show_element(request, element_id):
     element = get_object_or_404(Element, pk=element_id)
     prev = Element.objects.filter(work=element.work).filter(id__lt=element.id)

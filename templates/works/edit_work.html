@@ -1,0 +1,233 @@
+{% extends "base.html"%}
+
+{% block title %}创建新作品{% endblock %}
+
+{% block content %}
+<div class="container" >
+  <div class="container-fluid">
+    <div class="sidebar">
+      <img src="/media/{{work.cover}}" width="100%" height="200" />
+        <div class="span4">
+          {{work.name}}
+          <p>{{work.intro}}</p>
+        </div>
+    </div>
+    <div class="content">
+      <div class="row">
+        <article class="span12">
+
+        </article>
+        <div class="span12" id="tool_bar">
+          <button id="id_add_text_button" class="btn" data-controls-modal="id_add_text" data-backdrop="true" data-keyboard="true">添加文字</button>
+          <input type="file" name="story_upload" id="id_story_upload" class="btn"/>
+          <input type="text" id="id_line_name" /><button class="btn">添加分割线</button>
+          <button class="btn" type="submit">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="id_add_text" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3>Input Text!</h3>
+  </div>
+  <div class="modal-body">
+    <textarea id="id_add_text_content" rows="5" cols="100"></textarea>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary" onclick="Controller.addElement.text()">Submit</a>
+  </div>
+</div>
+
+<div id="id_edit_text" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3>Input Text!</h3>
+  </div>
+  <div class="modal-body">
+    <textarea id="id_edit_text_content" rows="5" cols="100"></textarea>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary" onclick="Controller.editElement.text()">Edit</a>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
+
+<script>
+$(document).ready(function(){
+  
+  {% for e in elements %}
+    {% if e.category == 'text' %}
+    $('article').append(View.Element.text('{{e.content}}'));
+    {% endif %}
+    
+    {% if e.category == 'line' %}
+    $('article').append(View.Element.line('{{e.content}}'));
+    {% endif %}
+    
+    {% if e.category == 'image' %}
+    $('article').append(View.Element.image('{{e.content}}'));
+    {% endif %}
+  {% endfor %}
+  
+  
+  $("article" ).sortable();
+  
+  $("article .element").live('mouseover', function(){
+    $(this).children("toolbar").show()
+  }).live('mouseout', function(){
+    $(this).children("toolbar").hide()
+  })
+  
+  $('article .element toolbar [name="delete"]').live('click',function(){
+    var answer = confirm('Delete?');
+    if (answer) $(this).parent().parent().remove();
+  })
+  
+  $('article .element toolbar [name="edit"]').live('click',function(){
+    var type = $(this).parent().parent().children('.span1').text();
+    switch(type) {
+      case '分割线':
+        var dom = $(this).parent().parent().children('p');
+        Controller.editElement.line(dom);
+        break;
+      case '文字':
+        window.tempTextElement = $(this).parent().parent().children('p');
+        //html(dom.text())
+        $('#id_edit_text_content').val(window.tempTextElement.text());
+        break;
+      default: 
+        break;
+    };
+  });
+  
+  $('button[type="submit"]').bind('click', function(){
+    Controller.submitWork();
+  });
+  
+  $("#id_line_name").next().bind('click', function(){
+    Controller.addElement.line();
+  });
+  
+    //批量上传按钮
+	$('#id_story_upload').uploadify ({
+		'swf'		: '/static/uploadify.swf',
+		'uploader' 	: '{%url upload_image request.user.id %}', 
+    'script'  :  '{%url upload_image request.user.id %}', 
+		'cancelImage' : '/static/images/icons/cancel.png',
+    'buttonClass' : 'btn',
+		'checkExisting' : '{%url check_existing %}',
+		'removeCompleted': true,
+    'fileExt'     : '*.jpg;*.gif;*.png',
+		'multi'		: true,
+    'auto'    : true,
+		'buttonText': '添加图片',
+		'onUploadSuccess' : function (file, data, response) {
+      console.log(file)
+      Controller.addElement.image(data);
+		}
+	});
+})
+
+var View = {
+  Element : {
+    text : function(content){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label success">文字</span></div>'+
+    '<p class="span11">'+content+'</p>'+
+    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#"  name="edit" data-controls-modal="id_edit_text" data-backdrop="true" data-keyboard="true">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '</div>'},
+    image : function(name){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label success">图片</span></div>'+
+    '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
+    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '</div>'},
+    line : function(name){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label success">分割线</span></div>'+
+    '<p class="span11">'+name+'</p>'+
+    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '</div>'},
+  }
+}
+
+var Controller = {
+  addElement : {
+    text : function(){
+      var content = $('#id_add_text_content').val();
+      $('article').append(View.Element.text(content));
+      $('#id_add_text_content').val(null);
+      $('#id_add_text').modal('hide');
+    },
+    image : function(name){
+      $('article').append(View.Element.image(name));
+    },
+    line : function(){
+      var v = $('#id_line_name').val();
+      $('article').append(View.Element.line(v));
+    }
+  },
+  editElement : {
+    text : function(){
+      var v = $('#id_edit_text_content').val();
+      window.tempTextElement.text(v);
+      $('#id_edit_text').modal('hide');
+    },
+    line : function(dom){
+      var text = dom.text();
+      window.editLineSubmit = function(button){
+        var changeText = button.prev().val();
+        dom.empty().text(changeText);
+      };
+      dom.html('<textarea>'+text+'</textarea> <button class="btn" onclick="editLineSubmit($(this))">Submit</button>');
+    }
+  },
+  submitWork : function(){
+    $(".element").each(function(i){
+      var type = $(".element").eq(i).children('.span1').text();
+      var content = '';
+      switch(type) {
+        case '分割线':
+          content = $(".element").eq(i).children('p').text();
+          type = 'line';
+          break;
+        case '文字':
+          content = $(".element").eq(i).children('p').text();
+          type = 'text';
+          break;
+        case '图片':
+          content = $(".element").eq(i).children('img').attr('src');
+          type = 'image'
+          break;
+	      default: 
+		      default_statement;
+      }
+      
+      $.ajax({ type: 'post', data: {'category': type, content: content}});
+    })
+    location.href = '{%url show_work work.id %}';
+  },
+  get : {
+    type : function(){
+      
+    },
+    content : function(){
+      
+    }
+  }
+}
+
+
+</script>
+{% endblock %}

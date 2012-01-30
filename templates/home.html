@@ -39,7 +39,11 @@
                 <li><a href="#"><img src="/static/images/work_1_cover_3.jpg.420x420_q85.jpg" width="150" /></a></li>
             </ul>
         </div>
-        <div class="span10">111</div>
+        <div class="span10">
+          {% for work in works %}
+          <div><a href="{%url show_work work.id %}">{{work.name}}</a></div>
+          {% endfor %}
+        </div>
         <div class="span3">111</div>
     </div>
 </div>
