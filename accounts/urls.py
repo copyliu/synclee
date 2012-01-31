@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 from accounts.forms import LoginForm
 from django.contrib.auth import views as auth_views
-from django.shortcuts import render_to_response
 
 urlpatterns = patterns('accounts.views',
     url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html', 'authentication_form':LoginForm }, name = 'login'),

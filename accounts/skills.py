@@ -49,7 +49,7 @@ def int2skill(skill):
                 break
         
         if tem:
-            profile_skill.append(("shui", 1, abbreviation))
+            profile_skill.append((i, 1, abbreviation))
     return profile_skill
     
 def set_skill(request, profile):

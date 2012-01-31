@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
 
 from accounts.skills import SKILL_CHOICES
+from works.models import Work
 
 class UserProfiles(models.Model):
     user = models.ForeignKey(User, related_name='profile')
@@ -39,3 +40,18 @@ class AccountTempPassword(models.Model):
     user = models.ForeignKey(User, related_name='tmp_psw')
     tmp_psw = models.CharField(max_length = 20)
     datetime = models.DateTimeField(auto_now_add = True)
+
+class Invitation(models.Model):
+    work = models.ForeignKey(Work, related_name='invitaion')
+    invited = models.ForeignKey(User, related_name='invited')
+    skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
+    reason = models.CharField(max_length = 300)
+    b_from = models.BooleanField(default = False)
+    b_to = models.BooleanField(default = False)
+    
+    def s_done(self):
+        return b_from and b_to
+    def s_invite(self):
+        return b_from and (not b_to)
+    def s_apply(self):
+        return (not b_from) and b_to

@@ -3,12 +3,13 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.template.response import TemplateResponse
-from django.shortcuts import redirect, get_object_or_404, render_to_response#, HttpResponse
+from django.shortcuts import redirect, get_object_or_404, render_to_response, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
-from accounts.models import UserProfiles, AccountTempPassword
+from accounts.models import UserProfiles, AccountTempPassword, Invitation
+from works.models import Work
 from django.http import Http404, HttpResponseRedirect
 
 from .skills import set_skill, int2skill
@@ -38,17 +39,43 @@ def register(request):
 
 
 def profile(request, username):
-    user = get_object_or_404(User, username=username)
     
+    user = get_object_or_404(User, username=username)
+
     profile = UserProfiles.objects.get(user=user)
     profile_skill = int2skill(profile.skill)
     work_set = user.work_set.all()
+    work_set2 = request.user.work_set.all()
     
+    if request.method == 'POST':
+        type = request.POST.get('type', '')
+        if type == 'invite':
+            try:
+                work_id = request.POST.get('work_id', '-1')
+                work = Work.objects.get(pk=int(work_id))
+                role = request.POST.get('role')
+                reason = request.POST.get('reason', '')
+                if len(reason) > 300:
+                    reason = reason[:300]
+                invitation = Invitation.objects.filter(work = work, invited = user)
+                
+                if len(invitation) > 0:
+                    invitation = invitation[0]
+                    invitation.b_from = True
+                    invitation.role = role
+                    invitation.reason = reason
+                    invitation.save()
+                else:
+                    Invitation.objects.create(work = work, invited = user,
+                                              skill = role, reason = reason,
+                                              b_from = True, b_to =False)
+            except Exception as e:
+                print e
     context = {
         'profile':profile, 
         'profile_skill':profile_skill,
         'work_set' : work_set,
-        'user' : user,
+        'work_set2' : work_set2,
     }
     return TemplateResponse(request, 'accounts/profile.html', context)
 
