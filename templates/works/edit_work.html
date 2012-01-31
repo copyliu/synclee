@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 
-{% block title %}创建新作品{% endblock %}
+{% block title %}编辑{{work.name}}{% endblock %}
 
 {% block content %}
 <div class="container" >
@@ -36,6 +36,7 @@
     <h3>Input Text!</h3>
   </div>
   <div class="modal-body">
+    <input id="id_add_text_title" placeholder="标题" /><br/>
     <textarea id="id_add_text_content" rows="5" cols="100"></textarea>
   </div>
   <div class="modal-footer">
@@ -49,13 +50,13 @@
     <h3>Input Text!</h3>
   </div>
   <div class="modal-body">
+    <input id="id_edit_text_title" placeholder="标题" /><br/>
     <textarea id="id_edit_text_content" rows="5" cols="100"></textarea>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn primary" onclick="Controller.editElement.text()">Edit</a>
   </div>
 </div>
-
 {% endblock %}
 
 {% block script %}
@@ -68,7 +69,7 @@ $(document).ready(function(){
   
   {% for e in elements %}
     {% if e.category == 'text' %}
-    $('article').append(View.Element.text('{{e.content}}'));
+    $('article').append(View.Element.text('{{e.content}}', '{{e.title}}'));
     {% endif %}
     
     {% if e.category == 'line' %}
@@ -76,7 +77,8 @@ $(document).ready(function(){
     {% endif %}
     
     {% if e.category == 'image' %}
-    $('article').append(View.Element.image('{{e.content}}'));
+    var imageSrc = '{{e.content|cut:"/media/upload/"}}'.toString().replace('{{request.user.id}}/', '');
+    $('article').append(View.Element.image(imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
   
@@ -102,9 +104,13 @@ $(document).ready(function(){
         Controller.editElement.line(dom);
         break;
       case '文字':
-        window.tempTextElement = $(this).parent().parent().children('p');
+        window.tempTextElement = {
+          content : $(this).parent().parent().children('p'),
+          title :  $(this).parent().parent().children('.title')
+        }
         //html(dom.text())
-        $('#id_edit_text_content').val(window.tempTextElement.text());
+        $('#id_edit_text_title').val(window.tempTextElement['title'].text());
+        $('#id_edit_text_content').val(window.tempTextElement['content'].text());
         break;
       default: 
         break;
@@ -123,17 +129,15 @@ $(document).ready(function(){
 	$('#id_story_upload').uploadify ({
 		'swf'		: '/static/uploadify.swf',
 		'uploader' 	: '{%url upload_image request.user.id %}', 
-    'script'  :  '{%url upload_image request.user.id %}', 
 		'cancelImage' : '/static/images/icons/cancel.png',
     'buttonClass' : 'btn',
 		'checkExisting' : '{%url check_existing %}',
 		'removeCompleted': true,
-    'fileExt'     : '*.jpg;*.gif;*.png',
+    'fileTypeExts'     : '*.jpg;*.gif;*.png',
 		'multi'		: true,
     'auto'    : true,
 		'buttonText': '添加图片',
 		'onUploadSuccess' : function (file, data, response) {
-      console.log(file)
       Controller.addElement.image(data);
 		}
 	});
@@ -141,17 +145,19 @@ $(document).ready(function(){
 
 var View = {
   Element : {
-    text : function(content){
+    text : function(content, title){
       return '<div class="row element">'+
     '<div class="span1"><span class="label success">文字</span></div>'+
+    '<h2 class="title">'+title+'</h2>'+
     '<p class="span11">'+content+'</p>'+
     '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#"  name="edit" data-controls-modal="id_edit_text" data-backdrop="true" data-keyboard="true">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
     '</div>'},
-    image : function(name){
+    image : function(name, title){
       return '<div class="row element">'+
     '<div class="span1"><span class="label success">图片</span></div>'+
+    '<input class="title" value="'+title+'"  placeholder="图片标题"/>'+
     '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
-    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '<toolbar class="span11" name="toolbar" style="display:none;"> <a href="#" name="delete">删除</a></toolbar>'+
     '</div>'},
     line : function(name){
       return '<div class="row element">'+
@@ -166,7 +172,8 @@ var Controller = {
   addElement : {
     text : function(){
       var content = $('#id_add_text_content').val();
-      $('article').append(View.Element.text(content));
+      var title = $('#id_add_text_title').val();
+      $('article').append(View.Element.text(content, title));
       $('#id_add_text_content').val(null);
       $('#id_add_text').modal('hide');
     },
@@ -180,8 +187,10 @@ var Controller = {
   },
   editElement : {
     text : function(){
-      var v = $('#id_edit_text_content').val();
-      window.tempTextElement.text(v);
+      var content = $('#id_edit_text_content').val();
+      var title = $('#id_edit_text_title').val();
+      window.tempTextElement['title'].text(title);
+      window.tempTextElement['content'].text(content);
       $('#id_edit_text').modal('hide');
     },
     line : function(dom){
@@ -194,19 +203,24 @@ var Controller = {
     }
   },
   submitWork : function(){
+    $.ajax({type: 'delete'});
     $(".element").each(function(i){
       var type = $(".element").eq(i).children('.span1').text();
       var content = '';
       switch(type) {
         case '分割线':
+          title = '';
           content = $(".element").eq(i).children('p').text();
           type = 'line';
           break;
         case '文字':
+          title = '';
+          title = $(".element").eq(i).children('.title').text();
           content = $(".element").eq(i).children('p').text();
           type = 'text';
           break;
         case '图片':
+          title = '';
           content = $(".element").eq(i).children('img').attr('src');
           type = 'image'
           break;
@@ -214,7 +228,7 @@ var Controller = {
 		      default_statement;
       }
       
-      $.ajax({ type: 'post', data: {'category': type, content: content}});
+      $.ajax({ type: 'post', data: {'category': type, 'content': content, 'title': title}});
     })
     location.href = '{%url show_work work.id %}';
   },

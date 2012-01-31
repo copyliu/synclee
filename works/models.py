@@ -52,5 +52,6 @@ class Element(models.Model):
         ('line', u'分割线')
     )
     category = models.CharField(max_length=8, choices=CATEGORY_CHOICE)
+    title = models.CharField(max_length=64, blank=True)
     content = models.TextField()
     work = models.ForeignKey(Work)

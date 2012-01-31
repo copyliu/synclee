@@ -64,8 +64,9 @@ def show_work(request, work_id):
 def write_work(request, work_id):
     if request.method == 'POST':
         category = request.POST.get('category', '')
+        title = request.POST.get('title', '')
         content = request.POST.get('content', '')
-        element = Element.objects.create(work_id=work_id, category=category, content=content)
+        element = Element.objects.create(work_id=work_id, category=category, title=title, content=content)
         element.save()
         return HttpResponse(element.id)
     else:
@@ -76,14 +77,19 @@ def write_work(request, work_id):
 def edit_work(request, work_id):
     if request.method == 'POST':
         category = request.POST.get('category', '')
+        title = request.POST.get('title', '')
         content = request.POST.get('content', '')
-        element = Element.objects.create(work_id=work_id, category=category, content=content)
+        element = Element.objects.create(work_id=work_id, category=category, title=title, content=content)
         element.save()
         return HttpResponse(element.id)
-    else:
+    elif request.method == 'DELETE':
+        work = Work.objects.get(pk=work_id)
+        elements = Element.objects.filter(work=work)
+        elements.delete()
+        return HttpResponse('delete_success')
+    elif request.method == 'GET':
         work = Work.objects.get(pk=int(work_id))
         elements = Element.objects.filter(work=work)
-        print elements
         return TemplateResponse(request, 'works/edit_work.html', {'work' : work, 'elements' : elements})
     
 def show_element(request, element_id):
