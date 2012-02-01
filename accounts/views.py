@@ -9,15 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
-from accounts.models import UserProfiles, AccountTempPassword, Invitation
+from accounts.models import *
 from works.models import Work, TimeLines
 from django.http import Http404, HttpResponseRedirect
 
-from .skills import set_skill, int2skill
-import random
+import random, datetime, time
 from threading import Thread
-import datetime
-import time
 
 def register(request):
     if request.method == 'POST':
@@ -49,50 +46,42 @@ def follow(request):
         request.user.relationships.remove(user)
         return HttpResponse("success")
 
+@csrf_exempt
+def invite(request):
+    username = request.POST.get('username', '')
+    user = get_object_or_404(User, username=username)
+    work_id = request.POST.get('work_id', '-1')
+    reason = request.POST.get('reason', '')
+    try:
+        work = Work.objects.get(pk=int(work_id))
+        #中文不能直接截取
+#        if len(reason) > 300:
+#            reason = reason[:300]
+        invitation = Invitation.objects.filter(work = work, invited = user, invite_status = 'noanswer').count()
+        
+        if invitation:
+            return HttpResponse("already_invite")
+        else:
+            Invitation.objects.create(work = work, invited = user,
+                                      reason = reason,
+                                      invite_status = 'noanswer')
+    except Exception as e:
+        print e
+    return HttpResponse('success')
 
 def profile(request, username):
-    
     user = get_object_or_404(User, username=username)
     
-    if request.method == 'POST':
-        type = request.POST.get('type', '')
-        if type == 'invite':
-            try:
-                work_id = request.POST.get('work_id', '-1')
-                work = Work.objects.get(pk=int(work_id))
-                role = request.POST.get('role')
-                reason = request.POST.get('reason', '')
-                if len(reason) > 300:
-                    reason = reason[:300]
-                invitation = Invitation.objects.filter(work = work, invited = user)
-                
-                if len(invitation) > 0:
-                    invitation = invitation[0]
-                    invitation.b_from = True
-                    invitation.role = role
-                    invitation.reason = reason
-                    invitation.save()
-                else:
-                    Invitation.objects.create(work = work, invited = user,
-                                              skill = role, reason = reason,
-                                              b_from = True, b_to =False)
-            except Exception as e:
-                print e
-        return HttpResponse("")
-    
     profile = UserProfiles.objects.get(user=user)
-    profile_skill = int2skill(profile.skill)
-    work_set = user.work_set.all()
-    work_set2 = request.user.work_set.all()
     timeline = TimeLines.objects.filter(user__username=username)
-    if user.id == request.user.id:
-        pass
+    invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
+    joined = Invitation.objects.filter(invited=user, invite_status='accept')
+    # TODO: context中加入skill
     context = {
-        'profile':profile, 
-        'profile_skill':profile_skill,
-        'work_set' : work_set,
-        'work_set2' : work_set2,
-        'timeline' : timeline
+        'profile' : profile, 
+        'timeline' : timeline,
+        'invited' : invited,
+        'joined' : joined
     }
     return TemplateResponse(request, 'accounts/profile.html', context)
 
@@ -103,9 +92,9 @@ def settings(request, item):
     if item == "profile":
         return _set_profile(request, profile)
     elif item == "skill":
-        return set_skill(request, profile)
+        return _set_skill(request, profile)
     elif item == "psw":
-        return set_psw(request)
+        return _set_psw(request)
     else:
         raise Http404("no setting")
             
@@ -128,7 +117,7 @@ def _set_profile(request, profile):
         form = UserProfileForm()
         return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':'profile'})
 
-def set_psw(request):
+def _set_psw(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user = request.user, data = request.POST)
         if form.is_valid():
@@ -137,6 +126,17 @@ def set_psw(request):
             return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})  
     form = PasswordChangeForm(user = request.user)
     return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})
+
+def _set_skill(request, profile):
+    if request.method == 'POST':
+        pass
+        # TODO: 选择后写入UserSkill表等操作
+    else:
+        skill_list = []
+        for skill in SKILL_CHOICES:
+            skill_list.append(skill[1]) 
+        
+        return TemplateResponse(request, 'accounts/setting_skill.html', {'skill_list': skill_list, 'active': "skill"})
 
 def reset_psw(request):
     if request.method == 'POST':

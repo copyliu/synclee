@@ -47,7 +47,7 @@
 					<h3>主创作品</h3>
 			  	</div>
 			  	<div class="row">
-				  	{% for work in work_set%}
+				  	{% for work in profile.user.work_set.all%}
 					<div class="span2">
 						<li><a href="{%url show_work work.pk%}">
 							<img src="/media/{{work.cover}}" width="100px" height="100px">
@@ -70,6 +70,14 @@
 			<section id = "related">
 				<div class="page-header">
 					<h3>参与创作</h3>
+          <ul>
+            {% for i in invited %}
+            <li>{{i.work.author}} 邀请您参与 {{i.work.name}} [同意] [拒绝]</li>
+            {% endfor %}
+            {% for j in joined %}
+            <li>{{i.work.name}}</li>
+            {% endfor %}
+          </ul>
 			  	</div>
 			</section> <!-- section related -->
         </div>
@@ -147,13 +155,13 @@
       <label for="normalSelect">选择作品：</label>
 	  <div class="input">
 	    <select name="normalSelect" id="id_invite_work">
-		  {% for work in work_set2%}
+		  {% for work in request.user.work_set.all%}
 		  <option value = "{{work.pk}}">{{work.name}}</option>
 		  {% endfor %}
         </select>
       </div>
 	</div>
-	<div class="clearfix">
+	<!--div class="clearfix">
       <label for="normalSelect">选择角色：</label>
 	  <div class="input">
 	    <select name="normalSelect" id="id_invite_role">
@@ -162,7 +170,7 @@
 		  {% endfor %}
         </select>
       </div>
-	</div>
+	</div-->
 	<div class="clearfix">
       <label for="textarea">邀请理由：</label>
 	  <div class="input">
@@ -189,7 +197,7 @@ var Controller = {
 		var work_id = $('#id_invite_work').val();
 		var role = $('#id_invite_role').val();
 		var reason = $('#id_invite_reason').val();
-		$.ajax({ type: 'post', data: {'type': 'invite', 'work_id': work_id, 'role': role, 'reason': reason}});
+		$.ajax({url : '{%url invite %}', type: 'post', data: {'username': '{{profile.user.username}}', 'work_id': work_id, 'role': role, 'reason': reason}});
 		$('#id_invite').modal('hide');
 	},
   follow : function(action){
@@ -202,6 +210,7 @@ var Controller = {
       $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
     }
   },
+  
 }
 </script>
 {% endblock %}

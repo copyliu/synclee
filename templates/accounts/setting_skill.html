@@ -11,21 +11,18 @@
 		你所掌握的技能在新岚会以图标的形式。。。。。
 	</p> </div>
 	<div class="span9">
-		{% for category, list in skill_list %}
 		<div class="clearfix">
-			<label>{{category}}</label>
 			<div class="input">
 				<ul class="inputs-list">
-					{% for item, sid, checked in list %}
+					{% for skill in skill_list %}
 					<li> <label>
-						<input type="checkbox" name="{{sid}}" value="{{sid}}" {{checked}}>
-				        <span>{{item}}</span>
+						<input type="checkbox">
+				        <span>{{skill}}</span>
 					</label> </li>
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
-		{% endfor %}
 	</div>
 </div>
 <div class="actions">
