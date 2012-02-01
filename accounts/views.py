@@ -41,11 +41,6 @@ def register(request):
 def profile(request, username):
     
     user = get_object_or_404(User, username=username)
-
-    profile = UserProfiles.objects.get(user=user)
-    profile_skill = int2skill(profile.skill)
-    work_set = user.work_set.all()
-    work_set2 = request.user.work_set.all()
     
     if request.method == 'POST':
         type = request.POST.get('type', '')
@@ -71,6 +66,14 @@ def profile(request, username):
                                               b_from = True, b_to =False)
             except Exception as e:
                 print e
+        return HttpResponse("")
+    
+    profile = UserProfiles.objects.get(user=user)
+    profile_skill = int2skill(profile.skill)
+    work_set = user.work_set.all()
+    work_set2 = request.user.work_set.all()
+    if user.id == request.user.id:
+        pass
     context = {
         'profile':profile, 
         'profile_skill':profile_skill,

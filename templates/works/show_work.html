@@ -7,6 +7,11 @@
   <div class="container-fluid">
     <div class="sidebar">
       Workname: {{work.name}}
+      {% if request.user.is_authenticated %}
+      {% if request.user.username != work.author.username %}
+		<input type="submit" class="btn primary" id = "id_apply_btn" data-controls-modal="id_apply" data-backdrop="true" data-keyboard="true" value="加入">
+      {% endif %}
+      {% endif %}
     </div>
     <div class="content">
       {% if elements %}
@@ -22,5 +27,48 @@
     </div>
   </div>
 </div>
+
+<div id="id_apply" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3>加入作品</h3>
+  </div>
+  <div class="modal-body">
+	<div class="clearfix">
+      <label for="normalSelect">选择角色：</label>
+	  <div class="input">
+	    <select name="normalSelect" id="id_apply_role">
+		  {% for category, lv, name in profile_skill%}
+		  <option value = "{{category}}">{{name}}</option>
+		  {% endfor %}
+        </select>
+      </div>
+	</div>
+	<div class="clearfix">
+      <label for="textarea">申请理由：</label>
+	  <div class="input">
+	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5""></textarea>
+      </div>
+      <span class="help-block">最多300个字符</span>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary" onclick="Controller.invite()">Submit</a>
+  </div>
+</div>
 {% endblock %}
 
+{% block script %}
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
+<script>
+var Controller = {
+	invite : function(){
+		var role = $('#id_apply_role').val();
+		var reason = $('#id_apply_reason').val();
+		$.ajax({ type: 'post', data: {'type': 'apply', 'role': role, 'reason': reason}});
+		$('#id_apply').modal('hide');
+	}
+}
+</script>
+{% endblock %}

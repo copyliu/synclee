@@ -13,7 +13,9 @@ from .models import Work, Element
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-
+from accounts.skills import int2skill
+from accounts.models import UserProfiles
+from django.contrib.auth.decorators import login_required
 #import string, random
 from django.utils import simplejson
 
@@ -54,11 +56,44 @@ def add_work(request):
 
 def show_work(request, work_id):
     work = Work.objects.get(pk=work_id)
+    
+    if request.method == 'POST':
+        type = request.POST.get('type', '')
+        if type == 'apply':
+            try:
+                role = request.POST.get('role')
+                reason = request.POST.get('reason', '')
+                if len(reason) > 300:
+                    reason = reason[:300]
+                invitation = Invitation.objects.filter(work = work, invited = user)
+                
+                if len(invitation) > 0:
+                    invitation = invitation[0]
+                    invitation.b_to = True
+                    invitation.role = role
+                    invitation.reason = reason
+                    invitation.save()
+                else:
+                    Invitation.objects.create(work = work, invited = user,
+                                              skill = role, reason = reason,
+                                              b_from = False, b_to = True)
+            except Exception as e:
+                print e
+        return HttpResponse("")
+    
     try:
         elements = Element.objects.filter(work=work)
     except:
         elements = None
-    return TemplateResponse(request, 'works/show_work.html', {'work': work, 'elements' : elements})
+    
+    context = {'work': work, 'elements' : elements}
+    
+    if request.user.is_authenticated() and work.author.id != request.user.id:
+        profile = UserProfiles.objects.get(user = request.user)
+        context['profile_skill'] = int2skill(profile.skill)
+
+    
+    return TemplateResponse(request, 'works/show_work.html', context)
 
 @csrf_exempt
 def write_work(request, work_id):
@@ -74,6 +109,7 @@ def write_work(request, work_id):
         return TemplateResponse(request, 'works/write_work.html', {'work' : work})
     
 @csrf_exempt
+@login_required
 def edit_work(request, work_id):
     if request.method == 'POST':
         category = request.POST.get('category', '')
