@@ -50,8 +50,8 @@ class Invitation(models.Model):
     b_to = models.BooleanField(default = False)
     
     def s_done(self):
-        return b_from and b_to
+        return self.b_from and self.b_to
     def s_invite(self):
-        return b_from and (not b_to)
+        return self.b_from and (not self.b_to)
     def s_apply(self):
-        return (not b_from) and b_to
+        return (not self.b_from) and self.b_to

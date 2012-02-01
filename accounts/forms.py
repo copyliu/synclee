@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList
-from django.shortcuts import redirect, HttpResponse
 
 #from apps.accounts.models import AccountTempPassword
 

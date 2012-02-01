@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect, get_object_or_404, render_to_response, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
@@ -36,6 +37,17 @@ def register(request):
         form = RegistrationForm()
 
     return TemplateResponse(request, 'accounts/register.html', {'form': form})
+
+@csrf_exempt
+def follow(request):
+    action = request.POST.get('action')
+    user = User.objects.get(pk=request.POST.get('foid'))
+    if action == 'fo':
+        request.user.relationships.add(user)
+        return HttpResponse("success")
+    elif action == 'unfo':
+        request.user.relationships.remove(user)
+        return HttpResponse("success")
 
 
 def profile(request, username):

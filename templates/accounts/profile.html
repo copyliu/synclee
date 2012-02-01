@@ -1,4 +1,5 @@
 {% extends "base.html"  %}
+{% load relationship_tags %}
 {% block title %}{{profile.user.username}}{% endblock %}
 {% block content %}
   
@@ -89,7 +90,12 @@
 				<div class="row">
 					<div class="span1">
 					  {% if request.user.id != profile.user_id %}
-						<input type="submit" class="btn primary" value="关注">
+            
+              {% if_relationship request.user profile.user "following" %}
+						<input type="submit" id="follow" class="btn" value="取消" onclick="Controller.follow('unfo')">
+              {% else %}
+            <input type="submit" id="follow" class="btn primary" value="关注" onclick="Controller.follow('fo')">
+              {% endif_relationship %}
 						<input type="submit" class="btn primary" id = "id_invite_btn" data-controls-modal="id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
             {% else %}
             <input type="submit" class="btn primary" value="权限">
@@ -172,6 +178,7 @@
 <script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
 <script>
+  
 var Controller = {
 	invite : function(){
 		var work_id = $('#id_invite_work').val();
@@ -179,7 +186,17 @@ var Controller = {
 		var reason = $('#id_invite_reason').val();
 		$.ajax({ type: 'post', data: {'type': 'invite', 'work_id': work_id, 'role': role, 'reason': reason}});
 		$('#id_invite').modal('hide');
-	}
+	},
+  follow : function(action){
+    if (action == 'fo'){
+      $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
+      $('#follow').val('取消').removeClass('primary').attr('onclick', "Controller.follow('unfo')");
+    }
+    if (action ==  'unfo'){
+      $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
+      $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
+    }
+  },
 }
 </script>
 {% endblock %}
