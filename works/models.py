@@ -17,7 +17,7 @@ class TimeLines(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     
-    event = generic.GenericForeignKey('content_type', 'object_id')
+    instance = generic.GenericForeignKey('content_type', 'object_id')
     created = models.DateTimeField(auto_now_add = True)
 
 
@@ -38,7 +38,7 @@ class Work(models.Model):
     #project = models.ForeignKey(Project, related_name='work', null=True)
     #founder = models.ForeignKey(User, related_name='own_work')
     #members = models.ManyToManyField(User, through='Membership', related_name='in_work')
-    date = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     #privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES)
     #catalog = models.ForeignKey(Catalog, related_name='work')
     #tab = models.ManyToManyField(SubTabClass, limit_choices_to={'parent_tab__tab_model_name':'work'}, related_name='work')
@@ -47,11 +47,11 @@ class Work(models.Model):
     closed = models.BooleanField(default=False)
     intro = models.TextField()
     
-def work_event(sender = None, instance = None, created = False, **kwargs):
-    if created:
-        TimeLines.objects.create(user = instance.author, event = instance)
-   
-models.signals.post_save.connect(work_event, sender = Work)
+#def work_event(sender = None, instance = None, created = False, **kwargs):
+#    if created:
+#        TimeLines.objects.create(user = instance.author, event = instance)
+#   
+#models.signals.post_save.connect(work_event, sender = Work)
  
 class Action(models.Model):
     ACTION_CHOICES = (
@@ -77,6 +77,6 @@ class Element(models.Model):
     
 def element_event(sender = None, instance = None, created = False, **kwargs):
     if created:
-        TimeLines.objects.create(user = instance.work.author, event = instance)
+        TimeLines.objects.create(user = instance.work.author, instance = instance)
    
 models.signals.post_save.connect(element_event, sender = Element)

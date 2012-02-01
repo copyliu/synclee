@@ -10,7 +10,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
 from accounts.models import UserProfiles, AccountTempPassword, Invitation
-from works.models import Work
+from works.models import Work, TimeLines
 from django.http import Http404, HttpResponseRedirect
 
 from .skills import set_skill, int2skill
@@ -84,6 +84,7 @@ def profile(request, username):
     profile_skill = int2skill(profile.skill)
     work_set = user.work_set.all()
     work_set2 = request.user.work_set.all()
+    timeline = TimeLines.objects.filter(user__username=username)
     if user.id == request.user.id:
         pass
     context = {
@@ -91,6 +92,7 @@ def profile(request, username):
         'profile_skill':profile_skill,
         'work_set' : work_set,
         'work_set2' : work_set2,
+        'timeline' : timeline
     }
     return TemplateResponse(request, 'accounts/profile.html', context)
 
