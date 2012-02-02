@@ -138,7 +138,7 @@ $(document).ready(function(){
     'auto'    : true,
 		'buttonText': '添加图片',
 		'onUploadSuccess' : function (file, data, response) {
-      Controller.addElement.image(data);
+      Controller.addElement.image(data, '');
 		}
 	});
 })
@@ -177,8 +177,8 @@ var Controller = {
       $('#id_add_text_content').val(null);
       $('#id_add_text').modal('hide');
     },
-    image : function(name){
-      $('article').append(View.Element.image(name));
+    image : function(name, title){
+      $('article').append(View.Element.image(name, title));
     },
     line : function(){
       var v = $('#id_line_name').val();
@@ -220,7 +220,7 @@ var Controller = {
           type = 'text';
           break;
         case '图片':
-          title = '';
+          title = $(".element").eq(i).children('.title').val();
           content = $(".element").eq(i).children('img').attr('src');
           type = 'image'
           break;
