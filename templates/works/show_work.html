@@ -44,8 +44,8 @@
       <label for="normalSelect">选择角色：</label>
 	  <div class="input">
 	    <select name="normalSelect" id="id_apply_role">
-		  {% for category, lv, name in profile_skill%}
-		  <option value = "{{category}}">{{name}}</option>
+		  {% for skill, lv, name in skill_list%}
+		  <option value = "{{skill}}">{{name}}</option>
 		  {% endfor %}
         </select>
       </div>
@@ -96,11 +96,11 @@ var Controller = {
 	notice : {
 		apply : {
 			accept :function(id){
-				$.ajax({ type: 'post', data: {'type': 'apply_accept', 'id': id}});
+				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_accept', 'id': id}});
 				$('#id_apply_' + id).remove();
 			},
 			reject :function(id){
-				$.ajax({ type: 'post', data: {'type': 'apply_reject', 'id': id}});
+				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_reject', 'id': id}});
 				$('#id_apply_' + id).remove();
 			},
 		},

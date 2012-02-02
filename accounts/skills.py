@@ -52,36 +52,3 @@ def int2skill(skill):
             profile_skill.append((i, 1, abbreviation))
     return profile_skill
     
-def set_skill(request, profile):
-    skill = skill2str(profile.skill)
-    
-    skill_list = []
-    for i, (category, abbreviation, list) in skills.items():
-        tem = []
-        for item, sid in list:
-            if skill[sid] == '1':
-                checked = "checked"
-            else: checked = ""
-            
-            tem.append((item, "skill_" + str(sid), checked))
-        skill_list.append((category, tem))
-    
-    if request.method == 'POST':
-        skill = ['0' for _ in range(total_skill)]
-        for i, _ in request.POST.items():
-            if i.startswith("skill_"):
-                sid = int(i[6:])
-                if sid > total_skill or sid < 0: continue
-                skill[sid] = '1'
-        profile.skill = int(''.join(skill), 2)
-        profile.save()
-        
-        for category, list in skill_list:
-            for i in xrange(len(list)):
-                item, sid, checked = list[i]
-                if skill[int(sid[6:])] == '1':
-                    list[i] = (item, sid, "checked")
-                else:
-                    list[i] = (item, sid, "")
-            
-    return TemplateResponse(request, 'accounts/setting_skill.html', {'skill_list': skill_list, 'active': "skill"})

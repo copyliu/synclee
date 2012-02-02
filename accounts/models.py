@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-
 from easy_thumbnails.fields import ThumbnailerImageField
 
-from accounts.skills import SKILL_CHOICES
 from works.models import Work
 
 class UserProfiles(models.Model):
@@ -30,6 +28,15 @@ def create_user_profile(sender = None, instance = None, created = False, **kwarg
    
 models.signals.post_save.connect(create_user_profile, sender = User)
 
+SKILL_CHOICES = (
+    ('write', u'写手'),
+    ('paint', u'画师'),
+    ('design', u'设计美工'),
+    ('prog', u'程序员'),
+    ('music', u'音乐制作'),
+    ('_other', u'其他'),
+)
+
 class UserSkills(models.Model):
     user = models.ForeignKey(User, related_name='skills')
     skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
@@ -42,16 +49,14 @@ class AccountTempPassword(models.Model):
     datetime = models.DateTimeField(auto_now_add = True)
 
 class Invitation(models.Model):
+    INVITE_CHOICES = (
+        (u'noanswer', u'未响应'),
+        (u'goingon', u'申请中'),
+        (u'accept', u'已接受'),
+        (u'reject', u'已拒绝')
+    )
     work = models.ForeignKey(Work, related_name='invitaion')
     invited = models.ForeignKey(User, related_name='invited')
     skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
     reason = models.CharField(max_length = 300)
-    b_from = models.BooleanField(default = False)
-    b_to = models.BooleanField(default = False)
-    
-    def s_done(self):
-        return self.b_from and self.b_to
-    def s_invite(self):
-        return self.b_from and (not self.b_to)
-    def s_apply(self):
-        return (not self.b_from) and self.b_to
+    invite_status = models.CharField(max_length=8, choices=INVITE_CHOICES)

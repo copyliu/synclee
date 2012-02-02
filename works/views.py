@@ -14,7 +14,7 @@ from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from accounts.skills import int2skill
-from accounts.models import UserProfiles, Invitation
+from accounts.models import *
 from django.contrib.auth.decorators import login_required
 #import string, random
 from django.utils import simplejson
@@ -69,35 +69,17 @@ def show_work(request, work_id):
                 invitation = Invitation.objects.filter(work = work, invited = request.user)
                 
                 if len(invitation) > 0:
-                    print "here!!!"
                     invitation = invitation[0]
-                    invitation.b_to = True
+                    invitation.invite_status = 'goingon'
                     invitation.role = role
                     invitation.reason = reason
                     invitation.save()
                 else:
                     Invitation.objects.create(work = work, invited = request.user,
                                               skill = role, reason = reason,
-                                              b_from = False, b_to = True)
+                                              invite_status = 'goingon')
             except Exception as e:
                 print e
-        elif type == "apply_accept":
-            try:
-                id = request.POST.get('id', '-1')
-                invitation = Invitation.objects.get(id = int(id))
-                if invitation.work.author.id == request.user.id:
-                    invitation.b_from = True
-                    invitation.save()
-            except:
-                pass
-        elif type == "apply_reject":
-            try:
-                id = request.POST.get('id', '-1')
-                invitation = Invitation.objects.get(id = int(id))
-                if invitation.work.author.id == request.user.id:
-                    invitation.delete()
-            except:
-                pass
         return HttpResponse("")
     
     try:
@@ -109,10 +91,15 @@ def show_work(request, work_id):
     
     if request.user.is_authenticated():
         if work.author.id != request.user.id:
-            profile = UserProfiles.objects.get(user = request.user)
-            context['profile_skill'] = int2skill(profile.skill)
+            skill = UserSkills.objects.filter(user = request.user)
+            skill_list = []
+            for i in skill:
+                for j in SKILL_CHOICES:
+                    if i.skill == j[0]:
+                        skill_list.append((i.skill, i.exp, j[1]))
+            context['skill_list'] = skill_list
         else:
-            context['apply_set'] = Invitation.objects.filter(work = work, b_from = False, b_to = True)
+            context['apply_set'] = Invitation.objects.filter(work = work, invite_status = 'goingon')
             print len(context['apply_set']),"####"
     return TemplateResponse(request, 'works/show_work.html', context)
 
