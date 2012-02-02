@@ -113,7 +113,7 @@ def profile(request, username):
     timeline = TimeLines.objects.filter(user__username=username)
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
-    joined = [i.work for i in tem]
+    joined = [i.work for i in joined]
     work_set = user.work_set.all()
     skill = UserSkills.objects.filter(user = user)
     skill_list = []
