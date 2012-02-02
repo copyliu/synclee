@@ -84,7 +84,7 @@ def show_work(request, work_id):
     except:
         elements = None
     
-    context = {'work': work, 'elements' : elements, 'involved': involved(work, request.user)}
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user)}
     
     if request.user.is_authenticated():
         if work.author.id != request.user.id:
@@ -100,10 +100,10 @@ def show_work(request, work_id):
             print len(context['apply_set']),"####"
     return TemplateResponse(request, 'works/show_work.html', context)
 
-def involved(work, user):
+def _involved(work, user):
     try:
         if user.id == work.author.id: return True
-        if Invitation.objects.filter(work = work, invited = user, invite_status = 'accept').count() > 0:
+        if Invitation.objects.filter(work = work, invited = user, invite_status = 'accept').count():
             return True
     except: return False
     return False
@@ -111,7 +111,7 @@ def involved(work, user):
 @csrf_exempt
 @login_required
 def write_work(request, work_id):
-    if not involved(Work.objects.get(pk=int(work_id)), request.user):
+    if not _involved(Work.objects.get(pk=int(work_id)), request.user):
         raise Http404("no privilege")
     if request.method == 'POST':
         category = request.POST.get('category', '')
@@ -127,7 +127,7 @@ def write_work(request, work_id):
 @csrf_exempt
 @login_required
 def edit_work(request, work_id):
-    if not involved(Work.objects.get(pk=int(work_id)), request.user):
+    if not _involved(Work.objects.get(pk=int(work_id)), request.user):
         raise Http404("no privilege")
     if request.method == 'POST':
         if request.POST.get('action') == 'delete':

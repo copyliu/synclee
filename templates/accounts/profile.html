@@ -79,7 +79,7 @@
 					<h3>参与创作</h3>
 			  	</div>
 			  	<div class="row">
-				  	{% for work in work_set_invited%}
+				  	{% for work in joined %}
 					<div class="span2">
 						<li><a href="{%url show_work work.pk%}">
 							<img src="/media/{{work.cover}}" width="100px" height="100px">

@@ -112,7 +112,8 @@ def profile(request, username):
     profile = UserProfiles.objects.get(user=user)
     timeline = TimeLines.objects.filter(user__username=username)
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
-    #joined = Invitation.objects.filter(invited=user, invite_status='accept')
+    joined = Invitation.objects.filter(invited=user, invite_status='accept')
+    joined = [i.work for i in tem]
     work_set = user.work_set.all()
     skill = UserSkills.objects.filter(user = user)
     skill_list = []
@@ -126,15 +127,11 @@ def profile(request, username):
         'profile' : profile, 
         'timeline' : timeline,
         #'invited' : invited,
-        #'joined' : joined,
-        'work_set' : work_set,
+        'joined' : joined,
         'skill_list' : skill_list,
     }
     
     if request.user.is_authenticated():
-        context['work_set2'] = request.user.work_set.all()
-        tem = Invitation.objects.filter(invited = user, invite_status = 'accept')
-        context['work_set_invited'] = [i.work for i in tem]
         if request.user.id == profile.user_id:
             context['invitation'] = Invitation.objects.filter(invited = request.user, invite_status = 'noanswer')
     
@@ -198,7 +195,7 @@ def _set_skill(request, profile):
                 if cnt == 0:
                      UserSkills.objects.create(user = request.user, skill = i, exp = 0, today_exp = 0)
                 skill_list[i] = (skill_list[i][0], "checked")
-        #TODO 去掉勾选
+        # TODO: 去掉勾选
                  
     return TemplateResponse(request, 'accounts/setting_skill.html', {'skill_list': skill_list, 'active': "skill"})
 
