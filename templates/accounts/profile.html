@@ -151,7 +151,7 @@
 				<h1>新鲜事</h1>
           <ul>
             {% for e in timeline %}
-            <li>[{{e.created|date:"Y-m-d H:m:s"}}] {{e.user.username}} 为 <a href="{%url show_work e.instance.work.id %}">{{e.instance.work.name}}</a> 新增了一个 <a href="{%url show_element e.instance.id %}">{{e.instance.get_category_display}}</a>  </li>
+            <li>[{{e.created|date:"Y-m-d H:m:s"}}] {{e.user.username}} 为 <a href="/works/show_work/{{e.instance.work_id }}">{{e.instance.work.name}}</a> 新增了一个 <a href="/works/show_element/{{e.instance.id}}">{{e.instance.get_category_display}}</a>  </li>
             {% endfor %}
           </ul>
 		  	</div>
