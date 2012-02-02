@@ -54,40 +54,37 @@ def add_work(request):
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
 
-def show_work(request, work_id):
-    work = Work.objects.get(pk=work_id)
-    
-    if request.method == 'POST' and request.user.is_authenticated():
-        type = request.POST.get('type', '')
-        
-        if type == 'apply':
-            try:
-                role = request.POST.get('role')
-                reason = request.POST.get('reason', '')
-                if len(reason) > 300:
-                    reason = reason[:300]
-                invitation = Invitation.objects.filter(work = work, invited = request.user)
-                
-                if len(invitation) > 0:
-                    invitation = invitation[0]
-                    invitation.invite_status = 'goingon'
-                    invitation.role = role
-                    invitation.reason = reason
-                    invitation.save()
-                else:
-                    Invitation.objects.create(work = work, invited = request.user,
+@login_required
+def apply(request):
+    type = request.POST.get('type', '')
+    if type == 'apply':
+        try:
+            role = request.POST.get('role')
+            reason = request.POST.get('reason', '')
+            work_id = request.POST.get('work_id', '-1')
+            work = Work.objects.get(pk=int(work_id))
+            #if len(reason) > 300:
+            #    reason = reason[:300]
+            invitation = Invitation.objects.filter(work = work, invited = request.user).count()             
+            if invitation > 0:
+                return HttpResponse("already_invite")
+            else:
+                Invitation.objects.create(work = work, invited = request.user,
                                               skill = role, reason = reason,
                                               invite_status = 'goingon')
-            except Exception as e:
+        except Exception as e:
                 print e
-        return HttpResponse("")
-    
+        return HttpResponse("success")
+
+def show_work(request, work_id):
+    work = Work.objects.get(pk=work_id)
+ 
     try:
         elements = Element.objects.filter(work=work)
     except:
         elements = None
     
-    context = {'work': work, 'elements' : elements}
+    context = {'work': work, 'elements' : elements, 'involved': involved(work, request.user)}
     
     if request.user.is_authenticated():
         if work.author.id != request.user.id:
@@ -103,8 +100,19 @@ def show_work(request, work_id):
             print len(context['apply_set']),"####"
     return TemplateResponse(request, 'works/show_work.html', context)
 
+def involved(work, user):
+    try:
+        if user.id == work.author.id: return True
+        if Invitation.objects.filter(work = work, invited = user, invite_status = 'accept').count() > 0:
+            return True
+    except: return False
+    return False
+
 @csrf_exempt
+@login_required
 def write_work(request, work_id):
+    if not involved(Work.objects.get(pk=int(work_id)), request.user):
+        raise Http404("no privilege")
     if request.method == 'POST':
         category = request.POST.get('category', '')
         title = request.POST.get('title', '')
@@ -119,6 +127,8 @@ def write_work(request, work_id):
 @csrf_exempt
 @login_required
 def edit_work(request, work_id):
+    if not involved(Work.objects.get(pk=int(work_id)), request.user):
+        raise Http404("no privilege")
     if request.method == 'POST':
         if request.POST.get('action') == 'delete':
             work = Work.objects.get(pk=work_id, author=request.user)

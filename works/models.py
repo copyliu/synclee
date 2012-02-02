@@ -10,8 +10,6 @@ from taggit.managers import TaggableManager
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.comments.moderation import CommentModerator, moderator
 
-
-
 class TimeLines(models.Model):
     user = models.ForeignKey(User)
     content_type = models.ForeignKey(ContentType)

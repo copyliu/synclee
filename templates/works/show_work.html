@@ -7,10 +7,11 @@
   <div class="container-fluid">
     <div class="sidebar">
       Workname: {{work.name}}
-      {% if request.user.is_authenticated %}
-      {% if request.user.username != work.author.username %}
+      {% if not involved %}
 		<input type="submit" class="btn primary" id = "id_apply_btn" data-controls-modal="id_apply" data-backdrop="true" data-keyboard="true" value="加入">
-	  {% else %}
+	  {% endif %}
+      {% if request.user.is_authenticated %}
+	  {% if request.user.username == work.author.username %}
 		<section id = "sec_apply">
 		  <div class="page-header">
 			<h3>申请</h3>
@@ -90,7 +91,7 @@ var Controller = {
 	apply : function(){
 		var role = $('#id_apply_role').val();
 		var reason = $('#id_apply_reason').val();
-		$.ajax({ type: 'post', data: {'type': 'apply', 'role': role, 'reason': reason}});
+		$.ajax({ type: 'post', url : '{%url apply %}', data: {'type': 'apply', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
 		$('#id_apply').modal('hide');
 	},
 	notice : {
