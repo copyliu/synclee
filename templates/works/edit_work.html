@@ -203,7 +203,7 @@ var Controller = {
     }
   },
   submitWork : function(){
-    $.ajax({type: 'delete'});
+    $.ajax({type: 'post', data: {'action' : 'delete'}});
     $(".element").each(function(i){
       var type = $(".element").eq(i).children('.span1').text();
       var content = '';
