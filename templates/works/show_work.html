@@ -10,6 +10,12 @@
       {% if request.user.is_authenticated %}
       {% if request.user.username != work.author.username %}
 		<input type="submit" class="btn primary" id = "id_apply_btn" data-controls-modal="id_apply" data-backdrop="true" data-keyboard="true" value="加入">
+	  {% else %}
+		<section id = "sec_apply">
+		  <div class="page-header">
+			<h3>申请</h3>
+		  </div>
+		</section> <!-- section related -->
       {% endif %}
       {% endif %}
     </div>
@@ -53,22 +59,52 @@
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.invite()">Submit</a>
+    <a href="#" class="btn primary" onclick="Controller.apply()">Submit</a>
   </div>
 </div>
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
 <script>
+$(document).ready(function(){
+	{%for i in apply_set%}
+	$("#sec_apply").append(View.apply({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
+	{% endfor %}
+})
+var View = {
+	apply : function(id, applyer, role, reason){
+		return '<div class="row" id = "id_apply_'+ id +'"> <div class="span4">' +
+				'<B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
+				'希望作为' + role + '参加作品的创作</B>' +
+				'<li>' + reason + '</li>' +
+				'<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
+				'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')">' +
+				'</div> </idv>'
+	},
+};
 var Controller = {
-	invite : function(){
+	apply : function(){
 		var role = $('#id_apply_role').val();
 		var reason = $('#id_apply_reason').val();
 		$.ajax({ type: 'post', data: {'type': 'apply', 'role': role, 'reason': reason}});
 		$('#id_apply').modal('hide');
-	}
+	},
+	notice : {
+		apply : {
+			accept :function(id){
+				$.ajax({ type: 'post', data: {'type': 'apply_accept', 'id': id}});
+				$('#id_apply_' + id).remove();
+			},
+			reject :function(id){
+				$.ajax({ type: 'post', data: {'type': 'apply_reject', 'id': id}});
+				$('#id_apply_' + id).remove();
+			},
+		},
+	},
 }
 </script>
 {% endblock %}

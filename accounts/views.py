@@ -78,20 +78,41 @@ def profile(request, username):
                                               b_from = True, b_to =False)
             except Exception as e:
                 print e
+        elif type == "invite_accept":
+            try:
+                id = request.POST.get('id', '-1')
+                invitation = Invitation.objects.get(id = int(id))
+                if invitation.invited.id == request.user.id:
+                    invitation.b_to = True
+                    invitation.save()
+            except:
+                pass
+        elif type == "invite_reject":
+            try:
+                id = request.POST.get('id', '-1')
+                invitation = Invitation.objects.get(id = int(id))
+                if invitation.invited.id == request.user.id:
+                    invitation.delete()
+            except:
+                pass
         return HttpResponse("")
     
     profile = UserProfiles.objects.get(user=user)
     profile_skill = int2skill(profile.skill)
     work_set = user.work_set.all()
-    work_set2 = request.user.work_set.all()
-    if user.id == request.user.id:
-        pass
     context = {
         'profile':profile, 
         'profile_skill':profile_skill,
         'work_set' : work_set,
-        'work_set2' : work_set2,
     }
+    
+    if request.user.is_authenticated():
+        context['work_set2'] = request.user.work_set.all()
+        tem = Invitation.objects.filter(invited = request.user, b_from = True, b_to = True)
+        context['work_set_invited'] = [i.work for i in tem]
+        if request.user.id == profile.user_id:
+            context['invitation'] = Invitation.objects.filter(invited = request.user, b_from = True, b_to = False)
+    
     return TemplateResponse(request, 'accounts/profile.html', context)
 
 @login_required

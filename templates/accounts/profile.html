@@ -42,6 +42,13 @@
 <div class="container">
       <div class="sidebar">
         <div class="well">
+        	{% if request.user.id == profile.user_id %}
+        	<section id = "sec_invitation">
+				<div class="page-header">
+					<h3>邀请</h3>
+			  	</div>
+			</section> <!-- section related -->
+			{% endif %}
 			<section id = "work">
 				<div class="page-header">
 					<h3>主创作品</h3>
@@ -55,8 +62,8 @@
 						<li><a href="{%url show_work work.pk%}">
 							{{work.name}}
 						</a></li>
-						<li> <a href="{%url profile profile.user.username%}">
-							by {{profile.user.username}}
+						<li> <a href="{%url profile work.author.username%}">
+							by {{work.author.username}}
 						</a> </li>
 					</div>
 					{% endfor %}
@@ -71,6 +78,21 @@
 				<div class="page-header">
 					<h3>参与创作</h3>
 			  	</div>
+			  	<div class="row">
+				  	{% for work in work_set_invited%}
+					<div class="span2">
+						<li><a href="{%url show_work work.pk%}">
+							<img src="/media/{{work.cover}}" width="100px" height="100px">
+						</a></li>
+						<li><a href="{%url show_work work.pk%}">
+							{{work.name}}
+						</a></li>
+						<li> <a href="{%url profile work.author.username%}">
+							by {{work.author.username}}
+						</a> </li>
+					</div>
+					{% endfor %}
+				</div>
 			</section> <!-- section related -->
         </div>
       </div>
@@ -178,7 +200,28 @@
 <script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
 <script>
-  
+
+$(document).ready(function(){
+	{%for i in invitation%}
+	work = {
+		id : "{{i.work.id}}",
+		name : "{{i.work.name}}",
+	};
+	$("#sec_invitation").append(View.invitaion({{i.id}}, "{{i.work.author.username}}", "{{i.skill}}", work, "{{i.reason}}"));
+	{% endfor %}
+})
+var View = {
+	invitaion : function(id, inviter, role, work, reason){
+		return '<div class="row" id = "id_invitaion_'+ id +'"> <div class="span5">' +
+				'<B> <a href = "/accounts/profile/' + inviter +'/">' + inviter + '</a>' +
+				'邀请您作为' + role + '参加作品<a href = "/works/show_work/' + work.id +'/">' + 
+				work.name + '</a>的创作</B>' +
+				'<li>' + reason + '</li>' +
+				'<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.invite.accept('+ id +')">' +
+				'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.invite.reject('+ id +')">' +
+				'</div> </idv>'
+	},
+};
 var Controller = {
 	invite : function(){
 		var work_id = $('#id_invite_work').val();
@@ -186,6 +229,18 @@ var Controller = {
 		var reason = $('#id_invite_reason').val();
 		$.ajax({ type: 'post', data: {'type': 'invite', 'work_id': work_id, 'role': role, 'reason': reason}});
 		$('#id_invite').modal('hide');
+	},
+	notice : {
+		invite : {
+			accept :function(id){
+				$.ajax({ type: 'post', data: {'type': 'invite_accept', 'id': id}});
+				$('#id_invitaion_' + id).remove();
+			},
+			reject :function(id){
+				$.ajax({ type: 'post', data: {'type': 'invite_reject', 'id': id}});
+				$('#id_invitaion_' + id).remove();
+			},
+		},
 	},
   follow : function(action){
     if (action == 'fo'){
@@ -197,6 +252,6 @@ var Controller = {
       $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
     }
   },
-}
+};
 </script>
 {% endblock %}
