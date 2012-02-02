@@ -71,8 +71,8 @@ def invite(request):
 
 @login_required
 def notice(request):
-    type = request.POST.get('type', '')
-    if type == "invite_accept":
+    action = request.POST.get('type', '')
+    if action == "invite_accept":
         try:
             id = request.POST.get('id', '-1')
             invitation = Invitation.objects.get(id = int(id))
@@ -80,7 +80,7 @@ def notice(request):
                 invitation.invite_status = 'accept'
                 invitation.save()
         except: return HttpResponse("something wrong")
-    elif type == "invite_reject":
+    elif action == "invite_reject":
         try:
             id = request.POST.get('id', '-1')
             invitation = Invitation.objects.get(id = int(id))
@@ -88,7 +88,7 @@ def notice(request):
                 invitation.invite_status = 'reject'
                 invitation.save()
         except: return HttpResponse("something wrong")
-    elif type == "apply_accept":
+    elif action == "apply_accept":
         try:
             id = request.POST.get('id', '-1')
             invitation = Invitation.objects.get(id = int(id))
@@ -96,7 +96,7 @@ def notice(request):
                 invitation.invite_status = 'accept'
                 invitation.save()
         except: return HttpResponse("something wrong")
-    elif type == "apply_reject":
+    elif action == "apply_reject":
         try:
             id = request.POST.get('id', '-1')
             invitation = Invitation.objects.get(id = int(id))

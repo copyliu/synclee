@@ -55,9 +55,9 @@ def add_work(request):
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
 
 @login_required
-def apply(request):
-    type = request.POST.get('type', '')
-    if type == 'apply':
+def apply_for(request):
+    action = request.POST.get('type', '')
+    if action == 'apply_for':
         try:
             role = request.POST.get('role')
             reason = request.POST.get('reason', '')

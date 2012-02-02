@@ -60,7 +60,7 @@
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.apply()">Submit</a>
+    <a href="#" class="btn primary" onclick="Controller.apply_for()">Submit</a>
   </div>
 </div>
 {% endblock %}
@@ -73,11 +73,11 @@
 <script>
 $(document).ready(function(){
 	{%for i in apply_set%}
-	$("#sec_apply").append(View.apply({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
+	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
 	{% endfor %}
 })
 var View = {
-	apply : function(id, applyer, role, reason){
+	apply_for : function(id, applyer, role, reason){
 		return '<div class="row" id = "id_apply_'+ id +'"> <div class="span4">' +
 				'<B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
 				'希望作为' + role + '参加作品的创作</B>' +
@@ -88,10 +88,10 @@ var View = {
 	},
 };
 var Controller = {
-	apply : function(){
+	apply_for : function(){
 		var role = $('#id_apply_role').val();
 		var reason = $('#id_apply_reason').val();
-		$.ajax({ type: 'post', url : '{%url apply %}', data: {'type': 'apply', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
+		$.ajax({ type: 'post', url : '{%url apply_for %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
 		$('#id_apply').modal('hide');
 	},
 	notice : {
