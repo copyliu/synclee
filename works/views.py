@@ -26,7 +26,7 @@ PRIVACY_CHOICES = (
     )
 
 @commit_on_success
-#@login_required  
+@login_required  
 def add_work(request):
     if request.method == 'POST':
         form = WorkForm(request.POST)
