@@ -128,6 +128,7 @@ def profile(request, username):
         'timeline' : timeline,
         #'invited' : invited,
         'joined' : joined,
+        'followed' : user.follow.all(),
         'skill_list' : skill_list,
     }
     

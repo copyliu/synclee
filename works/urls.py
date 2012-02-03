@@ -7,4 +7,5 @@ urlpatterns = patterns('works.views',
     url(r'^edit_work/(?P<work_id>\d+)/$', 'edit_work', name='edit_work'),
     url(r'^show_element/(?P<element_id>\d+)/$', 'show_element', name='show_element'),
     url(r'^apply/$', 'apply_for', name = 'apply_for'),
+    url(r'^follow_work/$', 'follow_work', name = 'follow_work'),
 )

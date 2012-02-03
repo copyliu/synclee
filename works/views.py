@@ -76,6 +76,18 @@ def apply_for(request):
                 print e
         return HttpResponse("success")
 
+@csrf_exempt
+@login_required
+def follow_work(request):
+    action = request.POST.get('action')
+    work = Work.objects.get(id=request.POST.get('foid'))
+    if action == 'fo':
+        work.follower.add(request.user)
+        return HttpResponse("success")
+    elif action == 'unfo':
+        work.follower.remove(request.user)
+        return HttpResponse("success")
+    
 def show_work(request, work_id):
     work = Work.objects.get(pk=work_id)
  
@@ -84,7 +96,8 @@ def show_work(request, work_id):
     except:
         elements = None
     
-    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user)}
+    followed = (request.user in work.follower.all()) or request.user == work.author
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed}
     
     if request.user.is_authenticated():
         if work.author.id != request.user.id:
