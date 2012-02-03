@@ -57,9 +57,7 @@ def invite(request):
         #中文不能直接截取
 #        if len(reason) > 300:
 #            reason = reason[:300]
-        invitation = Invitation.objects.filter(work = work, invited = user, invite_status = 'noanswer').count()
-        invitation = invitation + Invitation.objects.filter(work = work, invited = user, invite_status = 'accept').count()
-        invitation = invitation + Invitation.objects.filter(work = work, invited = user, invite_status = 'goingon').count()
+        invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
         
         if invitation:
             return HttpResponse("already_invite")
