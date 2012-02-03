@@ -4,56 +4,55 @@
 
 {% block content %}
 <div class="container">
-  <div class="container-fluid">
-    <div class="sidebar">
-      Summary
-    </div>
-    <div class="content">
-      <form ation="" method="post"  enctype="multipart/form-data">
-        {% csrf_token %}
-          <fieldset>
-          <legend>Create</legend>
-          <div class="clearfix">
-            <label for="id_name">NAME</label>
-            <div class="input">
-              <input class="span4" id="id_name" name="name" size="30" type="text">
-              <span class="help-inline error">{{form.name.errors.0}}</span>
-            </div>
-          </div>
-          <div class="clearfix">
-            <label for="normalSelect">Catelog</label>
-            <div class="input">
-              <select name="normalSelect" id="normalSelect">
-                <option>COMIC</option>
-                <option>WORD</option>
-                <option>GALLERY</option>
-              </select>
-            </div>
-          </div><!-- /clearfix -->
-          <div class="clearfix">
-            <label for="errorInput">Cover</label>
-            <div class="input">
-              <button type="reset" class="btn" onclick="document.getElementById('id_cover').click(); return false;">UPLOAD</button>
-              <input type="file" class="btn" value="Upload" name="cover" id="id_cover" style="width:0px;"/>
-              <span class="help-inline">Small snippet of help text</span>
-            </div>
-          </div><!-- /clearfix -->
-        </fieldset>
-        <div class="clearfix">
-            <label for="id_intro">Intro</label>
-            <div class="input">
-              <textarea class="span4" id="id_intro" name="intro" rows="3"></textarea>
-              <span class="help-block">
-                Block of help text to describe the field above if need be.
-              </span>
-            </div>
-          </div>
-        <div class="actions">
-          <input type="submit" class="btn primary" value="Save changes">&nbsp;
+  <form class="form-horizontal" ation="" method="post"  enctype="multipart/form-data">
+    {% csrf_token %}
+      <legend>新增企划 - 填写基本信息</legend>
+      <div class="control-group">
+        <label class="control-label" for="id_name">企划名称</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="id_name" name="name"> {{form.name.errors.0}}
         </div>
-      </form>
-    </div>
-  </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_isprivate">不公开</label>
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox" id="id_isprivate" name="isprivate" value="True">
+            勾选后其他用户不能查看该企划
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_category">分类</label>
+        <div class="controls">
+          <select id="id_category" name="category">
+            <option value="other" selected="selected">其他</option>
+            <option value="word">文字企划</option>
+            <option value="image">图片企画</option>
+          </select>
+          <p class="help-block">选择后将排行榜中进入不同的分类，不会影响企划的制作</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_cover">企划封面</label>
+        <div class="controls">
+          <input class="input-file" id="id_cover" name="cover" type="file">
+          <p class="help-block">选择并上传一张能代表这个企划的图</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="textarea">企划描述</label>
+        <div class="controls">
+          <textarea class="span4" id="id_intro" name="intro" rows="5"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存，开始制作企划</button>
+        <button type="reset" class="btn" onclick="window.history.go(-1)">返回</button>
+      </div>
+    </fieldset>
+  </form>
+  
 </div>
 {% endblock %}
 

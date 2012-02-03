@@ -6,16 +6,17 @@
 
 <div class="container">
     <div class="row">
-        <div class="span10">
-            <h2>Welcome to synclee</h2>
-            <p>这里是创作与合作的崭新平台。<br/>
-            你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
-            新岚希望你在这里找回属于自己的创作乐趣。<br/>
-            <a href="{%url add_work %}"><button class="btn error">开始创作</button></a>
-</p>
-        </div>
-        <div class="span6">
-            <form>
+      <div class="span8">
+        <h2>Welcome to synclee</h2>
+        <p>这里是创作与合作的崭新平台。<br/>
+        你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
+        新岚希望你在这里找回属于自己的创作乐趣。<br/>
+        <p><a href="{%url add_work %}"><button class="btn">开始创作</button></a></p>
+        </p>
+      </div>
+        <div class="span4">
+            <form action="{%url login %}" method="post">
+              {% csrf_token %}
             <fieldset>
               <div class="clearfix">
                 <label for="xlInput">登录</label>

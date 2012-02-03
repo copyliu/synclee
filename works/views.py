@@ -30,7 +30,10 @@ def add_work(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             intro = form.cleaned_data['intro']
-            work = Work.objects.create(name=name, intro=intro, author=request.user)
+            category = form.cleaned_data['category']
+            print category
+            isprivate = form.cleaned_data['isprivate']
+            work = Work.objects.create(name=name, intro=intro, category=category, isprivate=isprivate, author=request.user)
             #handle cover
             cover = request.FILES.get('cover', '')
             if cover:
@@ -38,7 +41,7 @@ def add_work(request):
             work.cover = cover
             work.save()
             #uploaded = request.FILES.get('cover', '')
-            #catalog_id = request.POST.get('catalog_id')
+            #
             
         #object_type = ContentType.objects.get(name='work')
         #object_id = new_work.id
@@ -50,6 +53,8 @@ def add_work(request):
     else:
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
+
+
 
 @login_required
 def apply_for(request):

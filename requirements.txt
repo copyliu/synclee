@@ -5,3 +5,4 @@ django-notification
 django-taggit
 #registration
 PIL
+south

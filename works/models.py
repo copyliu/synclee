@@ -33,19 +33,12 @@ class Work(models.Model):
         default='cover/default_cover.gif'
     )
     author = models.ForeignKey(User)
-    #project = models.ForeignKey(Project, related_name='work', null=True)
-    #founder = models.ForeignKey(User, related_name='own_work')
-    #members = models.ManyToManyField(User, through='Membership', related_name='in_work')
-    follower = models.ManyToManyField(User, related_name='follow')
+    category = models.CharField(max_length=16)
     created = models.DateTimeField(auto_now_add=True)
-    #privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES)
-    #catalog = models.ForeignKey(Catalog, related_name='work')
-    #tab = models.ManyToManyField(SubTabClass, limit_choices_to={'parent_tab__tab_model_name':'work'}, related_name='work')
-    tags = TaggableManager()
-
-    closed = models.BooleanField(default=False)
-    intro = models.TextField()
+    isprivate = models.BooleanField(default=False)
+    intro = models.TextField(blank=True)
     
+    follower = models.ManyToManyField(User, related_name='follow')
 #def work_event(sender = None, instance = None, created = False, **kwargs):
 #    if created:
 #        TimeLines.objects.create(user = instance.author, event = instance)
