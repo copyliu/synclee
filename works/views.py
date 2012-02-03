@@ -13,11 +13,8 @@ from .models import Work, Element
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from accounts.skills import int2skill
 from accounts.models import *
-from django.contrib.auth.decorators import login_required
 #import string, random
-from django.utils import simplejson
 
 PRIVACY_CHOICES = (
         (u'Pub', u'公开'),
