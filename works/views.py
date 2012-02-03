@@ -65,8 +65,12 @@ def apply_for(request):
             work = Work.objects.get(pk=int(work_id))
             #if len(reason) > 300:
             #    reason = reason[:300]
-            invitation = Invitation.objects.filter(work = work, invited = request.user).count()             
+            invitation = Invitation.objects.filter(work = work, invited = request.user, invite_status = 'noanswer').count()
+            invitation = invitation + Invitation.objects.filter(work = work, invited = request.user, invite_status = 'accept').count()
+            invitation = invitation + Invitation.objects.filter(work = work, invited = request.user, invite_status = 'goingon').count()
+                     
             if invitation > 0:
+                print "here"
                 return HttpResponse("already_invite")
             else:
                 Invitation.objects.create(work = work, invited = request.user,
