@@ -36,6 +36,7 @@ class Work(models.Model):
     #project = models.ForeignKey(Project, related_name='work', null=True)
     #founder = models.ForeignKey(User, related_name='own_work')
     #members = models.ManyToManyField(User, through='Membership', related_name='in_work')
+    follower = models.ManyToManyField(User, related_name='follow')
     created = models.DateTimeField(auto_now_add=True)
     #privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES)
     #catalog = models.ForeignKey(Catalog, related_name='work')

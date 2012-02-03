@@ -10,6 +10,12 @@
       {% if not involved %}
 		<input type="submit" class="btn primary" id = "id_apply_btn" data-controls-modal="id_apply" data-backdrop="true" data-keyboard="true" value="加入">
 	  {% endif %}
+	  {% if followed and not involved%}
+	    <input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')">
+      {% endif %}
+      {% if not followed and not involved%}
+        <input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')">
+      {% endif %}
       {% if request.user.is_authenticated %}
 	  {% if request.user.username == work.author.username %}
 		<section id = "sec_apply">
@@ -106,6 +112,16 @@ var Controller = {
 			},
 		},
 	},
-}
+	follow_work : function(action){
+		if (action == 'fo'){
+		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $('#follow_work').val('取消').removeClass('primary').attr('onclick', "Controller.follow_work('unfo')");
+		}
+		if (action ==  'unfo'){
+		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $('#follow_work').val('关注').addClass('primary').attr('onclick', "Controller.follow_work('fo')");
+		}
+	},
+};
 </script>
 {% endblock %}
