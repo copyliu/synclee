@@ -31,7 +31,6 @@ def add_work(request):
             name = form.cleaned_data['name']
             intro = form.cleaned_data['intro']
             category = form.cleaned_data['category']
-            print category
             isprivate = form.cleaned_data['isprivate']
             work = Work.objects.create(name=name, intro=intro, category=category, isprivate=isprivate, author=request.user)
             #handle cover
