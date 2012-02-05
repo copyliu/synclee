@@ -5,23 +5,45 @@
 {% block content %}
 <div class="container" >
   <div class="container-fluid">
-    <div class="sidebar">
-      <img src="/media/{{work.cover}}" width="100%" height="200" />
-        <div class="span4">
-          {{work.name}}
-          <p>{{work.intro}}</p>
-        </div>
-    </div>
-    <div class="content">
-      <div class="row">
-        <article class="span12">
-
+    <div class="row-fluid">
+      <div class="span3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2"><a href="#" class="thumbnail">
+            <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100%" />
+          </a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="label label-info">企划名称</span></td>
+              <td>{{work.name}}</td>
+            </tr>
+            <tr>
+              <td><span class="label label-info">发起人</span></td>
+              <td><a href="/accounts/profile/{{work.author.username}}/">{{work.author.username}}</a></td>
+            </tr>
+            <!--tr>
+              <td><span class="label label-info">参与人</span></td>
+              <td></td>
+            </tr-->
+            <tr>
+              <td width="60"><span class="label label-info">描述</span></td>
+              <td>{{work.intro}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="span9">
+        <article>
         </article>
-        <div class="span12" id="tool_bar">
-          <button id="id_add_text_button" class="btn" data-controls-modal="id_add_text" data-backdrop="true" data-keyboard="true">添加文字</button>
-          <input type="file" name="story_upload" id="id_story_upload" class="btn"/>
-          <input type="text" id="id_line_name" /><button class="btn">添加分割线</button>
-          <button class="btn" type="submit">提交</button>
+        <div class="well" id="tool_bar">
+            <a class="btn btn-success" type="submit">提交</a>
+            <a id="id_add_text_button" href="#id_add_text" class="btn" data-toggle="modal" data-backdrop="true" data-keyboard="true">添加文字</a>
+            <input type="file" name="story_upload" id="id_story_upload"/>
+            <!--input type="text" id="id_line_name" /><button class="btn">添加分割线</button-->
+          </div>
         </div>
       </div>
     </div>
@@ -32,35 +54,39 @@
 
 <div id="id_add_text" class="modal hide fade">
   <div class="modal-header">
-    <a href="#" class="close">&times;</a>
-    <h3>Input Text!</h3>
+    <a href="javascript:void(0)" class="close" data-dismiss="modal">&times;</a>
+    <h3>添加文字</h3>
   </div>
   <div class="modal-body">
+    <label class="control-label" for="id_add_text_title">标题</label>
     <input id="id_add_text_title" placeholder="标题" /><br/>
-    <textarea id="id_add_text_content" rows="5" cols="100"></textarea>
+    <label class="control-label" for="id_add_text_title">内容</label>
+    <textarea id="id_add_text_content" rows="25" cols="100" style="width:500px; height:200px;"></textarea>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.addElement.text()">Submit</a>
+    <a href="javascript:void(0)" class="btn primary" onclick="Controller.addElement.text()">提交</a>
   </div>
 </div>
 
 <div id="id_edit_text" class="modal hide fade">
   <div class="modal-header">
-    <a href="#" class="close">&times;</a>
-    <h3>Input Text!</h3>
+    <a href="javascript:void(0)" class="close" data-dismiss="modal">&times;</a>
+    <h3>编辑文字</h3>
   </div>
   <div class="modal-body">
     <input id="id_edit_text_title" placeholder="标题" /><br/>
-    <textarea id="id_edit_text_content" rows="5" cols="100"></textarea>
+    <textarea id="id_edit_text_content" rows="25" cols="100" style="width:500px; height:200px;"></textarea>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.editElement.text()">Edit</a>
+    <a href="javascript:void(0)" class="btn primary" onclick="Controller.editElement.text()">提交</a>
   </div>
 </div>
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/static/js/nicEdit.js"></script>
 <script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
 
@@ -69,7 +95,7 @@ $(document).ready(function(){
   
   {% for e in elements %}
     {% if e.category == 'text' %}
-    $('article').append(View.Element.text('{{e.content}}', '{{e.title}}'));
+    $('article').append(View.Element.text('{{e.content|safe}}', '{{e.title}}'));
     {% endif %}
     
     {% if e.category == 'line' %}
@@ -82,17 +108,13 @@ $(document).ready(function(){
     {% endif %}
   {% endfor %}
   
-  
+	document.addNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_add_text_content');
+  document.editNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_edit_text_content');
+
   $("article" ).sortable();
   
-  $("article .element").live('mouseover', function(){
-    $(this).children("toolbar").show()
-  }).live('mouseout', function(){
-    $(this).children("toolbar").hide()
-  })
-  
   $('article .element toolbar [name="delete"]').live('click',function(){
-    var answer = confirm('Delete?');
+    var answer = confirm('确定要删除吗?');
     if (answer) $(this).parent().parent().remove();
   })
   
@@ -105,19 +127,18 @@ $(document).ready(function(){
         break;
       case '文字':
         window.tempTextElement = {
-          content : $(this).parent().parent().children('p'),
+          content : $(this).parent().parent().children('div .span11'),
           title :  $(this).parent().parent().children('.title')
         }
-        //html(dom.text())
         $('#id_edit_text_title').val(window.tempTextElement['title'].text());
-        $('#id_edit_text_content').val(window.tempTextElement['content'].text());
+        document.editNicEditor.nicInstances[0].setContent(window.tempTextElement['content'].html());
         break;
       default: 
         break;
     };
   });
   
-  $('button[type="submit"]').bind('click', function(){
+  $('#tool_bar .btn-success').bind('click', function(){
     Controller.submitWork();
   });
   
@@ -147,23 +168,24 @@ var View = {
   Element : {
     text : function(content, title){
       return '<div class="row element">'+
-    '<div class="span1"><span class="label success">文字</span></div>'+
-    '<h2 class="title">'+title+'</h2>'+
-    '<p class="span11">'+content+'</p>'+
-    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#"  name="edit" data-controls-modal="id_edit_text" data-backdrop="true" data-keyboard="true">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '<div class="span1"><span class="label label-success">文字</span></div>'+
+    '<h3 class="title">'+title+'</h3>'+
+    '<div class="span11">'+content+'</div>'+
+    '<toolbar class="span4"><a href="#id_edit_text" name="edit" data-toggle="modal" data-backdrop="true" data-keyboard="true"><i class="icon-edit"></i>编辑</a> <a name="delete" href="#"><i class="icon-trash"></i> 删除</a>'+
     '</div>'},
-    image : function(name, title){
+    image : function(name){
       return '<div class="row element">'+
-    '<div class="span1"><span class="label success">图片</span></div>'+
-    '<input class="title" value="'+title+'"  placeholder="图片标题"/>'+
+    '<div class="span1"><span class="label label-success">图片</span></div>'+
+    '<input class="title" placeholder="图片标题"/>'+
     '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
-    '<toolbar class="span11" name="toolbar" style="display:none;"> <a href="#" name="delete">删除</a></toolbar>'+
+    //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '<toolbar class="span4"><a href="#"><i class="icon-trash"></i> 删除</a></toolbar>'+
     '</div>'},
     line : function(name){
       return '<div class="row element">'+
     '<div class="span1"><span class="label success">分割线</span></div>'+
     '<p class="span11">'+name+'</p>'+
-    '<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '<toolbar class="span11" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
     '</div>'},
   }
 }
@@ -171,14 +193,17 @@ var View = {
 var Controller = {
   addElement : {
     text : function(){
+      document.addNicEditor.nicInstances[0].saveContent();
       var content = $('#id_add_text_content').val();
       var title = $('#id_add_text_title').val();
       $('article').append(View.Element.text(content, title));
-      $('#id_add_text_content').val(null);
+      $('#id_add_text_title').val('');
+      $('#id_add_text_content').val('');
+      $('#id_add_text_content').prev().children('div').html('');
       $('#id_add_text').modal('hide');
     },
-    image : function(name, title){
-      $('article').append(View.Element.image(name, title));
+    image : function(name){
+      $('article').append(View.Element.image(name));
     },
     line : function(){
       var v = $('#id_line_name').val();
@@ -187,20 +212,14 @@ var Controller = {
   },
   editElement : {
     text : function(){
+      document.editNicEditor.nicInstances[0].saveContent();
+      //document.editNicEditor.nicInstances[0].getContent();
       var content = $('#id_edit_text_content').val();
       var title = $('#id_edit_text_title').val();
       window.tempTextElement['title'].text(title);
-      window.tempTextElement['content'].text(content);
+      window.tempTextElement['content'].html(content);
       $('#id_edit_text').modal('hide');
     },
-    line : function(dom){
-      var text = dom.text();
-      window.editLineSubmit = function(button){
-        var changeText = button.prev().val();
-        dom.empty().text(changeText);
-      };
-      dom.html('<textarea>'+text+'</textarea> <button class="btn" onclick="editLineSubmit($(this))">Submit</button>');
-    }
   },
   submitWork : function(){
     $.ajax({type: 'post', data: {'action' : 'delete'}});
@@ -214,15 +233,14 @@ var Controller = {
           type = 'line';
           break;
         case '文字':
-          title = '';
           title = $(".element").eq(i).children('.title').text();
-          content = $(".element").eq(i).children('p').text();
+          content = $(".element").eq(i).children('.span11').html();
           type = 'text';
           break;
         case '图片':
-          title = $(".element").eq(i).children('.title').val();
+          title = $(".element").eq(i).children('input').val();
           content = $(".element").eq(i).children('img').attr('src');
-          type = 'image'
+          type = 'image';
           break;
 	      default: 
           return false;
@@ -230,7 +248,7 @@ var Controller = {
       }
       $.ajax({ type: 'post', data: {'category': type, 'content': content, 'title': title}});
     });
-    var answer = confirm('所有Element已经提交完成，要跳转到read_work页面吗？');
+    var answer = confirm('所有元素已经成功生成，要跳转回[{{work.name}}]查看吗？');
     if (answer) location.href = '{%url show_work work.id %}';
   },
   get : {
