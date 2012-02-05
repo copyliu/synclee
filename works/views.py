@@ -66,7 +66,7 @@ def apply_for(request):
             work = Work.objects.get(pk=int(work_id))
             #if len(reason) > 300:
             #    reason = reason[:300]
-            invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
+            invitation = Invitation.objects.filter(work = work, invited = request.user).exclude(invite_status = 'reject').count()
                      
             if invitation > 0:
                 print "here"

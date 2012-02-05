@@ -133,16 +133,16 @@
               {% else %}
             <input type="submit" id="follow" class="btn primary" value="关注" onclick="Controller.follow('fo')">
               {% endif_relationship %}
-						<input type="submit" class="btn primary" id = "id_invite_btn" data-controls-modal="id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
+						<input type="submit" class="btn primary" id = "id_invite_btn" data-toggle="modal" href ="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
             {% else %}
             <input type="submit" class="btn primary" value="权限">
             {% endif %}
 					</div>
-					<div class="span6">
+					<div class="span4">
 						<h4>介绍</h4>
 						<span>{{profile.intro}}</span>
 					</div>
-					<div class="span6">
+					<div class="span4">
 						<h4>技能</h4>
 						<ul class="abilities">
 							{% for skill, lv, name in skill_list%}
@@ -153,7 +153,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="span6 offset1">
+					<div class="span4 offset1">
 						<h4>位置</h4>
 						<span>{{profile.location}}</span>
 					</div>
@@ -176,23 +176,23 @@
 
 <div id="id_invite" class="modal hide fade">
   <div class="modal-header">
-    <a href="#" class="close">&times;</a>
+    <a class="close" data-dismiss="modal">&times;</a>
     <h3>选择邀请加入的作品</h3>
   </div>
   <div class="modal-body">
-	<div class="clearfix">
-      <label for="normalSelect">选择作品：</label>
-	  <div class="input">
+	<div class="control-group">
+    <label class="control-label" for="normalSelect">选择作品：</label>
+	  <div class="control">
 	    <select name="normalSelect" id="id_invite_work">
 		  {% for work in request.user.work_set.all%}
 		  <option value = "{{work.pk}}">{{work.name}}</option>
 		  {% endfor %}
-        </select>
-      </div>
+      </select>
+    </div>
 	</div>
-	<div class="clearfix">
-      <label for="normalSelect">选择角色：</label>
-	  <div class="input">
+	<div class="control-group">
+      <label class="control-label" for="normalSelect">选择角色：</label>
+	  <div class="control">
 	    <select name="normalSelect" id="id_invite_role">
 		  {% for skill, lv, name in skill_list%}
 		  <option value = "{{skill}}">{{name}}</option>
@@ -200,9 +200,9 @@
         </select>
       </div>
 	</div>
-	<div class="clearfix">
-      <label for="textarea">邀请理由：</label>
-	  <div class="input">
+	<div class="control-group">
+      <label class="control-label" for="textarea">邀请理由：</label>
+	  <div class="control">
 	    <textarea class="large" id="id_invite_reason" name="textarea2" rows="5""></textarea>
       </div>
       <span class="help-block">最多300个字符</span>

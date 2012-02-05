@@ -4,18 +4,18 @@
 <div class="page-header">
 	<h3>技能设置</h3>
 </div>
-<form ation="" method="post">
+<form class = "form-horizontal" ation="" method="post">
 {% csrf_token %}
 <div class="row"> 
 	<div class="span2"> <p>
 		你所掌握的技能在新岚会以图标的形式。。。。。
 	</p> </div>
-	<div class="span9">
-		<div class="clearfix">
-			<div class="input">
+	<div class="span7">
+		<div class="control-group">
+			<div class="control">
 				<ul class="inputs-list">
 					{% for id, skill in skill_list.items %}
-					<li> <label>
+					<li> <label class="checkbox">
 						<input type="checkbox" name = "skill_{{id}}" {{skill.1}}>
 				        <span>{{skill.0}}</span>
 					</label> </li>
@@ -25,7 +25,7 @@
 		</div>
 	</div>
 </div>
-<div class="actions">
+<div class="form-actions">
 	<input type="submit" class="btn primary" value="Save changes">&nbsp;
 </div>
 </form>

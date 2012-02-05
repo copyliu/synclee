@@ -1,10 +1,10 @@
 {% extends "accounts/settings.html"  %}
 {% block title %}修改密码{% endblock %}
 {% block content_content %}
-<form action="" method="post">
+<form class = "form-horizontal" action="" method="post">
   {% csrf_token %}
 {{form.as_p}}
-<div class="actions">
+<div class="form-actions">
 	<input type="submit" class="btn primary" value="Save changes">&nbsp;
 </div>
 </form>

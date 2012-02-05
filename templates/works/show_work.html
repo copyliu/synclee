@@ -8,7 +8,7 @@
     <div class="sidebar">
       Workname: {{work.name}}
       {% if not involved %}
-		<input type="submit" class="btn primary" id = "id_apply_btn" data-controls-modal="id_apply" data-backdrop="true" data-keyboard="true" value="加入">
+		<input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入">
 	  {% endif %}
 	  {% if followed and not involved%}
 	    <input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')">
@@ -43,7 +43,7 @@
 
 <div id="id_apply" class="modal hide fade">
   <div class="modal-header">
-    <a href="#" class="close">&times;</a>
+    <a class="close" data-dismiss="modal">&times;</a>
     <h3>加入作品</h3>
   </div>
   <div class="modal-body">
