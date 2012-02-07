@@ -93,7 +93,10 @@ def follow_work(request):
     
 def show_work(request, work_id):
     work = Work.objects.get(pk=work_id)
- 
+    if work.isprivate:
+        if not _involved(work, request.user):
+            raise Http404("private work")
+    
     try:
         elements = Element.objects.filter(work=work)
     except:
