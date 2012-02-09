@@ -29,7 +29,7 @@ class Work(models.Model):
     cover = ThumbnailerImageField(
         blank=True,
         upload_to='cover',
-        resize_source=dict(size=(300, 300), crop='smart'),
+        resize_source=dict(size=(360, 268), crop='smart'),
         default='cover/default_cover.gif'
     )
     author = models.ForeignKey(User)

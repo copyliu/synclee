@@ -181,3 +181,17 @@ def show_element(request, element_id):
         'next' : next or False
     }
     return TemplateResponse(request, 'works/show_element.html', {'element' : element, 'nav' : nav})
+
+def list_works(request):
+    works = Work.objects.all()
+    #分页
+    paginator = Paginator(works, 1)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1    
+    works = paginator.page(page)
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'works/list_works.html', {'works' : works, 'paginator' : paginator})
