@@ -97,7 +97,7 @@
 				  	{% for work in joined %}
 					<div class="span2">
 						<li><a href="{%url show_work work.pk%}">
-							<img src="/media/{{work.cover}}" width="100px" height="100px">
+							<img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px">
 						</a></li>
 						<li><a href="{%url show_work work.pk%}">
 							{{work.name}}

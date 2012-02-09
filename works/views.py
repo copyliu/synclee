@@ -103,7 +103,9 @@ def show_work(request, work_id):
         elements = None
     
     followed = (request.user in work.follower.all()) or request.user == work.author
-    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed}
+    participated = Invitation.objects.filter(work = work, invite_status = 'accept')
+    participated = [i.invited for i in participated]
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated}
     
     if request.user.is_authenticated():
         if work.author.id != request.user.id:
@@ -141,7 +143,9 @@ def write_work(request, work_id):
         return HttpResponse(element.id)
     else:
         work = Work.objects.get(pk=int(work_id))
-        return TemplateResponse(request, 'works/write_work.html', {'work' : work})
+        participated = Invitation.objects.filter(work = work, invite_status = 'accept')
+        participated = [i.invited for i in participated]
+        return TemplateResponse(request, 'works/write_work.html', {'work' : work, 'participated':participated})
     
 @csrf_exempt
 @login_required
@@ -162,8 +166,10 @@ def edit_work(request, work_id):
         return HttpResponse(element.id)
     elif request.method == 'GET':
         work = Work.objects.get(pk=int(work_id))
+        participated = Invitation.objects.filter(work = work, invite_status = 'accept')
+        participated = [i.invited for i in participated]
         elements = Element.objects.filter(work=work)
-        return TemplateResponse(request, 'works/edit_work.html', {'work' : work, 'elements' : elements})
+        return TemplateResponse(request, 'works/edit_work.html', {'work' : work, 'elements' : elements, 'participated':participated})
     
 def show_element(request, element_id):
     element = get_object_or_404(Element, pk=element_id)

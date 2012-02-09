@@ -5,39 +5,65 @@
 {% block content %}
 <div class="container">
   <div class="container-fluid">
-    <div class="sidebar">
-      Workname: {{work.name}}
-      {% if not involved %}
-		<input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入">
-	  {% endif %}
-	  {% if followed and not involved%}
-	    <input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')">
-      {% endif %}
-      {% if not followed and not involved%}
-        <input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')">
-      {% endif %}
+    <div class="row-fluid">
+      <div class="span3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2"><a href="#" class="thumbnail">
+            <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100%" />
+          </a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="label label-info">企划名称</span></td>
+              <td>{{work.name}}</td>
+            </tr>
+            <tr>
+              <td><span class="label label-info">发起人</span></td>
+              <td><a href="/accounts/profile/{{work.author.username}}/">{{work.author.username}}</a></td>
+            </tr>
+            <tr>
+              <td><span class="label label-info">参与人</span></td>
+              <td>
+              {% for p in participated %}
+              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a></li>
+              {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td width="60"><span class="label label-info">描述</span></td>
+              <td>{{work.intro}}</td>
+            </tr>
+            <tr>
+              {% if not involved %}
+              <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
+	            {% endif %}
+	            
+	            {% if followed and not involved%}
+	            <td><input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')"></td>
+              {% endif %}
+              {% if not followed and not involved%}
+              <td><input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')"></td>
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="span8">
       {% if request.user.is_authenticated %}
-	  {% if request.user.username == work.author.username %}
-		<section id = "sec_apply">
-		  <div class="page-header">
-			<h3>申请</h3>
-		  </div>
-		</section> <!-- section related -->
-      {% endif %}
-      {% endif %}
-    </div>
-    <div class="content">
+	    {% if request.user.username == work.author.username %}
+	    <section id = "sec_apply">
+	    </section>
+	    {% endif %}
+	    {% endif %}
       {% if elements %}
-        {% for element in elements %}
-        <div>
-          <span class="label success">{{ element.category }}</span>
-          <p><a href="{%url show_element element.id %}">{{element.content}}</a></p>
-        </div>
-        {% endfor %}
+        <article></article>
       {% else %}
         当前work没有任何element
       {% endif %}
-    </div>
+      </div>
   </div>
 </div>
 
@@ -81,17 +107,53 @@ $(document).ready(function(){
 	{%for i in apply_set%}
 	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
 	{% endfor %}
+	
+	{% for e in elements %}
+    {% if e.category == 'text' %}
+    $('article').append(View.Element.text('{{e.content|safe}}', '{{e.title}}'));
+    {% endif %}
+    
+    {% if e.category == 'line' %}
+    $('article').append(View.Element.line('{{e.content}}'));
+    {% endif %}
+    
+    {% if e.category == 'image' %}
+    var imageSrc = '{{e.content|cut:"/media/upload/"}}'.toString().replace('{{request.user.id}}/', '');
+    $('article').append(View.Element.image(imageSrc, '{{e.title}}'));
+    {% endif %}
+  {% endfor %}
 })
+
 var View = {
 	apply_for : function(id, applyer, role, reason){
-		return '<div class="row" id = "id_apply_'+ id +'"> <div class="span4">' +
-				'<B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
-				'希望作为' + role + '参加作品的创作</B>' +
-				'<li>' + reason + '</li>' +
-				'<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
-				'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')">' +
-				'</div> </idv>'
+		return '<div class="alert alert-block alert-error fade in" id = "id_apply_'+ id +'"> <h4 class="alert-heading">申请加入!</h4>' +
+'<p><B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
+'希望作为' + role + '参加作品的创作</B>' +
+'<li>' + reason + '</li> </p>' +
+'<p><input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
+'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')"> </p>' +
+				'</div>'
 	},
+	Element : {
+    text : function(content, title){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label label-success">文字</span></div>'+
+    '<h3 class="title">'+title+'</h3>'+
+    '<div class="span11">'+content+'</div>'+
+    '</div>'},
+    image : function(name, title){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label label-success">图片</span></div>'+
+    '<h3 class="title">'+title+'</h3>'+
+    '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
+    //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+    '</div>'},
+    line : function(name){
+      return '<div class="row element">'+
+    '<div class="span1"><span class="label success">分割线</span></div>'+
+    '<p class="span11">'+name+'</p>'+
+    '</div>'},
+  },
 };
 var Controller = {
 	apply_for : function(){
