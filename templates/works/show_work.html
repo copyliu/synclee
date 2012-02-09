@@ -118,7 +118,7 @@ $(document).ready(function(){
     {% endif %}
     
     {% if e.category == 'image' %}
-    var imageSrc = '{{e.content|cut:"/media/upload/"}}'.toString().replace('{{request.user.id}}/', '');
+    var imageSrc = '{{e.content|cut:"/media/upload/"}}'.toString();
     $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
@@ -145,7 +145,7 @@ var View = {
       return '<div class="row element"><a href="' + t_url +'">'+
     '<div class="span1"><span class="label label-success">图片</span></div>'+
     '<h3 class="title">'+title+'</h3>'+
-    '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
+    '<img class="span11" src="/media/upload/'+name+'"></p>'+
     //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
     '</a></div>'},
     line : function(t_url, name){
