@@ -110,16 +110,16 @@ $(document).ready(function(){
 	
 	{% for e in elements %}
     {% if e.category == 'text' %}
-    $('article').append(View.Element.text('{{e.content|safe}}', '{{e.title}}'));
+    $('article').append(View.Element.text("{%url show_element e.id%}", '{{e.content|safe}}', '{{e.title}}'));
     {% endif %}
     
     {% if e.category == 'line' %}
-    $('article').append(View.Element.line('{{e.content}}'));
+    $('article').append(View.Element.line("{%url show_element e.id%}" , '{{e.content}}'));
     {% endif %}
     
     {% if e.category == 'image' %}
     var imageSrc = '{{e.content|cut:"/media/upload/"}}'.toString().replace('{{request.user.id}}/', '');
-    $('article').append(View.Element.image(imageSrc, '{{e.title}}'));
+    $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
 })
@@ -135,24 +135,24 @@ var View = {
 				'</div>'
 	},
 	Element : {
-    text : function(content, title){
-      return '<div class="row element">'+
+    text : function(t_url, content, title){
+      return '<div class="row element"><a href="' + t_url +'">'+
     '<div class="span1"><span class="label label-success">文字</span></div>'+
     '<h3 class="title">'+title+'</h3>'+
     '<div class="span11">'+content+'</div>'+
-    '</div>'},
-    image : function(name, title){
-      return '<div class="row element">'+
+    '</a></div>'},
+    image : function(t_url, name, title){
+      return '<div class="row element"><a href="' + t_url +'">'+
     '<div class="span1"><span class="label label-success">图片</span></div>'+
     '<h3 class="title">'+title+'</h3>'+
     '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
     //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
-    '</div>'},
-    line : function(name){
-      return '<div class="row element">'+
+    '</a></div>'},
+    line : function(t_url, name){
+      return '<div class="row element"><a href="' + t_url +'">'+
     '<div class="span1"><span class="label success">分割线</span></div>'+
     '<p class="span11">'+name+'</p>'+
-    '</div>'},
+    '</a></div>'},
   },
 };
 var Controller = {

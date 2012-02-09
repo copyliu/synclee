@@ -4,44 +4,50 @@
 
 {% block content %}
 <div class="container">
-  <div>
-    {%if nav.prev %}
-    <a href="{%url show_element element.id|add:"-1" %}"><button class="btn span6">上一个</button></a>
-    {% endif %}
-    <span class="label success">{{ element.category }}</span>
-       {%  if element.category == "image" %}
-       <p><img src="{{element.content}}" /></p>
-       {% else %}
-       <p>{{element.content}}</p>
-       {% endif %}
-    {%if nav.next %}
-    <a href="{%url show_element element.id|add:"1" %}"><button class="btn span6">下一个</button></a>
-    {% endif %}
+  {%if nav.prev %}
+  <div class="row"><a href="{%url show_element element.id|add:"-1" %}"><button class="btn span6">上一个</button></a></div>
+  {% endif %}
+  <div class="row">
+    <div class="span1"><span class="label label-success">{{ element.category }}</span></div>
+    <h3 class="title">{{ element.title }}</h3>
+    <div class="span10">
+    {%  if element.category == "image" %}
+      <p><img src="{{element.content}}" /></p>
+    {% else %}
+      <p>{{element.content|safe}}</p>
+     {% endif %}
+    </div>
   </div>
+  
+  {%if nav.next %}
+  <div class="row"><a href="{%url show_element element.id|add:"1" %}"><button class="btn span6">下一个</button></a></div>
+  {% endif %}
+  
+  
+  {% get_comment_list for element as comment_list %}
+  <div class="row"> <ul id="comment">
+  {% for comment in comment_list %}
+      <li>{{comment}}</li>
+  {% endfor %}
+  </ul> </div>
+  
+  {% get_comment_form for element as form %}
+  <table>
+    <form action="{% comment_form_target %}" method="post">
+      {% csrf_token %}
 
-{% get_comment_list for element as comment_list %}
-<ul id="comment">
-{% for comment in comment_list %}
-    <li>{{comment}}</li>
-{% endfor %}
-</ul>
-{% get_comment_form for element as form %}
-<table>
-  <form action="{% comment_form_target %}" method="post">
-    {% csrf_token %}
-
-    CONTENT: {{form.comment}}
-    <tr>
-      <td colspan="2">
-        <input type="hidden" name="honeypot" id="id_honeypot">
-        <input id="id_name" type="hidden" name="name" value="{{request.user.username|default:"游客"}}">
-        <input type="hidden" name="email" id="id_email" value="{{request.user.email|default:"guest@doujinstg.cn"}}">
-        {{form.timestamp}} {{form.content_type}} {{form.object_pk}} {{form.security_hash}} 
-        <input type="submit" name="submit" value="Post">
-      </td>
-    </tr>
-  </form>
-</table>
+      CONTENT: {{form.comment}}
+      <tr>
+        <td colspan="2">
+          <input type="hidden" name="honeypot" id="id_honeypot">
+          <input id="id_name" type="hidden" name="name" value="{{request.user.username|default:"游客"}}">
+          <input type="hidden" name="email" id="id_email" value="{{request.user.email|default:"guest@doujinstg.cn"}}">
+          {{form.timestamp}} {{form.content_type}} {{form.object_pk}} {{form.security_hash}} 
+          <input type="submit" name="submit" value="Post">
+        </td>
+      </tr>
+    </form>
+  </table>
 </div>
 {% endblock %}
 

@@ -173,6 +173,10 @@ def edit_work(request, work_id):
     
 def show_element(request, element_id):
     element = get_object_or_404(Element, pk=element_id)
+    if element.work.isprivate:
+        if not _involved(element.work, request.user):
+            raise Http404("private work")
+    
     prev = Element.objects.filter(work=element.work).filter(id__lt=element.id)
     next = Element.objects.filter(work=element.work).filter(id__gt=element.id)
     
