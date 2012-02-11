@@ -1,5 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
+
+from notification import urls as notification
+
 import settings
 
 admin.autodiscover()
@@ -13,6 +16,7 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^notification/', include(notification)),
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
 )

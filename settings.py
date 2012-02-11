@@ -131,9 +131,10 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
     
     # Third-party packages
-    'taggit',
+    #'taggit',
     'easy_thumbnails',
     'relationships',
+    'notification',
     
     'main',
     'accounts',

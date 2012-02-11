@@ -13,19 +13,14 @@ class UserProfiles(models.Model):
     location = models.CharField(max_length = 50, blank = True)
     true_name = models.CharField(max_length = 14, blank = True)
     email = models.EmailField()
-    
-    #技能
-    skill = models.PositiveIntegerField(default = 0)
-    #权限
-    #作品
-    #关注作品
-    #参与作品
-    #。。。
 
 def create_user_profile(sender = None, instance = None, created = False, **kwargs):
     if created:
-        UserProfiles.objects.create(user = instance)
-   
+        UserProfiles.objects.create(user=instance)
+        UserSkills.objects.create(user=instance, skill='write')
+        UserSkills.objects.create(user=instance, skill='paint')
+        UserSkills.objects.create(user=instance, skill='onlook')
+        
 models.signals.post_save.connect(create_user_profile, sender = User)
 
 SKILL_CHOICES = (
@@ -34,6 +29,7 @@ SKILL_CHOICES = (
     ('design', u'设计美工'),
     ('prog', u'程序员'),
     ('music', u'音乐制作'),
+    ('onlook',u'围观'),
     ('_other', u'其他'),
 )
 

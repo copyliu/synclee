@@ -10,11 +10,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
 from django.db.models import Avg
+
+from notification import models as notification
+
 from .models import Work, Element, WorkScore
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from accounts.models import *
+
 #import string, random
 
 PRIVACY_CHOICES = (
@@ -60,25 +64,21 @@ def add_work(request):
 def apply_for(request):
     action = request.POST.get('type', '')
     if action == 'apply_for':
-        try:
-            role = request.POST.get('role')
-            reason = request.POST.get('reason', '')
-            work_id = request.POST.get('work_id', '-1')
-            work = Work.objects.get(pk=int(work_id))
-            #if len(reason) > 300:
-            #    reason = reason[:300]
-            invitation = Invitation.objects.filter(work = work, invited = request.user).exclude(invite_status = 'reject').count()
-                     
-            if invitation > 0:
-                print "here"
-                return HttpResponse("already_invite")
-            else:
-                Invitation.objects.create(work = work, invited = request.user,
-                                              skill = role, reason = reason,
-                                              invite_status = 'goingon')
-        except Exception as e:
-                print e
-        return HttpResponse("success")
+        role = request.POST.get('role')
+        reason = request.POST.get('reason', '')
+        work_id = request.POST.get('work_id', '-1')
+        work = Work.objects.get(pk=int(work_id))
+        #if len(reason) > 300:
+        #    reason = reason[:300]
+        invitation = Invitation.objects.filter(work = work, invited = request.user).exclude(invite_status = 'reject').count()
+                 
+        if invitation > 0:
+            return HttpResponse("already_invite")
+        else:
+            Invitation.objects.create(work = work, invited = request.user,
+                                          skill = role, reason = reason,
+                                          invite_status = 'goingon')
+            return HttpResponse("success")
 
 @csrf_exempt
 @login_required
@@ -87,6 +87,7 @@ def follow_work(request):
     work = Work.objects.get(id=request.POST.get('foid'))
     if action == 'fo':
         work.follower.add(request.user)
+        notification.send_now([request.user,], "work_fo")
         return HttpResponse("success")
     elif action == 'unfo':
         work.follower.remove(request.user)

@@ -32,7 +32,7 @@
           </form-->
           <ul class="nav pull-right">
             {% if user.is_authenticated %}
-            <li><a href="{%url profile request.user.username%}">{{request.user.username}}</a></li>
+            <li><a href="{%url profile request.user.username%}">{{request.user.username}}</a> <i class="icon-exclamation-sign icon-white" style="position:absolute;margin-top: -26px;margin-left: -10px;"></i> </li>
             <li class="divider-vertical"></li>
             <li><a href="{%url settings "profile"%}">个人设置</a></li>
             <li class="divider-vertical"></li>

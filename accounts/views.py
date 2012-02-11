@@ -54,9 +54,6 @@ def invite(request):
     reason = request.POST.get('reason', '')
     try:
         work = Work.objects.get(pk=int(work_id))
-        #中文不能直接截取
-#        if len(reason) > 300:
-#            reason = reason[:300]
         invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
         
         if invitation:
@@ -114,7 +111,6 @@ def profile(request, username):
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
     joined = [i.work for i in joined]
-    work_set = user.work_set.all()
     skill = UserSkills.objects.filter(user = user)
     skill_list = []
     for i in skill:
@@ -122,7 +118,6 @@ def profile(request, username):
             if i.skill == j[0]:
                 skill_list.append((i.skill, i.exp, j[1]))
             
-    # TODO: context中加入skill
     context = {
         'profile' : profile, 
         'timeline' : timeline,

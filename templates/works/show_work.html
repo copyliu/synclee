@@ -83,17 +83,17 @@
 	<div class="clearfix">
       <label for="normalSelect">选择角色：</label>
 	  <div class="input">
-	    <select name="normalSelect" id="id_apply_role">
-		  {% for skill, lv, name in skill_list%}
-		  <option value = "{{skill}}">{{name}}</option>
-		  {% endfor %}
+	    <select name="apply_role" id="id_apply_role">
+	      <option value = "writer">画师</option>
+		  <option value = "writer">写手</option>
+          <option value = "others">其他</option>
         </select>
       </div>
 	</div>
 	<div class="clearfix">
       <label for="textarea">申请理由：</label>
 	  <div class="input">
-	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5""></textarea>
+	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5"></textarea>
       </div>
       <span class="help-block">最多300个字符</span>
 	</div>
