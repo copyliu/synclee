@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
-from .models import Work, Element
+from django.db.models import Avg
+from .models import Work, Element, WorkScore
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -107,7 +108,17 @@ def show_work(request, work_id):
     participated = [i.invited for i in participated]
     context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated}
     
+    context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score']
+    if not context['average_score']:
+        context['average_score'] = 0
+    
     if request.user.is_authenticated():
+        try:
+            context['score'] = WorkScore.objects.get(work = work, user = request.user).score
+        except Exception as e:
+            context['score'] = 0
+        
+        print context['score'], "!!!!"
         if work.author.id != request.user.id:
             skill = UserSkills.objects.filter(user = request.user)
             skill_list = []
@@ -199,3 +210,13 @@ def list_works(request):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works.html', {'works' : works, 'paginator' : paginator})
+
+@login_required
+def work_score(request):
+    score = int(request.POST.get('score', '0'))
+    work_id = request.POST.get('work_id', '-1')
+    work = get_object_or_404(Work, pk=int(work_id))
+    
+    tmp = WorkScore.objects.get_or_create(work = work, user = request.user)[0]
+    tmp.score = score
+    tmp.save()

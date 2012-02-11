@@ -37,6 +37,11 @@
               <td>{{work.intro}}</td>
             </tr>
             <tr>
+              <td width="60"><span class="label label-info">评分</span></td>
+              <td>{{average_score}}&nbsp;&nbsp;
+              <input type="submit" class="btn primary" id = "id_score_btn" data-toggle="modal" href = "#id_score" data-backdrop="true" data-keyboard="true" value="我来"></td>
+            </tr>
+            <tr>
               {% if not involved %}
               <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
               {% else %}
@@ -97,6 +102,25 @@
     <a href="#" class="btn primary" onclick="Controller.apply_for()">Submit</a>
   </div>
 </div>
+
+<div id="id_score" class="modal hide fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>作品评分</h3>
+  </div>
+  <div class="modal-body">
+	<div class="control-group">
+    <label class="control-label" for="normalSelect">选择评分：</label>
+	  <div class="input">
+	    <select name="normalSelect" id="id_score_score">
+      </select>
+    </div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary" onclick="Controller.score()">Submit</a>
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -124,6 +148,12 @@ $(document).ready(function(){
     $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
+  
+  for (i=1 ; i<=10; i++)
+    if (i == {{score}})
+      $('#id_score_score').append('<option value = "' + i + '" selected="selected">' + i + '</option>');
+    else
+      $('#id_score_score').append('<option value = "' + i + '">' + i + '</option>');
 })
 
 var View = {
@@ -163,6 +193,11 @@ var Controller = {
 		var reason = $('#id_apply_reason').val();
 		$.ajax({ type: 'post', url : '{%url apply_for %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
 		$('#id_apply').modal('hide');
+	},
+	score : function(){
+    var score = $('#id_score_score').val();
+    $.ajax({ type: 'post', url : '{%url work_score %}', data: {'score': score, 'work_id': "{{work.id}}"}});
+    $('#id_score').modal('hide');
 	},
 	notice : {
 		apply : {
