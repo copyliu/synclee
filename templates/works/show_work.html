@@ -55,6 +55,14 @@
               <td><input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')"></td>
               {% endif %}
             </tr>
+            <tr> <td colspan="3"> <section>
+              <div class="page-header">
+					      <h3>编辑历史&nbsp;&nbsp;&nbsp;&nbsp;<a href="{%url list_works_history work.id%}"><small>更多...</small></a></h3>
+			      	</div>
+			      	{% for i in history%}
+			      	<li><a href = "{%url profile i.user.username%}">{{i.user.username}}</a>于{{i.date|date:"j/n/Y H:i"}}进行了修改</li>
+			      	{%endfor%}
+            </section> </td> </tr>
           </tbody>
         </table>
       </div>

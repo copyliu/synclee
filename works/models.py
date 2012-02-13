@@ -77,3 +77,11 @@ class WorkScore(models.Model):
     work = models.ForeignKey(Work)
     user = models.ForeignKey(User)
     score = models.PositiveSmallIntegerField(default = 0)
+
+class WorkHistory(models.Model):
+    work = models.ForeignKey(Work)
+    user = models.ForeignKey(User)
+    date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['date']

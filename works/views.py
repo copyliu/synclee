@@ -13,7 +13,7 @@ from django.db.models import Avg
 
 from notification import models as notification
 
-from .models import Work, Element, WorkScore
+from .models import Work, Element, WorkScore, WorkHistory
 from .forms import WorkForm
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -107,7 +107,8 @@ def show_work(request, work_id):
     followed = (request.user in work.follower.all()) or request.user == work.author
     participated = Invitation.objects.filter(work = work, invite_status = 'accept')
     participated = [i.invited for i in participated]
-    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated}
+    history = WorkHistory.objects.filter(work = work)[:10]
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated, 'history':history}
     
     context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score']
     if not context['average_score']:
@@ -169,6 +170,8 @@ def edit_work(request, work_id):
             work = Work.objects.get(pk=work_id, author=request.user)
             elements = Element.objects.filter(work=work)
             elements.delete()
+            
+            WorkHistory.objects.create(work = work, user = request.user)
             return HttpResponse('delete_success')
         category = request.POST.get('category', '')
         title = request.POST.get('title', '')
@@ -211,6 +214,26 @@ def list_works(request):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works.html', {'works' : works, 'paginator' : paginator})
+
+def list_works_history(request, work_id):
+    work = Work.objects.get(pk=work_id)
+    if work.isprivate:
+        if not _involved(work, request.user):
+            raise Http404("private work")
+    history = WorkHistory.objects.filter(work = work)
+    
+    #分页
+    paginator = Paginator(history, 1)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1
+    
+    history = paginator.page(page)
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'works/list_works_history.html', {'history' : history, 'paginator' : paginator})
 
 @login_required
 def work_score(request):

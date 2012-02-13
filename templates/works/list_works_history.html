@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}编辑历史{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>编辑者</th>
+      <th>时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in history.object_list %}
+    <tr>
+      <td width="170"><a href = "{%url profile i.user.username%}">{{i.user.username}}</a></td>
+      <td width="470">{{i.date|date:"j/n/Y H:i"}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="pagination">
+  <ul>
+    {% if history.has_previous %}
+    <li><a href="?page={{ history.previous_page_number }}">上一页</a></li>
+    {% endif %} 
+    {% for i in paginator.page_range %}
+    <li><a href="?page={{i}}">{{i}}</a></li>
+    {% endfor %}
+    {% if history.has_next %}
+    <li><a href="?page={{ history.next_page_number }}">下一页</a></li>
+    {% endif %}
+  </ul>
+</div>
+</div>
+
+{% endblock %}
