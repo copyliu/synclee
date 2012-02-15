@@ -10,3 +10,5 @@
 .git
 .tmp*
 migrations
+custom_settings.py
+media/upload/

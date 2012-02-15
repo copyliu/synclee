@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 
+from notification.models import Notice
+
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
 from accounts.models import *
 from works.models import Work, TimeLines
@@ -143,6 +145,8 @@ def settings(request, item):
         return _set_skill(request, profile)
     elif item == "psw":
         return _set_psw(request)
+    elif item == "notification":
+        return _set_notification(request)
     else:
         raise Http404("no setting")
             
@@ -174,6 +178,11 @@ def _set_psw(request):
             return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})  
     form = PasswordChangeForm(user = request.user)
     return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})
+
+def _set_notification(request):
+    user  = request.user
+    notices = Notice.objects.notices_for(user)
+    return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
 
 def _set_skill(request, profile):
     skill_list = {}

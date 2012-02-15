@@ -44,7 +44,6 @@ def add_work(request):
                 cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
             work.cover = cover
             work.save()
-            #uploaded = request.FILES.get('cover', '')
             #
             
         #object_type = ContentType.objects.get(name='work')
@@ -84,10 +83,10 @@ def apply_for(request):
 @login_required
 def follow_work(request):
     action = request.POST.get('action')
-    work = Work.objects.get(id=request.POST.get('foid'))
+    work = Work.objects.get(pk=request.POST.get('foid', 0))
     if action == 'fo':
         work.follower.add(request.user)
-        notification.send_now([request.user,], "work_fo")
+        notification.send_now([work.author,], "follow_work")
         return HttpResponse("success")
     elif action == 'unfo':
         work.follower.remove(request.user)
