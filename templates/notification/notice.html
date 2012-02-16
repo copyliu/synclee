@@ -1,1 +1,15 @@
-{% load i18n %}{% blocktrans %}{{ notice }}{% endblocktrans %}
+{% if notice_label ==  'follow_work' %}
+<a href="{%url profile user.username %}">{{user.username}}</a> 关注了你的企划 [<a href="{%url show_work work.id %}">{{work.name}}</a>]。
+{% endif %}
+
+{% if notice_label ==  'follow_user' %}
+<a href="{%url profile user.username %}">{{user.username}}</a> 关注了你。
+{% endif %}
+
+{% if notice_label ==  'apply_work' %}
+<a href="{%url profile user.username %}">{{user.username}}</a> 希望能作为 [{{role}}] 加入你的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>]。
+{% endif %}
+
+{% if notice_label ==  'invite_work' %}
+<a href="{%url profile user.username %}">{{user.username}}</a> 邀请你作为 [{{role}}] 加入他的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>]。
+{% endif %}

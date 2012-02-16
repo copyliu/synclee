@@ -32,7 +32,7 @@
           </form-->
           <ul class="nav pull-right">
             {% if user.is_authenticated %}
-            <li><a href="{%url profile request.user.username%}">{{request.user.username}}</a> <i class="icon-exclamation-sign icon-white" style="position:absolute;margin-top: -26px;margin-left: -10px;"></i> </li>
+            <li><a href="{%url profile request.user.username%}">{{request.user.username}}</a></li>
             <li class="divider-vertical"></li>
             <li><a href="{%url settings "profile"%}">个人设置</a></li>
             <li class="divider-vertical"></li>
@@ -55,6 +55,29 @@
 
 {% block content %}{% endblock %}
 <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-tooltip.js"></script>
+<script>
+$(document).ready(function(){
+   {% if user.is_authenticated %}
+   function checkUnread(){
+       $.ajax({
+           url: '{%url unread %}',
+           data: {uid: {{request.user.id}}},
+           success: function(data){
+               if (data != 0){
+                   $('.pull-right').children('li:first').tooltip({title: '<a href="/accounts/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
+                   $('.pull-right').children('li:first').tooltip('show');
+               }else{
+                   $('.pull-right').children('li:first').tooltip('hide');
+               }
+           }
+       })
+
+   };
+   setInterval(checkUnread, 15000);
+   {% endif %}
+});
+</script>
 {% block script %}{% endblock %}
 </body>
 </html>

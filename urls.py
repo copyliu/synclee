@@ -8,7 +8,8 @@ import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'main.views.home', name='home'),
+    url(r'^$', 'views.home', name='home'),
+    url(r'^unread$', 'views.unread', name='unread'),
     url(r'^', include('tools.urls')),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^works/', include('works.urls')),

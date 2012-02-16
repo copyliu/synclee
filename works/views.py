@@ -45,11 +45,7 @@ def add_work(request):
                 cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
             work.cover = cover
             work.save()
-            #
             
-        #object_type = ContentType.objects.get(name='work')
-        #object_id = new_work.id
-        #notification.send([user], "new_work", {"from_user": user, "work":new_work}, sender=user, object_type=object_type, object_id=object_id)
             return HttpResponseRedirect('/works/write_work/%s' % work.id)
         else:
             return TemplateResponse(request, 'works/add_work.html', {'form': form})
@@ -68,8 +64,6 @@ def apply_for(request):
         reason = request.POST.get('reason', '')
         work_id = request.POST.get('work_id', '-1')
         work = Work.objects.get(pk=int(work_id))
-        #if len(reason) > 300:
-        #    reason = reason[:300]
         invitation = Invitation.objects.filter(work = work, invited = request.user).exclude(invite_status = 'reject').count()
                  
         if invitation > 0:
@@ -78,7 +72,31 @@ def apply_for(request):
             Invitation.objects.create(work = work, invited = request.user,
                                           skill = role, reason = reason,
                                           invite_status = 'goingon')
+            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
             return HttpResponse("success")
+        
+@csrf_exempt
+def invite(request):
+    username = request.POST.get('username', '')
+    user = get_object_or_404(User, username=username)
+    work_id = request.POST.get('work_id', '-1')
+    role = request.POST.get('role', '-1')
+    reason = request.POST.get('reason', '')
+    try:
+        work = Work.objects.get(pk=int(work_id))
+        invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
+        
+        if invitation:
+            return HttpResponse("already_invite")
+        else:
+            Invitation.objects.create(work = work, invited = user,
+                                      reason = reason,
+                                      invite_status = 'noanswer')
+            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
+    except Exception as e:
+        print e
+    return HttpResponse('success')
+
 
 @csrf_exempt
 @login_required
@@ -87,7 +105,7 @@ def follow_work(request):
     work = Work.objects.get(pk=request.POST.get('foid', 0))
     if action == 'fo':
         work.follower.add(request.user)
-        notification.send_now([work.author,], "follow_work")
+        notification.send([work.author,], "follow_work", {"notice_label": "follow_work", "work": work, "user": request.user})
         return HttpResponse("success")
     elif action == 'unfo':
         work.follower.remove(request.user)

@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-import os
+import os, sys
 PROJECT_ROOT = os.path.dirname(__file__)
 
 DEBUG = True
@@ -136,7 +136,6 @@ INSTALLED_APPS = (
     'relationships',
     'notification',
     
-    'main',
     'accounts',
     'works',
 )
@@ -171,3 +170,6 @@ try:
     execfile(os.path.join(PROJECT_ROOT, 'custom_settings.py'))
 except IOError:
     pass
+
+if os.path.join(PROJECT_ROOT, 'tools') not in sys.path:
+    sys.path.append(os.path.join(PROJECT_ROOT, 'tools'))
