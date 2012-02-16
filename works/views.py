@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.db.models import Avg
 from django.db.transaction import commit_on_success
 from django.core.cache import cache
 from django.core.paginator import Paginator
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
-from django.db.models import Avg
+
 
 from notification import models as notification
 
@@ -109,10 +110,9 @@ def show_work(request, work_id):
     history = WorkHistory.objects.filter(work = work)[:10]
     context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated, 'history':history}
     
-    context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score']
+    context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
     context['score_count'] = WorkScore.objects.filter(work=work).count()
-    if not context['average_score']:
-        context['average_score'] = 0
+
     
     if request.user.is_authenticated():
         try:
@@ -214,6 +214,24 @@ def list_works(request):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works.html', {'works' : works, 'paginator' : paginator})
+
+def work_rank(request):
+    works = Work.objects.all()
+    works = sorted(works, key = lambda work: WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0, reverse = True)
+    for i in works:
+        print i.aver_score()
+    #分页
+    paginator = Paginator(works, 1)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1
+    works = paginator.page(page)
+    #print page,"+++",works.object_list[0].aver_score()
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'works/work_rank.html', {'works' : works, 'paginator' : paginator})
 
 def list_works_history(request, work_id):
     work = Work.objects.get(pk=work_id)

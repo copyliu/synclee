@@ -39,6 +39,9 @@ class Work(models.Model):
     intro = models.TextField(blank=True)
     
     follower = models.ManyToManyField(User, related_name='follow')
+    
+    def aver_score(self):
+        return WorkScore.objects.filter(work=self).aggregate(average_score=models.Avg('score'))['average_score'] or 0
 #def work_event(sender = None, instance = None, created = False, **kwargs):
 #    if created:
 #        TimeLines.objects.create(user = instance.author, event = instance)
