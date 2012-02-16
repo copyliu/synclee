@@ -54,7 +54,7 @@
 {% block script %}
 <script>
 $(document).ready(function(){
-  $('.container form').bind('submit', function(){
+  $('.container form').onsubmit(function(){
     $.ajax({
       type : 'post',
       url : '/comments/post/',

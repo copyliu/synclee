@@ -142,11 +142,11 @@ $(document).ready(function(){
     };
   });
   
-  $('#tool_bar .btn-success').bind('click', function(){
+  $('#tool_bar .btn-success').click(function(){
     Controller.submitWork();
   });
   
-  $("#id_line_name").next().bind('click', function(){
+  $("#id_line_name").next().click(function(){
     Controller.addElement.line();
   });
   

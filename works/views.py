@@ -110,6 +110,7 @@ def show_work(request, work_id):
     context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated, 'history':history}
     
     context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score']
+    context['score_count'] = WorkScore.objects.filter(work=work).count()
     if not context['average_score']:
         context['average_score'] = 0
     

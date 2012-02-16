@@ -38,8 +38,10 @@
             </tr>
             <tr>
               <td width="60"><span class="label label-info">评分</span></td>
-              <td>{{average_score}}&nbsp;&nbsp;
+              <td>{{average_score}}&nbsp;&nbsp;<small>已有{{score_count}}人评分</small>
+              {% if request.user.is_authenticated %}
               <input type="submit" class="btn primary" id = "id_score_btn" data-toggle="modal" href = "#id_score" data-backdrop="true" data-keyboard="true" value="我来"></td>
+              {% endif %}
             </tr>
             <tr>
               {% if not involved %}
