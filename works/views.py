@@ -74,6 +74,28 @@ def apply_for(request):
             notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
             return HttpResponse("success")
         
+@csrf_exempt
+def invite(request):
+    username = request.POST.get('username', '')
+    user = get_object_or_404(User, username=username)
+    work_id = request.POST.get('work_id', '-1')
+    role = request.POST.get('role', '-1')
+    reason = request.POST.get('reason', '')
+    try:
+        work = Work.objects.get(pk=int(work_id))
+        invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
+        
+        if invitation:
+            return HttpResponse("already_invite")
+        else:
+            Invitation.objects.create(work = work, invited = user,
+                                      reason = reason,
+                                      invite_status = 'noanswer')
+            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
+    except Exception as e:
+        print e
+    return HttpResponse('success')
+
 
 @csrf_exempt
 @login_required
