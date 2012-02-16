@@ -193,7 +193,7 @@
 	<div class="control-group">
       <label class="control-label" for="normalSelect">选择角色：</label>
 	  <div class="control">
-	    <select name="normalSelect" id="id_invite_role">
+	    <select name="invite_role" id="id_invite_role">
 		  {% for skill, lv, name in skill_list%}
 		  <option value = "{{skill}}">{{name}}</option>
 		  {% endfor %}
@@ -249,18 +249,6 @@ var Controller = {
 		var reason = $('#id_invite_reason').val();
 		$.ajax({url : '{%url invite %}', type: 'post', data: {'username': '{{profile.user.username}}', 'work_id': work_id, 'role': role, 'reason': reason}});
 		$('#id_invite').modal('hide');
-	},
-	notice : {
-		invite : {
-			accept :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_accept', 'id': id}});
-				$('#id_invitaion_' + id).remove();
-			},
-			reject :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_reject', 'id': id}});
-				$('#id_invitaion_' + id).remove();
-			},
-		},
 	},
   follow : function(action){
     if (action == 'fo'){

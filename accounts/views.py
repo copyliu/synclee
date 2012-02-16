@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 
-from notification.models import Notice
-
+from notification import models as notification
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
 from accounts.models import *
 from works.models import Work, TimeLines
@@ -43,31 +42,13 @@ def follow(request):
     user = User.objects.get(pk=request.POST.get('foid'))
     if action == 'fo':
         request.user.relationships.add(user)
+        notification.send([user,], "follow_user", {"notice_label": "follow_user", "user": request.user})
         return HttpResponse("success")
     elif action == 'unfo':
         request.user.relationships.remove(user)
         return HttpResponse("success")
 
-@csrf_exempt
-def invite(request):
-    username = request.POST.get('username', '')
-    user = get_object_or_404(User, username=username)
-    work_id = request.POST.get('work_id', '-1')
-    reason = request.POST.get('reason', '')
-    try:
-        work = Work.objects.get(pk=int(work_id))
-        invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
-        
-        if invitation:
-            return HttpResponse("already_invite")
-        else:
-            Invitation.objects.create(work = work, invited = user,
-                                      reason = reason,
-                                      invite_status = 'noanswer')
-    except Exception as e:
-        print e
-    return HttpResponse('success')
-
+#未使用
 @login_required
 def notice(request):
     action = request.POST.get('type', '')
@@ -135,6 +116,7 @@ def profile(request, username):
     
     return TemplateResponse(request, 'accounts/profile.html', context)
 
+@csrf_exempt
 @login_required
 def settings(request, item):
     profile = UserProfiles.objects.get(pk=request.user.id)
@@ -179,10 +161,21 @@ def _set_psw(request):
     form = PasswordChangeForm(user = request.user)
     return TemplateResponse(request, 'accounts/setting_psw.html', {'form': form, 'active':'psw'})
 
+@csrf_exempt
 def _set_notification(request):
-    user  = request.user
-    notices = Notice.objects.notices_for(user)
-    return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
+    if request.method == 'POST':
+        notice_id = request.POST.get('notice_id', 0)
+        notice = notification.Notice.objects.get(pk=notice_id)
+        if not notice:
+            return HttpResponse('error_notice_id')
+        else:
+            notice.unseen = 0
+            notice.save()
+            return HttpResponse('success')
+    else:
+        user  = request.user
+        notices = notification.Notice.objects.notices_for(user)
+        return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
 
 def _set_skill(request, profile):
     skill_list = {}
@@ -198,7 +191,7 @@ def _set_skill(request, profile):
                 i = i[6:]
                 cnt = UserSkills.objects.filter(user = request.user, skill = i).count()
                 if cnt == 0:
-                     UserSkills.objects.create(user = request.user, skill = i, exp = 0, today_exp = 0)
+                    UserSkills.objects.create(user = request.user, skill = i, exp = 0, today_exp = 0)
                 skill_list[i] = (skill_list[i][0], "checked")
         # TODO: 去掉勾选
                  
