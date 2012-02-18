@@ -145,8 +145,8 @@
 					<div class="span4">
 						<h4>技能</h4>
 						<ul class="abilities">
-							{% for skill, lv, name in skill_list%}
-							<li class="{{skill}} lv{{lv}}">{{name}} <strong>Lv{{lv}}</strong></li>
+							{% for skill in skill_list%}
+							<li class="{{skill.skill}}">{{skill.skill}} <strong>exp{{skill.exp}}</strong></li>
 							{% endfor %}
 						</ul>
 					</div>
@@ -194,9 +194,9 @@
       <label class="control-label" for="normalSelect">选择角色：</label>
 	  <div class="control">
 	    <select name="invite_role" id="id_invite_role">
-		  {% for skill, lv, name in skill_list%}
-		  <option value = "{{skill}}">{{name}}</option>
-		  {% endfor %}
+	      <option value = "image">画师</option>
+		  <option value = "word">写手</option>
+          <option value = "other">其他</option>
         </select>
       </div>
 	</div>
@@ -259,6 +259,18 @@ var Controller = {
       $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
       $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
     }
+  },
+  notice : {
+	invite : {
+		accept :function(id){
+			$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_accept', 'id': id}});
+			$('#id_invitaion_' + id).remove();
+		},
+		reject :function(id){
+			$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_reject', 'id': id}});
+			$('#id_invitaion_' + id).remove();
+		},
+	},
   },
 };
 </script>

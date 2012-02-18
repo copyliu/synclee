@@ -7,9 +7,9 @@
 {% endif %}
 
 {% if notice_label ==  'apply_work' %}
-<a href="{%url profile user.username %}">{{user.username}}</a> 希望能作为 [{{role}}] 加入你的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>]。
+<a href="{%url profile user.username %}">{{user.username}}</a> 希望能作为 [{{role}}] 加入你的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>] [<a href = "{%url show_work work.id %}">现在处理</a>]。
 {% endif %}
 
 {% if notice_label ==  'invite_work' %}
-<a href="{%url profile user.username %}">{{user.username}}</a> 邀请你作为 [{{role}}] 加入他的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>]。
+<a href="{%url profile user.username %}">{{user.username}}</a> 邀请你作为 [{{role}}] 加入他的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>] [<a href = "{%url profile invited.username %}">现在处理</a>]。
 {% endif %}

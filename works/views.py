@@ -13,6 +13,7 @@ from django.template.response import TemplateResponse
 
 
 from notification import models as notification
+from tools import SkillManager
 
 from .models import Work, Element, WorkScore, WorkHistory
 from .forms import WorkForm
@@ -45,7 +46,6 @@ def add_work(request):
                 cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
             work.cover = cover
             work.save()
-            
             return HttpResponseRedirect('/works/write_work/%s' % work.id)
         else:
             return TemplateResponse(request, 'works/add_work.html', {'form': form})
@@ -69,7 +69,7 @@ def apply_for(request):
         if invitation > 0:
             return HttpResponse("already_invite")
         else:
-            Invitation.objects.create(work = work, invited = request.user,
+            invitation = Invitation.objects.create(work = work, invited = request.user,
                                           skill = role, reason = reason,
                                           invite_status = 'goingon')
             notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
@@ -89,10 +89,10 @@ def invite(request):
         if invitation:
             return HttpResponse("already_invite")
         else:
-            Invitation.objects.create(work = work, invited = user,
+            invitation = Invitation.objects.create(work = work, invited = user,
                                       reason = reason,
                                       invite_status = 'noanswer')
-            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
+            notification.send([user,], "invite_work", {"notice_label": "invite_work", "work": work, "user": request.user, "role":role, "invited": user})
     except Exception as e:
         print e
     return HttpResponse('success')
@@ -235,6 +235,7 @@ def list_works(request):
 
 def work_rank(request):
     works = Work.objects.all()
+    works = filter(lambda work: WorkScore.objects.filter(work=work).count() > 1, works)
     works = sorted(works, key = lambda work: WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0, reverse = True)
     for i in works:
         print i.aver_score()

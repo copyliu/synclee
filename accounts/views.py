@@ -16,6 +16,7 @@ from django.http import Http404, HttpResponseRedirect
 
 import random, datetime, time
 from threading import Thread
+from tools import SkillManager
 
 def register(request):
     if request.method == 'POST':
@@ -48,10 +49,11 @@ def follow(request):
         request.user.relationships.remove(user)
         return HttpResponse("success")
 
-#未使用
+
 @login_required
 def notice(request):
     action = request.POST.get('type', '')
+    print action
     if action == "invite_accept":
         try:
             id = request.POST.get('id', '-1')
@@ -59,6 +61,7 @@ def notice(request):
             if invitation.invited.id == request.user.id:
                 invitation.invite_status = 'accept'
                 invitation.save()
+                SkillManager.addexp(request.user, invitation.work.category, 5)
         except: return HttpResponse("something wrong")
     elif action == "invite_reject":
         try:
@@ -75,6 +78,7 @@ def notice(request):
             if invitation.work.author.id == request.user.id:
                 invitation.invite_status = 'accept'
                 invitation.save()
+                SkillManager.addexp(invitation.invited, invitation.work.category, 5)
         except: return HttpResponse("something wrong")
     elif action == "apply_reject":
         try:
@@ -94,12 +98,7 @@ def profile(request, username):
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
     joined = [i.work for i in joined]
-    skill = UserSkills.objects.filter(user = user)
-    skill_list = []
-    for i in skill:
-        for j in SKILL_CHOICES:
-            if i.skill == j[0]:
-                skill_list.append((i.skill, i.exp, j[1]))
+    skill_list = UserSkills.objects.filter(user = user, exp__gt = 0)
             
     context = {
         'profile' : profile, 
