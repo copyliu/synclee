@@ -164,7 +164,10 @@ $(document).ready(function(){
 		'buttonText': '添加图片',
 		'onUploadSuccess' : function (file, data, response) {
       Controller.addElement.image(data, '');
-		}
+		},
+        'onUploadError' : function(file,errorCode,errorMsg){
+            console.log(errorMsg);
+        }
 	});
 })
 

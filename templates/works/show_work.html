@@ -47,7 +47,7 @@
               {% if not involved %}
               <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
               {% else %}
-              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a></td>
+              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a></td>
 	            {% endif %}
 	            
 	            {% if followed and not involved%}

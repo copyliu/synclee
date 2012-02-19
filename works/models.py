@@ -28,7 +28,7 @@ class Work(models.Model):
     name = models.CharField(max_length=48)
     cover = ThumbnailerImageField(
         blank=True,
-        upload_to='cover',
+        upload_to='works',
         resize_source=dict(size=(360, 268), crop='smart'),
         default='cover/default_cover.gif'
     )
