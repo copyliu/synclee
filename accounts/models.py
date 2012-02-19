@@ -17,20 +17,20 @@ class UserProfiles(models.Model):
 def create_user_profile(sender = None, instance = None, created = False, **kwargs):
     if created:
         UserProfiles.objects.create(user=instance)
-        UserSkills.objects.create(user=instance, skill='write')
-        UserSkills.objects.create(user=instance, skill='paint')
-        UserSkills.objects.create(user=instance, skill='onlook')
+        UserSkills.objects.create(user=instance, skill='word')
+        UserSkills.objects.create(user=instance, skill='image')
+        UserSkills.objects.create(user=instance, skill='other')
         
 models.signals.post_save.connect(create_user_profile, sender = User)
 
 SKILL_CHOICES = (
-    ('write', u'写手'),
-    ('paint', u'画师'),
-    ('design', u'设计美工'),
-    ('prog', u'程序员'),
-    ('music', u'音乐制作'),
-    ('onlook',u'围观'),
-    ('_other', u'其他'),
+    ('word', u'写手'),
+    ('image', u'画师'),
+#    ('design', u'设计美工'),
+#    ('prog', u'程序员'),
+#    ('music', u'音乐制作'),
+#    ('onlook',u'围观'),
+    ('other', u'其他'),
 )
 
 class UserSkills(models.Model):

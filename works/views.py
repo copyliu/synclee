@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.db.models import Avg
 from django.db.transaction import commit_on_success
 from django.core.cache import cache
 from django.core.paginator import Paginator
@@ -9,9 +10,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
-from django.db.models import Avg
+
 
 from notification import models as notification
+from tools import SkillManager
 
 from .models import Work, Element, WorkScore, WorkHistory
 from .forms import WorkForm
@@ -44,7 +46,6 @@ def add_work(request):
                 cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
             work.cover = cover
             work.save()
-            
             return HttpResponseRedirect('/works/write_work/%s' % work.id)
         else:
             return TemplateResponse(request, 'works/add_work.html', {'form': form})
@@ -68,7 +69,7 @@ def apply_for(request):
         if invitation > 0:
             return HttpResponse("already_invite")
         else:
-            Invitation.objects.create(work = work, invited = request.user,
+            invitation = Invitation.objects.create(work = work, invited = request.user,
                                           skill = role, reason = reason,
                                           invite_status = 'goingon')
             notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
@@ -88,10 +89,10 @@ def invite(request):
         if invitation:
             return HttpResponse("already_invite")
         else:
-            Invitation.objects.create(work = work, invited = user,
+            invitation = Invitation.objects.create(work = work, invited = user,
                                       reason = reason,
                                       invite_status = 'noanswer')
-            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
+            notification.send([user,], "invite_work", {"notice_label": "invite_work", "work": work, "user": request.user, "role":role, "invited": user})
     except Exception as e:
         print e
     return HttpResponse('success')
@@ -127,10 +128,9 @@ def show_work(request, work_id):
     history = WorkHistory.objects.filter(work = work)[:10]
     context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated, 'history':history}
     
-    context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score']
+    context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
     context['score_count'] = WorkScore.objects.filter(work=work).count()
-    if not context['average_score']:
-        context['average_score'] = 0
+
     
     if request.user.is_authenticated():
         try:
@@ -232,6 +232,25 @@ def list_works(request):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works.html', {'works' : works, 'paginator' : paginator})
+
+def work_rank(request):
+    works = Work.objects.all()
+    works = filter(lambda work: WorkScore.objects.filter(work=work).count() > 1, works)
+    works = sorted(works, key = lambda work: WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0, reverse = True)
+    for i in works:
+        print i.aver_score()
+    #分页
+    paginator = Paginator(works, 1)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1
+    works = paginator.page(page)
+    #print page,"+++",works.object_list[0].aver_score()
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'works/work_rank.html', {'works' : works, 'paginator' : paginator})
 
 def list_works_history(request, work_id):
     work = Work.objects.get(pk=work_id)

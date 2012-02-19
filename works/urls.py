@@ -10,6 +10,7 @@ urlpatterns = patterns('works.views',
     url(r'^invite/$', 'invite', name = 'invite'),
     url(r'^follow_work/$', 'follow_work', name = 'follow_work'),
     url(r'^list_works/$', 'list_works', name='list_works'),
+    url(r'^work_rank/$', 'work_rank', name='work_rank'),
     url(r'^work_score/$', 'work_score', name='work_score'),
     url(r'^list_works_history/(?P<work_id>\d+)/$', 'list_works_history', name='list_works_history'),
 )
