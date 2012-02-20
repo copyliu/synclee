@@ -10,6 +10,8 @@ from taggit.managers import TaggableManager
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.comments.moderation import CommentModerator, moderator
 
+import os, settings
+
 class TimeLines(models.Model):
     user = models.ForeignKey(User)
     content_type = models.ForeignKey(ContentType)
@@ -18,7 +20,8 @@ class TimeLines(models.Model):
     instance = generic.GenericForeignKey('content_type', 'object_id')
     created = models.DateTimeField(auto_now_add = True)
 
-
+def get_image_path(instance, filename):
+    return os.path.join('work', str(instance.id), filename)
 class Work(models.Model):
     PRIVACY_CHOICES = (
         (u'Pub', u'公开'),
@@ -28,9 +31,9 @@ class Work(models.Model):
     name = models.CharField(max_length=48)
     cover = ThumbnailerImageField(
         blank=True,
-        upload_to='cover',
+        upload_to=get_image_path,
         resize_source=dict(size=(360, 268), crop='smart'),
-        default='cover/default_cover.gif'
+        default='no_cover.gif'
     )
     author = models.ForeignKey(User)
     category = models.CharField(max_length=16)

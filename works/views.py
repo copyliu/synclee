@@ -23,12 +23,6 @@ from accounts.models import *
 
 #import string, random
 
-PRIVACY_CHOICES = (
-        (u'Pub', u'公开'),
-        (u'Fri', u'好友可见'),
-        (u'Pri', u'私人'),        
-    )
-
 @commit_on_success
 @login_required  
 def add_work(request):
@@ -43,7 +37,7 @@ def add_work(request):
             #handle cover
             cover = request.FILES.get('cover', '')
             if cover:
-                cover.name = str(work.id) + '.' + cover.name.split('.')[-1]
+                cover.name = 'cover.' + cover.name.split('.')[-1]
             work.cover = cover
             work.save()
             return HttpResponseRedirect('/works/write_work/%s' % work.id)
@@ -53,7 +47,6 @@ def add_work(request):
     else:
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
-
 
 
 @login_required
