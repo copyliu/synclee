@@ -21,7 +21,7 @@ def upload_image(request, user_id):
     file_name = time.strftime('%Y%m%d%H%M%S')
     file_name = file_name + '_%d' % random.randint(0,100)
     
-    upload_path = os.path.join('media', 'upload')
+    upload_path = os.path.join('media', 'works')
     user_upload_folder = os.path.join(upload_path, user_id)
     
     if not os.path.exists(upload_path):

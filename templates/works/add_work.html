@@ -4,9 +4,10 @@
 
 {% block content %}
 <div class="container">
+    <div class="span7">
   <form class="form-horizontal" ation="" method="post"  enctype="multipart/form-data">
     {% csrf_token %}
-      <legend>新增企划 - 填写基本信息</legend>
+      <legend>新增企划 - 填写基本信息 </legend>
       <div class="control-group">
         <label class="control-label" for="id_name">企划名称</label>
         <div class="controls">
@@ -52,6 +53,17 @@
       </div>
     </fieldset>
   </form>
+    </div>
+
+    <div class="span4">
+        <blockquote>如果您恢复之前备份的企划，请点击导入
+        <form class="form-horizontal" action="{%url import_work %}" method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="work_zip"/><br/>
+            <button type="submit" class="btn btn-primary">导入</button>
+        </form>
+        </blockquote>
+    </div>
   
 </div>
 {% endblock %}

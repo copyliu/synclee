@@ -146,7 +146,7 @@ $(document).ready(function(){
     //批量上传按钮
 	$('#id_story_upload').uploadify ({
 		'swf'		: '/static/uploadify.swf',
-		'uploader' 	: '{%url upload_image request.user.id %}', 
+		'uploader' 	: '{%url upload_image work.id %}', 
 		'cancelImage' : '/static/images/icons/cancel.png',
     'buttonClass' : 'btn',
     'width'       : 90,
@@ -175,7 +175,7 @@ var View = {
       return '<div class="row element">'+
     '<div class="span1"><span class="label label-success">图片</span></div>'+
     '<input class="title" placeholder="图片标题"/>'+
-    '<img class="span11" src="/media/upload/{{request.user.id}}/'+name+'"></p>'+
+    '<img class="span11" src="/media/works/{{work.id}}/'+name+'"></p>'+
     //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
     '<toolbar class="span4"><a href="#"><i class="icon-trash"></i> 删除</a></toolbar>'+
     '</div>'},
