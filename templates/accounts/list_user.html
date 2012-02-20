@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}用户排行榜{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>用户名</th>
+      <th>画师</th>
+      <th>写手</th>
+      <th>围观</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users.object_list %}
+    <tr>
+      <td><a href="{%url profile user.username %}">
+        {{user.username}}
+      </a></td>
+      <td><p>{{user.image}}</p></td>
+      <td><p>{{user.word}}</p></td>
+      <td><p>{{user.other}}</p></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="pagination">
+  <ul>
+    {% if users.has_previous %}
+    <li><a href="?key={{kind}}&page={{ users.previous_page_number }}">上一页</a></li>
+    {% endif %} 
+    {% for i in paginator.page_range %}
+    <li><a href="?key={{kind}}&page={{i}}">{{i}}</a></li>
+    {% endfor %}
+    {% if users.has_next %}
+    <li><a href="?key={{kind}}&page={{ users.next_page_number }}">下一页</a></li>
+    {% endif %}
+  </ul>
+</div>
+</div>
+
+{% endblock %}
