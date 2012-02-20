@@ -244,7 +244,7 @@ var Controller = {
           break;
         case '图片':
           title = $(".element").eq(i).children('input').val();
-          content = $(".element").eq(i).children('img').attr('src');
+          content = $(".element").eq(i).children('img').attr('src').replace('/media/','');
           type = 'image';
           break;
 	      default: 

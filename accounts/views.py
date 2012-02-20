@@ -53,7 +53,6 @@ def follow(request):
 @login_required
 def notice(request):
     action = request.POST.get('type', '')
-    print action
     if action == "invite_accept":
         try:
             id = request.POST.get('id', '-1')

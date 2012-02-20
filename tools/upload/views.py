@@ -14,7 +14,7 @@ def check_existing(request):
     return HttpResponse('0')
 
 @csrf_exempt
-def upload_image(request, user_id):
+def upload_image(request, work_id):
     file_ext = str(request.FILES['Filedata'].name).split('.')[-1]
     
     # dont use Django save_FOO_file, defined a new filename
@@ -22,7 +22,7 @@ def upload_image(request, user_id):
     file_name = file_name + '_%d' % random.randint(0,100)
     
     upload_path = os.path.join('media', 'works')
-    user_upload_folder = os.path.join(upload_path, user_id)
+    user_upload_folder = os.path.join(upload_path, work_id)
     
     if not os.path.exists(upload_path):
         os.mkdir(upload_path)
