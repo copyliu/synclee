@@ -7,6 +7,7 @@ from django.shortcuts import redirect, get_object_or_404, render_to_response, Ht
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.paginator import Paginator
 
 from notification import models as notification
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
@@ -241,3 +242,36 @@ def reset_psw_confirm(request, tmp_psw):
             return TemplateResponse(request, 'accounts/reset_psw_confirm.html', {'form': form})
     form = ResetPasswordForm()
     return TemplateResponse(request, 'accounts/reset_psw_confirm.html', {'form': form})
+
+def list_user(request):
+    users = User.objects.all()
+    kind = request.GET.get('key', "other")
+    
+    #users = filter(lambda user: UserSkills.objects.get(user=user, skill="other").exp > 0, users)
+    if kind in ["word", "image", "other"]:
+        users = sorted(users, key = lambda user: UserSkills.objects.get(user=user, skill=kind).exp, reverse = True)
+    else:
+        kind = "all";
+        users = sorted(users, key = lambda user: UserSkills.objects.get(user=user, skill="word").exp +
+                                                 UserSkills.objects.get(user=user, skill="image").exp +
+                                                 UserSkills.objects.get(user=user, skill="other").exp, reverse = True)
+
+        
+    
+    users = [{"username" : i.username,
+              "word" : UserSkills.objects.get(user=i, skill="word").exp,
+              "image" : UserSkills.objects.get(user=i, skill="image").exp,
+              "other" : UserSkills.objects.get(user=i, skill="other").exp,
+              } for i in users]
+    #分页
+    paginator = Paginator(users, 1)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1
+    users = paginator.page(page)
+    #print page,"+++",works.object_list[0].aver_score()
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'accounts/list_user.html', {'kind':kind, 'users' : users, 'paginator' : paginator})

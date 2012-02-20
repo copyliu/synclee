@@ -1,0 +1,127 @@
+{% extends "base.html"%}
+
+{% block title %} {{work.name}} {% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      Workname: {{work.name}}
+      {% if not involved %}
+		<input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入">
+	  {% endif %}
+	  {% if followed and not involved%}
+	    <input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')">
+      {% endif %}
+      {% if not followed and not involved%}
+        <input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')">
+      {% endif %}
+      {% if request.user.is_authenticated %}
+	  {% if request.user.username == work.author.username %}
+		<section id = "sec_apply">
+		  <div class="page-header">
+			<h3>申请</h3>
+		  </div>
+		</section> <!-- section related -->
+      {% endif %}
+      {% endif %}
+    </div>
+    <div class="content">
+      {% if elements %}
+        {% for element in elements %}
+        <div>
+          <span class="label success">{{ element.category }}</span>
+          <p><a href="{%url show_element element.id %}">{{element.content}}</a></p>
+        </div>
+        {% endfor %}
+      {% else %}
+        当前work没有任何element
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div id="id_apply" class="modal hide fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>加入作品</h3>
+  </div>
+  <div class="modal-body">
+	<div class="clearfix">
+      <label for="normalSelect">选择角色：</label>
+	  <div class="input">
+	    <select name="normalSelect" id="id_apply_role">
+		  {% for skill, lv, name in skill_list%}
+		  <option value = "{{skill}}">{{name}}</option>
+		  {% endfor %}
+        </select>
+      </div>
+	</div>
+	<div class="clearfix">
+      <label for="textarea">申请理由：</label>
+	  <div class="input">
+	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5""></textarea>
+      </div>
+      <span class="help-block">最多300个字符</span>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary" onclick="Controller.apply_for()">Submit</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
+<script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
+<script>
+$(document).ready(function(){
+	{%for i in apply_set%}
+	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
+	{% endfor %}
+})
+var View = {
+	apply_for : function(id, applyer, role, reason){
+		return '<div class="row" id = "id_apply_'+ id +'"> <div class="span4">' +
+				'<B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
+				'希望作为' + role + '参加作品的创作</B>' +
+				'<li>' + reason + '</li>' +
+				'<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
+				'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')">' +
+				'</div> </idv>'
+	},
+};
+var Controller = {
+	apply_for : function(){
+		var role = $('#id_apply_role').val();
+		var reason = $('#id_apply_reason').val();
+		$.ajax({ type: 'post', url : '{%url apply_for %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
+		$('#id_apply').modal('hide');
+	},
+	notice : {
+		apply : {
+			accept :function(id){
+				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_accept', 'id': id}});
+				$('#id_apply_' + id).remove();
+			},
+			reject :function(id){
+				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_reject', 'id': id}});
+				$('#id_apply_' + id).remove();
+			},
+		},
+	},
+	follow_work : function(action){
+		if (action == 'fo'){
+		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $('#follow_work').val('取消').removeClass('primary').attr('onclick', "Controller.follow_work('unfo')");
+		}
+		if (action ==  'unfo'){
+		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $('#follow_work').val('关注').addClass('primary').attr('onclick', "Controller.follow_work('fo')");
+		}
+	},
+};
+</script>
+{% endblock %}

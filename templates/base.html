@@ -24,6 +24,18 @@
           <ul class="nav">
             <li class="active"><a href="/">首页</a></li>
             <li><a href="{%url list_works %}">所有企划</a></li>
+            <li class="dropdown" id="list_user">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#list_user">
+								用户排行榜
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="{%url list_user%}?key=all">总排行</a></li>
+								<li><a href="{%url list_user%}?key=image">画师</a></li>
+								<li><a href="{%url list_user%}?key=word">写手</a></li>
+								<li><a href="{%url list_user%}?key=other">围观</a></li>
+							</ul>
+						</li>
             <li><a href="#">用户列表</a></li>
             <li><a href="{%url work_rank %}">排行榜</a></li>
           </ul>
@@ -56,11 +68,12 @@
 {% block content %}{% endblock %}
 <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-tooltip.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-dropdown.js"></script>
 <script>
 $(document).ready(function(){
    {% if user.is_authenticated %}
    function checkUnread(){
-       $.ajax({
+       $.ajax({	
            url: '{%url unread %}',
            data: {uid: {{request.user.id}}},
            success: function(data){
