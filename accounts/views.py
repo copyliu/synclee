@@ -245,7 +245,11 @@ def reset_psw_confirm(request, tmp_psw):
 
 def list_user(request):
     users = User.objects.all()
-    kind = request.GET.get('key', "other")
+    kind = request.GET.get('key', "all")
+    cnt = request.GET.get('cnt', "1")
+    try:
+        cnt = int(cnt)
+    except: cnt = 1
     
     #users = filter(lambda user: UserSkills.objects.get(user=user, skill="other").exp > 0, users)
     if kind in ["word", "image", "other"]:
@@ -257,14 +261,15 @@ def list_user(request):
                                                  UserSkills.objects.get(user=user, skill="other").exp, reverse = True)
 
         
-    
-    users = [{"username" : i.username,
-              "word" : UserSkills.objects.get(user=i, skill="word").exp,
-              "image" : UserSkills.objects.get(user=i, skill="image").exp,
-              "other" : UserSkills.objects.get(user=i, skill="other").exp,
-              } for i in users]
+    users = [{"rank" : i + 1,
+              "username" : users[i].username,
+              "avatar" : UserProfiles.objects.get(user = users[i]).avatar.name,
+              "word" : UserSkills.objects.get(user=users[i], skill="word").exp,
+              "image" : UserSkills.objects.get(user=users[i], skill="image").exp,
+              "other" : UserSkills.objects.get(user=users[i], skill="other").exp,
+              } for i in xrange(len(users))]
     #分页
-    paginator = Paginator(users, 1)
+    paginator = Paginator(users, cnt)
     page = request.GET.get('page', 1)
     try:
         page = int(page)
@@ -274,4 +279,4 @@ def list_user(request):
     #print page,"+++",works.object_list[0].aver_score()
     request.session['page'] = page
     
-    return TemplateResponse(request, 'accounts/list_user.html', {'kind':kind, 'users' : users, 'paginator' : paginator})
+    return TemplateResponse(request, 'accounts/list_user.html', {'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator})
