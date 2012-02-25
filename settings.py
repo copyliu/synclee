@@ -135,7 +135,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'relationships',
     'notification',
-    'tastypie',
+    #'tastypie',
     
     'accounts',
     'api',

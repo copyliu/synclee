@@ -201,7 +201,7 @@ var Controller = {
 	apply_for : function(){
 		var role = $('#id_apply_role').val();
 		var reason = $('#id_apply_reason').val();
-		$.ajax({ type: 'post', url : '{%url apply_for %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
+		$.ajax({ type: 'post', url : '{%url ajax_apply_work %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
 		$('#id_apply').modal('hide');
 	},
 	score : function(){
@@ -223,11 +223,11 @@ var Controller = {
 	},
 	follow_work : function(action){
 		if (action == 'fo'){
-		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $.ajax({type : 'post', url : '{%url ajax_follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
 		  $('#follow_work').val('取消').removeClass('primary').attr('onclick', "Controller.follow_work('unfo')");
 		}
 		if (action ==  'unfo'){
-		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
+		  $.ajax({type : 'post', url : '{%url ajax_follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
 		  $('#follow_work').val('关注').addClass('primary').attr('onclick', "Controller.follow_work('fo')");
 		}
 	},

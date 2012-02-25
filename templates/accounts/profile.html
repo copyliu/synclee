@@ -1,216 +1,223 @@
 {% extends "base.html"  %}
 {% load relationship_tags %}
 {% block title %}{{profile.user.username}}{% endblock %}
-{% block content %}
-  
-<style type='text/css'>
+{% block content %}<style type='text/css'>
     .container > .sidebar {
-		position: absolute;
-		right: 20px;
-		width: 360px;
-		left: auto;
-	}
-
-	.container > .content {
-		margin-right: 240px;
-	}
-	.hero-unit {
-		padding: 0;
-	}
-	.abilities {
-	  margin: 0;
-	  padding: 0;
-	  list-style: none;
-	}
-	.abilities li {
-	  width: 50%;
-	  float: left;
-	  font-size: 16px;
-	  font-weight: bold;
-	}
-	.abilities li strong {
-	  font-size: 14px;
-	}
-	.abilities li.shui {
-	  color: #ff6600;
-	}
-	.abilities li.prog {
-	  color: #009933;
-	}
+        position: absolute;
+        right: 20px;
+        width: 360px;
+        left: auto;
+    }
+    .container > .content {
+        margin-right: 240px;
+    }
+    .hero-unit {
+        padding: 0;
+    }
+    .abilities {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .abilities li {
+        width: 50%;
+        float: left;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .abilities li strong {
+        font-size: 14px;
+    }
+    .abilities li.shui {
+        color: #ff6600;
+    }
+    .abilities li.prog {
+        color: #009933;
+    }
 </style>
-
 <div class="container">
-      <div class="sidebar">
+    <div class="sidebar">
         <div class="well">
-        	{% if request.user.id == profile.user_id %}
-        	<section id = "sec_invitation">
-				<div class="page-header">
-					<h3>邀请</h3>
-			  	</div>
-			</section> <!-- section related -->
-			{% endif %}
-			<section id = "work">
-				<div class="page-header">
-					<h3>主创作品</h3>
-			  	</div>
-			  	<div class="row">
-				  	{% for work in profile.user.work_set.all%}
-					<div class="span2">
-						<li><a href="{%url show_work work.pk%}">
-							<img src="/media/{{work.cover}}" width="100px" height="100px">
-						</a></li>
-						<li><a href="{%url show_work work.pk%}">
-							{{work.name}}
-						</a></li>
-						<li> <a href="{%url profile work.author.username%}">
-							by {{work.author.username}}
-						</a> </li>
-					</div>
-					{% endfor %}
-				</div>
-			</section> <!-- section work -->
-			<section id = "focus">
-				<div class="page-header">
-					<h3>关注作品</h3>
-			  	</div>
-			  	<div class="row">
-				  	{% for work in followed %}
-					<div class="span2">
-						<li><a href="{%url show_work work.pk%}">
-							<img src="/media/{{work.cover}}" width="100px" height="100px">
-						</a></li>
-						<li><a href="{%url show_work work.pk%}">
-							{{work.name}}
-						</a></li>
-						<li> <a href="{%url profile work.author.username%}">
-							by {{work.author.username}}
-						</a> </li>
-					</div>
-					{% endfor %}
-				</div>
-			</section> <!-- section focus -->
-			<section id = "related">
-				<div class="page-header">
-					<h3>参与创作</h3>
-			  	</div>
-			  	<div class="row">
-				  	{% for work in joined %}
-					<div class="span2">
-						<li><a href="{%url show_work work.pk%}">
-							<img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px">
-						</a></li>
-						<li><a href="{%url show_work work.pk%}">
-							{{work.name}}
-						</a></li>
-						<li> <a href="{%url profile work.author.username%}">
-							by {{work.author.username}}
-						</a> </li>
-					</div>
-					{% endfor %}
-				</div>
-			</section> <!-- section related -->
-        </div>
-      </div>
-      <div class="content">
-        <div class="hero-unit">
-        	<div class="row"> <div class="span13">
-		    	<a href = "{%url profile profile.user.username%}">
-				<div class="row ">
-					<div class="span1">
-						<img src="/media/{{profile.avatar.name}}" width="55px" height="55px" />
-					</div>
-					<div class="span2">
-						<h3>{{profile.user}}</h3>
-					</div>
-				</div> </a>
-				
-				<div class="row">
-					<div class="span1">
-					  {% if request.user.id != profile.user_id %}
-            
-              {% if_relationship request.user profile.user "following" %}
-						<input type="submit" id="follow" class="btn" value="取消">
-              {% else %}
-            <input type="submit" id="follow" class="btn primary" value="关注" data-user-id="{{profile.user.id}}">
-              {% endif_relationship %}
-						<input type="submit" class="btn primary" id = "id_invite_btn" data-toggle="modal" href ="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
-            {% else %}
-            <input type="submit" class="btn primary" value="权限">
+            {% if request.user.id == profile.user_id %}
+            <section id = "sec_invitation">
+                <div class="page-header">
+                    <h3>邀请</h3>
+                </div>
+            </section>
+            <!-- section related -->
             {% endif %}
-					</div>
-					<div class="span4">
-						<h4>介绍</h4>
-						<span>{{profile.intro}}</span>
-					</div>
-					<div class="span4">
-						<h4>技能</h4>
-						<ul class="abilities">
-							{% for skill in skill_list%}
-							<li class="{{skill.skill}}">{{skill.skill}} <strong>exp{{skill.exp}}</strong></li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="span4 offset1">
-						<h4>位置</h4>
-						<span>{{profile.location}}</span>
-					</div>
-				</div>
-			</div> </div>
+            <section id = "work">
+                <div class="page-header">
+                    <h3>主创作品</h3>
+                </div>
+                <div class="row">
+                    {% for work in profile.user.work_set.all%}
+                    <div class="span2">
+                        <li>
+                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover}}" width="100px" height="100px"> </a>
+                        </li>
+                        <li>
+                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
+                        </li>
+                        <li>
+                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <!-- section work -->
+            <section id = "focus">
+                <div class="page-header">
+                    <h3>关注作品</h3>
+                </div>
+                <div class="row">
+                    {% for work in followed %}
+                    <div class="span2">
+                        <li>
+                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover}}" width="100px" height="100px"> </a>
+                        </li>
+                        <li>
+                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
+                        </li>
+                        <li>
+                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <!-- section focus -->
+            <section id = "related">
+                <div class="page-header">
+                    <h3>参与创作</h3>
+                </div>
+                <div class="row">
+                    {% for work in joined %}
+                    <div class="span2">
+                        <li>
+                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
+                        </li>
+                        <li>
+                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
+                        </li>
+                        <li>
+                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <!-- section related -->
+        </div>
+    </div>
+    <div class="content">
+        <div class="hero-unit">
+            <div class="row">
+                <div class="span13">
+                    <a href = "{%url profile profile.user.username%}">
+                    <div class="row ">
+                        <div class="span1">
+                            <img src="/media/{{profile.avatar.name}}" width="55px" height="55px" />
+                        </div>
+                        <div class="span2">
+                            <h3>{{profile.user}}</h3>
+                        </div>
+                    </div> </a>
+                    <div class="row">
+                        <div class="span1">
+                            {% if request.user.id != profile.user_id %}
+
+                            {% if_relationship request.user profile.user "following" %}
+                            <button id="id_follow_btn" class="btn btn-error" data-action="unfollow" data-user-id="{{profile.user.id}}">取消</button>
+                            {% else %}
+                            <button id="id_follow_btn" class="btn btn-primary" data-action="follow" data-user-id="{{profile.user.id}}">关注</button>
+                            {% endif_relationship %}
+                            <input type="submit" class="btn btn-primary" id="id_invite_btn" data-toggle="modal" href="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
+                            {% else %}
+                            <input type="submit" class="btn primary" value="权限">
+                            {% endif %}
+                        </div>
+                        <div class="span4">
+                            <h4>介绍</h4>
+                            <span>{{profile.intro}}</span>
+                        </div>
+                        <div class="span4">
+                            <h4>技能</h4>
+                            <ul class="abilities">
+                                {% for skill in skill_list%}
+                                <li class="{{skill.skill}}">
+                                    {{skill.skill}} <strong>exp{{skill.exp}}</strong>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span4 offset1">
+                            <h4>位置</h4>
+                            <span>{{profile.location}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Example row of columns -->
         <section id = "news">
-    		<div class="page-header">
-				<h1>新鲜事</h1>
-          <ul>
-            {% for e in timeline %}
-            <li>[{{e.created|date:"Y-m-d H:m:s"}}] {{e.user.username}} 为 <a href="/works/show_work/{{e.instance.work_id }}">{{e.instance.work.name}}</a> 新增了一个 <a href="/works/show_element/{{e.instance.id}}">{{e.instance.get_category_display}}</a>  </li>
-            {% endfor %}
-          </ul>
-		  	</div>
-    	</section> <!-- section news -->
+            <div class="page-header">
+                <h1>新鲜事</h1>
+                <ul>
+                    {% for e in timeline %}
+                    <li>
+                        [{{e.created|date:"Y-m-d H:m:s"}}] {{e.user.username}} 为 <a href="/works/show_work/{{e.instance.work_id }}">{{e.instance.work.name}}</a> 新增了一个 <a href="/works/show_element/{{e.instance.id}}">{{e.instance.get_category_display}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <!-- section news -->
     </div>
 </div>
-
 <div id="id_invite" class="modal hide fade">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">&times;</a>
-    <h3>选择邀请加入的作品</h3>
-  </div>
-  <div class="modal-body">
-	<div class="control-group">
-    <label class="control-label" for="normalSelect">选择作品：</label>
-	  <div class="control">
-	    <select name="normalSelect" id="id_invite_work">
-		  {% for work in request.user.work_set.all%}
-		  <option value = "{{work.pk}}">{{work.name}}</option>
-		  {% endfor %}
-      </select>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>选择邀请加入的作品</h3>
     </div>
-	</div>
-	<div class="control-group">
-      <label class="control-label" for="normalSelect">选择角色：</label>
-	  <div class="control">
-	    <select name="invite_role" id="id_invite_role">
-	      <option value = "image">画师</option>
-		  <option value = "word">写手</option>
-          <option value = "other">其他</option>
-        </select>
-      </div>
-	</div>
-	<div class="control-group">
-      <label class="control-label" for="textarea">邀请理由：</label>
-	  <div class="control">
-	    <textarea class="large" id="id_invite_reason" name="textarea2" rows="5"></textarea>
-      </div>
-      <span class="help-block">最多300个字符</span>
-	</div>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.invite()">Submit</a>
-  </div>
+    <form method="post" action="{%url ajax_invite_user %}">
+        {% csrf_token %}
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label" for="normalSelect">选择作品：</label>
+            <div class="control">
+                <select name="normalSelect" id="id_invite_work">
+                    {% for work in request.user.work_set.all%} <option value = "{{work.pk}}">{{work.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="normalSelect">选择角色：</label>
+            <div class="control">
+                <select name="invite_role" id="id_invite_role">
+                    <option value="image">画师</option>
+                    <option value="word">写手</option>
+                    <option value="other">其他</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="textarea">邀请理由：</label>
+            <div class="control">
+                <textarea class="large" id="id_invite_reason" name="textarea2" rows="5"></textarea>
+            </div>
+            <span class="help-block">最多300个字符</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="uid" value="{{profile.user.id}}" />
+        <button class="btn btn-success">发送邀请</button>
+    </div>
+    </form>
 </div>
 {% endblock %}
 
@@ -218,62 +225,60 @@
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
 <script>
 $(document).ready(function(){
-    $('#follow').on('click', function(){
-       var id = $(this).data('user-id');
-       
+    var uid = {{profile.user.id}};
+    
+    $('#id_follow_btn').on('click', function(){
+        var action = $(this).data('action');
+        Controller.follow($(this) ,uid, action);
     });
     
+    $('#id_invite form').submit(function(e){
+        var data = $(this).serialize(),
+            data.uid = uid;
+        Controller.invite(data);
+        e.preventDefault();
+    });
     
-	{%for i in invitation%}
-	work = {
-		id : "{{i.work.id}}",
-		name : "{{i.work.name}}",
-	};
-	$("#sec_invitation").append(View.invitaion({{i.id}}, "{{i.work.author.username}}", "{{i.skill}}", work, "{{i.reason}}"));
-	{% endfor %}
-})
+    {%for i in invitation%}
+    work = {
+        id : "{{i.work.id}}",
+        name : "{{i.work.name}}",
+    };
+    $("#sec_invitation").append(View.invitaion({{i.id}}, "{{i.work.author.username}}", "{{i.skill}}", work, "{{i.reason}}"));
+    {% endfor %}
+});
+
 var View = {
-	invitaion : function(id, inviter, role, work, reason){
-		return '<div class="row" id = "id_invitaion_'+ id +'"> <div class="span5">' +
-				'<B> <a href = "/accounts/profile/' + inviter +'/">' + inviter + '</a>' +
-				'邀请您作为' + role + '参加作品<a href = "/works/show_work/' + work.id +'/">' + 
-				work.name + '</a>的创作</B>' +
-				'<li>' + reason + '</li>' +
-				'<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.invite.accept('+ id +')">' +
-				'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.invite.reject('+ id +')">' +
-				'</div> </idv>'
-	},
+    invitaion : function(id, inviter, role, work, reason){
+        return '<div class="row" id = "id_invitaion_'+ id +'"> <div class="span5">' +
+                '<B> <a href = "/accounts/profile/' + inviter +'/">' + inviter + '</a>' +
+                '邀请您作为' + role + '参加作品<a href = "/works/show_work/' + work.id +'/">' + 
+                work.name + '</a>的创作</B>' +
+                '<li>' + reason + '</li>' +
+                '<input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.invite.accept('+ id +')">' +
+                '<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.invite.reject('+ id +')">' +
+                '</div> </idv>'
+    },
 };
 var Controller = {
-	invite : function(){
-		var work_id = $('#id_invite_work').val();
-		var role = $('#id_invite_role').val();
-		var reason = $('#id_invite_reason').val();
-		$.ajax({url : '{%url invite %}', type: 'post', data: {'username': '{{profile.user.username}}', 'work_id': work_id, 'role': role, 'reason': reason}});
-		$('#id_invite').modal('hide');
-	},
-    follow : function(e){
-        if (action == 'fo'){
-            $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
-            $('#follow').val('取消').removeClass('primary').attr('onclick', "Controller.follow('unfo')");
-        }
-        if (action ==  'unfo'){
-            $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
-            $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
-        }
+    invite : function(data){
+        $.ajax({
+            url : '{%url ajax_invite_user %}', 
+            type: 'post', 
+            data: data
+        });
+        $('#id_invite').modal('hide');
     },
-  notice : {
-	invite : {
-		accept :function(id){
-			$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_accept', 'id': id}});
-			$('#id_invitaion_' + id).remove();
-		},
-		reject :function(id){
-			$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'invite_reject', 'id': id}});
-			$('#id_invitaion_' + id).remove();
-		},
-	},
-  },
+    follow : function(btn, uid, action){
+        $.ajax({type: 'post', url: '{%url ajax_follow_user %}', data:{'uid': uid, 'action': action}, success: function(data){
+            var data = JSON.parse(data);
+            if (data.action == 'follow'){ 
+                btn.text('取消').removeClass('btn-primary').data('action', 'unfollow');
+            }else{
+                btn.text('关注').addClass('btn-primary').data('action', 'follow');
+            }
+        }});
+    },
 };
 </script>
 {% endblock %}
