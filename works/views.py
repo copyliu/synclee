@@ -133,7 +133,7 @@ def show_work(request, work_id):
         
         print context['score'], "!!!!"
         if work.author.id != request.user.id:
-            skill = UserSkills.objects.filter(user = request.user)
+            skill = Skill.objects.filter(user = request.user)
             skill_list = []
             for i in skill:
                 for j in SKILL_CHOICES:

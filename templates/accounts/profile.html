@@ -129,9 +129,9 @@
 					  {% if request.user.id != profile.user_id %}
             
               {% if_relationship request.user profile.user "following" %}
-						<input type="submit" id="follow" class="btn" value="取消" onclick="Controller.follow('unfo')">
+						<input type="submit" id="follow" class="btn" value="取消">
               {% else %}
-            <input type="submit" id="follow" class="btn primary" value="关注" onclick="Controller.follow('fo')">
+            <input type="submit" id="follow" class="btn primary" value="关注" data-user-id="{{profile.user.id}}">
               {% endif_relationship %}
 						<input type="submit" class="btn primary" id = "id_invite_btn" data-toggle="modal" href ="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
             {% else %}
@@ -203,7 +203,7 @@
 	<div class="control-group">
       <label class="control-label" for="textarea">邀请理由：</label>
 	  <div class="control">
-	    <textarea class="large" id="id_invite_reason" name="textarea2" rows="5""></textarea>
+	    <textarea class="large" id="id_invite_reason" name="textarea2" rows="5"></textarea>
       </div>
       <span class="help-block">最多300个字符</span>
 	</div>
@@ -216,12 +216,14 @@
 
 {% block script %}
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
-<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
-<script type="text/javascript" src="/static/js/jquery.uploadify.js"></script>
-<script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
 <script>
-
 $(document).ready(function(){
+    $('#follow').on('click', function(){
+       var id = $(this).data('user-id');
+       
+    });
+    
+    
 	{%for i in invitation%}
 	work = {
 		id : "{{i.work.id}}",
@@ -250,16 +252,16 @@ var Controller = {
 		$.ajax({url : '{%url invite %}', type: 'post', data: {'username': '{{profile.user.username}}', 'work_id': work_id, 'role': role, 'reason': reason}});
 		$('#id_invite').modal('hide');
 	},
-  follow : function(action){
-    if (action == 'fo'){
-      $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
-      $('#follow').val('取消').removeClass('primary').attr('onclick', "Controller.follow('unfo')");
-    }
-    if (action ==  'unfo'){
-      $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
-      $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
-    }
-  },
+    follow : function(e){
+        if (action == 'fo'){
+            $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
+            $('#follow').val('取消').removeClass('primary').attr('onclick', "Controller.follow('unfo')");
+        }
+        if (action ==  'unfo'){
+            $.ajax({type : 'post', url : '{%url follow %}', data : { 'action' : action, 'foid' : {{profile.user.id}}} });
+            $('#follow').val('关注').addClass('primary').attr('onclick', "Controller.follow('fo')");
+        }
+    },
   notice : {
 	invite : {
 		accept :function(id){

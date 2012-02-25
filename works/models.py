@@ -6,13 +6,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 #from synclee.club.models import Club, Project, Catalog
 #from synclee.tab.models import SubTabClass, TabClass
-from taggit.managers import TaggableManager
+
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.comments.moderation import CommentModerator, moderator
 
 import os, settings
 
-class TimeLines(models.Model):
+class TimeLine(models.Model):
     user = models.ForeignKey(User)
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
