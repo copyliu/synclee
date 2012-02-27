@@ -19,10 +19,15 @@ class LoginForm(AuthenticationForm):
             self.user_cache = authenticate(username = username, password = password)
             if self.user_cache is None:
                 #尝试用Email登录
-                username_from_email = User.objects.get(email = username).username
-                self.user_cache = authenticate(username = username_from_email, password = password)
-                if self.user_cache is None:
+                try:
+                   User.objects.get(email = username).username
+                except:
                     raise forms.ValidationError("请输入正确的用户名、密码")
+                else:
+                    username_from_email = User.objects.get(email = username).username
+                    
+                self.user_cache = authenticate(username = username_from_email, password = password)
+                    
                 #临时密码登录
                 #user_temp_pwd_list = AccountTempPassword.objects.filter(temp_password = password, user__username = username)
                 #if user_temp_pwd_list:
