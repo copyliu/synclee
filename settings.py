@@ -167,7 +167,7 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 LOGIN_REDIRECT_URL = '/settings/profile/'
-
+LOGIN_URL = '/login/'
 try:
     execfile(os.path.join(PROJECT_ROOT, 'custom_settings.py'))
 except IOError:
