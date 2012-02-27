@@ -23,6 +23,19 @@ def user_follow(request):
     return HttpResponse(json.dumps({'action': action, 'username': user.username}))
 
 @csrf_exempt
+def work_follow(request):
+    action = request.GET.get('action')
+    work = Work.objects.get(pk=request.GET.get('wid', 0))
+    if action == 'follow':
+        work.follower.add(request.user)
+        notification.send([work.author,], "follow_work", {"notice_label": "follow_work", "work": work, "user": request.user})
+    elif action == 'unfollow':
+        work.follower.remove(request.user)
+        
+    return HttpResponse(json.dumps({'action': action, 'work': work.name}))
+
+
+@csrf_exempt
 def invite_user(request):
     uid = request.POST.get('uid', '')
     user = get_object_or_404(User, pk=uid)
@@ -44,18 +57,6 @@ def invite_user(request):
         print e
     return HttpResponse(json.dumps({'username': user.username}))
 
-@csrf_exempt
-def follow_work(request):
-    action = request.POST.get('action')
-    work = Work.objects.get(pk=request.POST.get('foid', 0))
-    if action == 'fo':
-        work.follower.add(request.user)
-        notification.send([work.author,], "follow_work", {"notice_label": "follow_work", "work": work, "user": request.user})
-        return HttpResponse("success")
-    elif action == 'unfo':
-        work.follower.remove(request.user)
-        
-    return HttpResponse("success")
 
 @csrf_exempt
 def apply_work(request):

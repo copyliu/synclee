@@ -65,7 +65,7 @@ $(document).ready(function(){
            data: {uid: {{request.user.id}}},
            success: function(data){
                if (data != 0){
-                   $('.pull-right').children('li:first').tooltip({title: '<a href="/accounts/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
+                   $('.pull-right').children('li:first').tooltip({title: '<a href="/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
                    $('.pull-right').children('li:first').tooltip('show');
                }else{
                    $('.pull-right').children('li:first').tooltip('hide');

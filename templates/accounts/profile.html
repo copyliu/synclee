@@ -219,6 +219,20 @@
     </div>
     </form>
 </div>
+
+<div class="modal hide fade in" id="alertModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>错误信息</h3>
+  </div>
+  <div class="modal-body">
+    <p> </p>
+  </div>
+  <div class="modal-footer">
+    <a href="/login/?next={%url profile profile.user.username%}" class="btn btn-success">&gt;&gt;跳转到登录页面</a>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block script %}
@@ -270,14 +284,16 @@ var Controller = {
         $('#id_invite').modal('hide');
     },
     follow : function(btn, uid, action){
-        $.ajax({type: 'get', url: '{%url ajax_follow_user %}', data:{'uid': uid, 'action': action}, success: function(data){
-            var data = JSON.parse(data);
-            if (data.action == 'follow'){ 
-                btn.text('取消').removeClass('btn-primary').data('action', 'unfollow');
-            }else{
-                btn.text('关注').addClass('btn-primary').data('action', 'follow');
+        $.ajax({type: 'get', url: '{%url ajax_user_follow %}', data:{'uid': uid, 'action': action}, 
+            success: function(data){
+                var data = JSON.parse(data, status);
+                data.action == 'follow' ? btn.text('取消').removeClass('btn-primary').data('action', 'unfollow'):btn.text('关注').addClass('btn-primary').data('action', 'follow');
+            },
+            error: function(jqXHR, textStatus){
+                $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+                $('#alertModal').modal({'show': true});
             }
-        }});
+        });
     },
 };
 </script>
