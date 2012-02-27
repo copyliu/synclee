@@ -233,8 +233,8 @@ $(document).ready(function(){
     });
     
     $('#id_invite form').submit(function(e){
-        var data = $(this).serialize(),
-            data.uid = uid;
+        var data = $(this).serialize();
+        data['uid'] = uid;
         Controller.invite(data);
         e.preventDefault();
     });
@@ -270,7 +270,7 @@ var Controller = {
         $('#id_invite').modal('hide');
     },
     follow : function(btn, uid, action){
-        $.ajax({type: 'post', url: '{%url ajax_follow_user %}', data:{'uid': uid, 'action': action}, success: function(data){
+        $.ajax({type: 'get', url: '{%url ajax_follow_user %}', data:{'uid': uid, 'action': action}, success: function(data){
             var data = JSON.parse(data);
             if (data.action == 'follow'){ 
                 btn.text('取消').removeClass('btn-primary').data('action', 'unfollow');

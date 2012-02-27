@@ -11,12 +11,12 @@ from accounts.models import Invitation
 import json
 
 @csrf_exempt
-def follow_user(request):
-    action = request.POST.get('action')
-    user = User.objects.get(pk=request.POST.get('uid'))
+def user_follow(request):
+    action = request.GET.get('action')
+    user = User.objects.get(pk=request.GET.get('uid'))
     if action == 'follow':
         request.user.relationships.add(user)
-        #notification.send([user,], "follow_user", {"notice_label": "follow_user", "user": request.user})
+        notification.send([user,], "follow_user", {"notice_label": "follow_user", "user": request.user})
     elif action == 'unfollow':
         request.user.relationships.remove(user)
     
