@@ -128,7 +128,7 @@
                             {% if request.user.work_set.count %}
                             <input type="submit" class="btn btn-primary" id="id_invite_btn" data-toggle="modal" href="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
                             {% else %}
-                            <a href="{%url add_work %}"><input type="submit" class="btn btn-primary" id="id_invite_btn"  value="邀请"></a>
+                            <input type="submit" class="btn btn-primary" id="id_invite_btn"  value="邀请" onclick = "Controller.no_work()">
                             {% endif %}
                             {% else %}
                             <input type="submit" class="btn primary" value="权限">
@@ -225,7 +225,7 @@
     <p> </p>
   </div>
   <div class="modal-footer">
-    <a href="/login/?next={%url profile profile.user.username%}" class="btn btn-success">&gt;&gt;跳转到登录页面</a>
+    <a  class="btn btn-success"></a>
   </div>
 </div>
 
@@ -258,6 +258,12 @@ var Controller = {
         });
         $('#id_invite').modal('hide');
     },
+    no_work : function(data){
+    	$('#alertModal .modal-body p').text('您还没有作品，无法邀请');
+        $('#alertModal .modal-footer a').attr("href", "{%url add_work%}?next={%url profile profile.user.username%}");
+        $('#alertModal .modal-footer a').text(">>跳转到创建作品页面");
+        $('#alertModal').modal({'show': true});
+    },
     follow : function(btn, uid, action){
         $.ajax({type: 'get', url: '{%url ajax_user_follow %}', data:{'uid': uid, 'action': action}, 
             success: function(data){
@@ -266,6 +272,8 @@ var Controller = {
             },
             error: function(jqXHR, textStatus){
                 $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+                $('#alertModal .modal-footer a').attr("href", "/login/?next={%url profile profile.user.username%}");
+                $('#alertModal .modal-footer a').text(">>跳转到登录页面");
                 $('#alertModal').modal({'show': true});
             }
         });
