@@ -328,7 +328,7 @@ def send_now(users, label, extra_context=None, on_site=True, sender=None):
     
     # reset environment to original language
     activate(current_language)
-
+    return notice
 
 def send(*args, **kwargs):
     """

@@ -174,7 +174,7 @@
         <a class="close" data-dismiss="modal">&times;</a>
         <h3>选择邀请加入的作品</h3>
     </div>
-    <form method="post" action="{%url ajax_work_invite %}">
+    <form method="post" action="{%url ajax_user_invite %}">
         {% csrf_token %}
     <div class="modal-body">
         <div class="control-group">
@@ -259,7 +259,7 @@ $(document).ready(function(){
 var Controller = {
     invite : function(data){
         $.ajax({
-            url : '{%url ajax_work_invite %}', 
+            url : '{%url ajax_user_invite %}', 
             type: 'post', 
             data: data,
         });

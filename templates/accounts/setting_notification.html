@@ -38,16 +38,22 @@
 {% block script %}
 <script>
 $(document).ready(function(){
-   $('table tbody tr').find('td:eq(2)').on('click', function(){
-       if ($(this).prev().text() == '未读'){
-           var status = $(this).prev(),
-               id = $(this).prev().prev().find('input').first().data('notifictaionId');
-               console.log(id)
-           $.ajax({type: 'POST', data:{'notice_id': id}, success: function(){
-               status.html('<span class="label">已读</span>');
-               }
-           });
-       };
+    //接受/拒绝
+    $('div.invitation_action').find('a').click(function(e){
+        var id = $(this).data('id'), 
+            action = $(this).data('action');
+        console.log(id, action);
+    });
+    
+    $('table tbody tr').find('td:eq(2)').on('click', function(){
+        if ($(this).prev().text() == '未读'){
+            var status = $(this).prev(),
+                id = $(this).prev().prev().find('input').first().data('notifictaionId');
+            $.ajax({type: 'POST', data:{'notice_id': id}, success: function(){
+                status.html('<span class="label">已读</span>');
+                }
+            });
+        };
        
        var content = $(this).parent().next();
        if (content.is(":visible")){
@@ -61,11 +67,11 @@ var Controller = {
 	notice : {
 		invite : {
 			accept : function(id){
-        		$.ajax({type: 'get', url: '{%url ajax_work_invite_accept %}', data:{'id': id}});
+        		$.ajax({type: 'get', url: '{%url ajax_user_invite_accept %}', data:{'id': id}});
         		$('#id_invitation_' + id).remove();
         	},
 			reject : function(id){
-        		$.ajax({type: 'get', url: '{%url ajax_work_invite_reject %}', data:{'id': id}});
+        		$.ajax({type: 'get', url: '{%url ajax_user_invite_reject %}', data:{'id': id}});
         		$('#id_invitation_' + id).remove();
         	},
 		},

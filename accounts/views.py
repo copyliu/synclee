@@ -161,16 +161,16 @@ def _set_notification(request):
     else:
         user  = request.user
         notices = notification.Notice.objects.notices_for(user)
-        import re
-        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
-        for i in xrange(len(notices)):
-            if notices[i].notice_type.label == u'invite_user':
-                id = rex.findall(notices[i].message)
-                statue = 'noanswer'
-                if len(id):
-                    statue = Invitation.objects.get(pk=int(id[0])).invite_status
-                
-                notices[i].message = Template(notices[i].message).render(Context({"statue":statue}))
+#        import re
+#        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
+#        for i in xrange(len(notices)):
+#            if notices[i].notice_type.label == u'invite_user':
+#                id = rex.findall(notices[i].message)
+#                statue = 'noanswer'
+#                if len(id):
+#                    statue = Invitation.objects.get(pk=int(id[0])).invite_status
+#                
+#                notices[i].message = Template(notices[i].message).render(Context({"statue":statue}))
         return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
 
 def _set_skill(request, profile):

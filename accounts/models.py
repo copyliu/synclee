@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
-
+from notification import models as notification
 from works.models import Work
 
 class UserProfile(models.Model):
@@ -55,3 +55,4 @@ class Invitation(models.Model):
     role = models.CharField(max_length=8, choices=SKILL_CHOICES)
     reason = models.CharField(max_length = 300)
     invite_status = models.CharField(max_length=8, choices=INVITE_CHOICES)
+    notice = models.ForeignKey(notification.Notice, default=0)

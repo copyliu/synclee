@@ -35,7 +35,7 @@ def work_follow(request):
     return HttpResponse(json.dumps({'action': action, 'work': work.name}))
 
 @csrf_exempt
-def work_invite(request):
+def user_invite(request):
     uid = request.POST.get('uid', '')
     user = get_object_or_404(User, pk=uid)
     work_id = request.POST.get('work_id', '-1')
@@ -49,20 +49,20 @@ def work_invite(request):
     print uid, work_id, reason, role
     try:
         invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
-        print invitation
         if invitation:
             raise BaseException("invited")
         else:
-            invitation = Invitation.objects.create(work = work, invited = user,
-                                      reason = reason,
-                                      invite_status = 'noanswer')
-            notification.send([user,], "invite_user", {"notice_label": "invite_user", "work": work, "user": request.user, "role":role, "invited": user, "id":invitation.id})
+            invitation = Invitation.objects.create(work= work, invited= user,
+                                      reason = reason, invite_status = 'noanswer')
+            notice = notification.send([user,], "invite_user", {"notice_label": "invite_user", "work": work, "message": reason, "user": request.user, "role":role, "invited": user, "id":invitation.id})
+            invitation.notice = notice  
+            invitation.save()
     except Exception as e:
         print e
     return HttpResponse("done")
 
 @csrf_exempt
-def work_invite_accept(request):
+def user_invite_accept(request):
     invitation = Invitation.objects.get(pk=int(request.GET.get('id')))
     if invitation.invited == request.user and invitation.invite_status == "noanswer":
         invitation.invite_status = "accept"
@@ -72,7 +72,7 @@ def work_invite_accept(request):
     return HttpResponse("done")
 
 @csrf_exempt
-def work_invite_reject(request):
+def user_invite_reject(request):
     invitation = Invitation.objects.get(pk=int(request.GET.get('id')))
     if invitation.invited == request.user and invitation.invite_status == "noanswer":
         invitation.invite_status = "reject"
