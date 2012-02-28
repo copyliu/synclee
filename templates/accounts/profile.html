@@ -119,17 +119,12 @@
                     <div class="row">
                         <div class="span1">
                             {% if request.user.id != profile.user_id %}
-
-                            {% if_relationship request.user profile.user "following" %}
+                                {% if_relationship request.user profile.user "following" %}
                             <button id="id_follow_btn" class="btn btn-error" data-action="unfollow" data-user-id="{{profile.user.id}}">取消</button>
-                            {% else %}
+                                {% else %}
                             <button id="id_follow_btn" class="btn btn-primary" data-action="follow" data-user-id="{{profile.user.id}}">关注</button>
-                            {% endif_relationship %}
-                            {% if request.user.work_set.count %}
-                            <input type="submit" class="btn btn-primary" id="id_invite_btn" data-toggle="modal" href="#id_invite" data-backdrop="true" data-keyboard="true" value="邀请">
-                            {% else %}
-                            <input type="submit" class="btn btn-primary" id="id_invite_btn"  value="邀请" onclick = "Controller.no_work()">
-                            {% endif %}
+                                {% endif_relationship %}
+                            <input type="submit" class="btn btn-primary" id="id_invite_btn" data-toggle="modal" data-backdrop="true" data-keyboard="true" value="邀请">
                             {% else %}
                             <input type="submit" class="btn primary" value="权限">
                             {% endif %}
@@ -242,12 +237,24 @@ $(document).ready(function(){
         Controller.follow($(this) ,uid, action);
     });
     
+    $('#id_invite_btn').click(function(e){
+        {% if request.user.work_set.count %}
+        $('#id_invite').modal('show');
+        {% else %}
+        $('#alertModal .modal-body p').text('您还没有作品，无法邀请');
+        $('#alertModal .modal-footer a').attr("href", "{%url add_work%}");
+        $('#alertModal .modal-footer a').text(">>跳转到创建作品页面");
+        $('#alertModal').modal({'show': true});
+        {% endif %}
+    });
+        
     $('#id_invite form').submit(function(e){
         var data = $(this).serialize();
         data['uid'] = uid;
         Controller.invite(data);
         e.preventDefault();
     });
+    
 });
 var Controller = {
     invite : function(data){
@@ -257,12 +264,6 @@ var Controller = {
             data: data,
         });
         $('#id_invite').modal('hide');
-    },
-    no_work : function(data){
-    	$('#alertModal .modal-body p').text('您还没有作品，无法邀请');
-        $('#alertModal .modal-footer a').attr("href", "{%url add_work%}?next={%url profile profile.user.username%}");
-        $('#alertModal .modal-footer a').text(">>跳转到创建作品页面");
-        $('#alertModal').modal({'show': true});
     },
     follow : function(btn, uid, action){
         $.ajax({type: 'get', url: '{%url ajax_user_follow %}', data:{'uid': uid, 'action': action}, 

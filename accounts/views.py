@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
+from django.db.transaction import commit_on_success
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect, get_object_or_404, render_to_response, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -18,6 +19,7 @@ from django.http import Http404, HttpResponseRedirect
 import random, datetime, time
 from threading import Thread
 
+@commit_on_success
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
