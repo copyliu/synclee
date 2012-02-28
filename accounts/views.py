@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.paginator import Paginator
+from django.template import Template, Context
 
 from notification import models as notification
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
@@ -80,15 +81,15 @@ def profile(request, username):
 
     profile = UserProfile.objects.get(user=user)
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
-    #joined = Invitation.objects.filter(invited=user, invite_status='accept')
-    #joined = [i.work for i in joined]
+    joined = Invitation.objects.filter(invited=user, invite_status='accept')
+    joined = [i.work for i in joined]
     #skill_list = Skill.objects.filter(user = user)
     
     context = {
         'profile' : profile, 
         #'timeline' : timeline,
         #'invited' : invited,
-        #'joined' : joined,
+        'joined' : joined,
         #'followed' : user.follow.all(),
         #'skill_list' : skill_list,
     }
@@ -158,6 +159,16 @@ def _set_notification(request):
     else:
         user  = request.user
         notices = notification.Notice.objects.notices_for(user)
+        import re
+        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
+        for i in xrange(len(notices)):
+            if notices[i].notice_type.label == u'invite_user':
+                id = rex.findall(notices[i].message)
+                statue = 'noanswer'
+                if len(id):
+                    statue = Invitation.objects.get(pk=int(id[0])).invite_status
+                
+                notices[i].message = Template(notices[i].message).render(Context({"statue":statue}))
         return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
 
 def _set_skill(request, profile):

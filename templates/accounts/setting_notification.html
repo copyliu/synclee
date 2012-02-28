@@ -57,5 +57,19 @@ $(document).ready(function(){
        }
    }) 
 });
+var Controller = {
+	notice : {
+		invite : {
+			accept : function(id){
+        		$.ajax({type: 'get', url: '{%url ajax_work_invite_accept %}', data:{'id': id}});
+        		$('#id_invitation_' + id).remove();
+        	},
+			reject : function(id){
+        		$.ajax({type: 'get', url: '{%url ajax_work_invite_reject %}', data:{'id': id}});
+        		$('#id_invitation_' + id).remove();
+        	},
+		},
+	},
+};
 </script>
 {% endblock %}
