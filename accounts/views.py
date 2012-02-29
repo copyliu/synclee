@@ -166,11 +166,11 @@ def reset_psw(request):
             tmp.save()
             
             #发送邮件
-            print tmp_psw
-            url = r"http://127.0.0.1:8000/accounts/reset/confirm/%s/" % tmp_psw
+            url = r"http://" + request.get_host() + "/reset/confirm/%s/" % tmp_psw
             tr = Thread(target = user.email_user,
                         args = ("重置密码", '请点击 %s' % url))
             tr.start()
+            
             
             return render_to_response('accounts/reset_psw_sended.html', {})
         else:
