@@ -239,15 +239,6 @@ $(document).ready(function(){
 })
 
 var View = {
-	apply_for : function(id, applyer, role, reason){
-		return '<div class="alert alert-block alert-error fade in" id = "id_apply_'+ id +'"> <h4 class="alert-heading">申请加入!</h4>' +
-'<p><B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
-'希望作为' + role + '参加作品的创作</B>' +
-'<li>' + reason + '</li> </p>' +
-'<p><input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
-'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')"> </p>' +
-				'</div>'
-	},
 	Element : {
     text : function(t_url, content, title){
       return '<div class="row element"><a href="' + t_url +'">'+
@@ -307,18 +298,6 @@ var Controller = {
 		    },
         });
     	$('#id_score').modal('hide');
-	},
-	notice : {
-		apply : {
-			accept :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_accept', 'id': id}});
-				$('#id_apply_' + id).remove();
-			},
-			reject :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_reject', 'id': id}});
-				$('#id_apply_' + id).remove();
-			},
-		},
 	},
     follow : function(btn, wid, action){
         $.ajax({type: 'get', url: '{%url ajax_work_follow %}', data:{'wid': wid, 'action': action}, 
