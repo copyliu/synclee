@@ -58,9 +58,11 @@ def show_work(request, work_id):
     except:
         elements = None
     
+    participated = Invitation.objects.filter(work = work, invite_status = 'accept')
+    participated = [i.invited for i in participated]
     followed = (request.user in work.follower.all()) or request.user == work.author
     history = WorkHistory.objects.filter(work = work)[:10]
-    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'history':history}
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'history':history, 'participated':participated}
     
     context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
     context['score_count'] = WorkScore.objects.filter(work=work).count()
@@ -192,13 +194,3 @@ def list_works_history(request, work_id):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works_history.html', {'history' : history, 'paginator' : paginator})
-
-@login_required
-def work_score(request):
-    score = int(request.POST.get('score', '0'))
-    work_id = request.POST.get('work_id', '-1')
-    work = get_object_or_404(Work, pk=int(work_id))
-    
-    tmp = WorkScore.objects.get_or_create(work = work, user = request.user)[0]
-    tmp.score = score
-    tmp.save()

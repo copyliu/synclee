@@ -262,6 +262,17 @@ var Controller = {
             url : '{%url ajax_user_invite %}', 
             type: 'post', 
             data: data,
+        	success: function(data){
+		    	var data = JSON.parse(data, status);
+		        if (data.state != 'done') {
+					$('#alertModal .modal-body p').text(data.error);
+		            $('#alertModal').modal({'show': true});
+				}
+		    },
+		    error: function(jqXHR, textStatus){
+		    	$('#alertModal .modal-body p').text('something wrong');
+                $('#alertModal').modal({'show': true});
+		    },
         });
         $('#id_invite').modal('hide');
     },

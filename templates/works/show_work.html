@@ -28,7 +28,11 @@
               <td><span class="label label-info">参与人</span></td>
               <td>
               {% for p in participated %}
-              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a></li>
+              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a>
+              	{% if work.author ==  request.user%}
+              	<a class="class_work_quit" data-uid="{{p.id}}">&times;</a>
+              	{% endif %}
+              </li>
               {% endfor %}
               </td>
             </tr>
@@ -47,7 +51,11 @@
               {% if not involved %}
               <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
               {% else %}
-              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a></td>
+              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a>
+              {% if work.author !=  request.user%}
+              	<button class="btn primary class_work_quit" data-uid="{{request.user.id}}">退出</button>
+              {% endif %}
+              </td>
 	            {% endif %}
 	            
 	            {% if followed and not involved%}
@@ -89,11 +97,13 @@
     <a class="close" data-dismiss="modal">&times;</a>
     <h3>加入作品</h3>
   </div>
+  <form method="post" action="{%url ajax_work_grade %}">
+        {% csrf_token %}
   <div class="modal-body">
 	<div class="clearfix">
       <label for="normalSelect">选择角色：</label>
 	  <div class="input">
-	    <select name="apply_role" id="id_apply_role">
+	    <select name="role" id="id_apply_role">
 	      <option value = "image">画师</option>
 		  <option value = "word">写手</option>
           <option value = "other">其他</option>
@@ -103,14 +113,16 @@
 	<div class="clearfix">
       <label for="textarea">申请理由：</label>
 	  <div class="input">
-	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5"></textarea>
+	    <textarea class="large" id="id_apply_reason" name="reason" rows="5"></textarea>
       </div>
       <span class="help-block">最多300个字符</span>
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.apply_for()">Submit</a>
+  	<input type="hidden" name="uid" value="{{work.id}}" />
+    <button class="btn btn-success">发送申请</button>
   </div>
+  </form>
 </div>
 
 <div class="modal hide fade in" id="alertModal">
@@ -131,18 +143,32 @@
     <a class="close" data-dismiss="modal">&times;</a>
     <h3>作品评分</h3>
   </div>
+  <form method="post" action="{%url ajax_user_apply %}">
+        {% csrf_token %}
   <div class="modal-body">
 	<div class="control-group">
     <label class="control-label" for="normalSelect">选择评分：</label>
 	  <div class="input">
-	    <select name="normalSelect" id="id_score_score">
-      </select>
+	    <select name="score" id="id_score_score">
+	    	<option value = "1">1</option>
+	    	<option value = "2">2</option>
+	    	<option value = "3">3</option>
+	    	<option value = "4">4</option>
+	    	<option value = "5">5</option>
+	    	<option value = "6">6</option>
+	    	<option value = "7">7</option>
+	    	<option value = "8">8</option>
+	    	<option value = "9">9</option>
+	    	<option value = "10">10</option>
+      	</select>
     </div>
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.score()">Submit</a>
+    <input type="hidden" name="uid" value="{{work.id}}" />
+    <button class="btn btn-success">Submit</button>
   </div>
+  </form>
 </div>
 {% endblock %}
 
@@ -159,6 +185,17 @@ $(document).ready(function(){
         var action = $(this).data('action');
         Controller.follow($(this), wid, action);
     });
+    $('#id_apply form').submit(function(e){
+        var data = $(this).serialize();
+        Controller.apply_for(data);
+        e.preventDefault();
+    });
+    $('#id_score form').submit(function(e){
+        var data = $(this).serialize();
+        Controller.score(data);
+        e.preventDefault();
+    });
+
 	{%for i in apply_set%}
 	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
 	{% endfor %}
@@ -177,13 +214,28 @@ $(document).ready(function(){
     $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
-//   
-  // for (i=1 ; i<=10; i++)
-    // if (i == {{score}})
-      // $('#id_score_score').append('<option value = "' + i + '" selected="selected">' + i + '</option>');
-    // else
-      // $('#id_score_score').append('<option value = "' + i + '">' + i + '</option>');
-//       
+     
+	$('#id_score_score>option[value={{score}}]').attr('selected', 'selected');
+	
+	$('.class_work_quit').click(function(e){
+		var answer = confirm('确定？');
+		if (answer) {
+        	var uid = $(this).data('uid');
+        	$.ajax({type: 'get', url: '{%url ajax_user_quit %}', data:{'uid': uid, 'wid': {{work.id}}},
+		    	success: function(data){
+					var data = JSON.parse(data);
+				    if (data.state != 'done') {
+						$('#alertModal .modal-body p').text(data.error);
+				        $('#alertModal').modal({'show': true});
+					}
+				},
+				error: function(jqXHR, textStatus){
+					$('#alertModal .modal-body p').text('something wrong');
+		            $('#alertModal').modal({'show': true});
+				},
+		    });
+        }
+    });
 })
 
 var View = {
@@ -218,16 +270,43 @@ var View = {
   },
 };
 var Controller = {
-	apply_for : function(){
-		var role = $('#id_apply_role').val();
-		var reason = $('#id_apply_reason').val();
-		$.ajax({ type: 'post', url : '{%url ajax_apply_work %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
-		$('#id_apply').modal('hide');
+	apply_for : function(data){
+		$.ajax({
+            url : '{%url ajax_user_apply %}', 
+            type: 'post', 
+            data: data,
+        	success: function(data){
+		    	var data = JSON.parse(data, status);
+		        if (data.state != 'done') {
+					$('#alertModal .modal-body p').text(data.error);
+		            $('#alertModal').modal({'show': true});
+				}
+		    },
+		    error: function(jqXHR, textStatus){
+		    	$('#alertModal .modal-body p').text('something wrong');
+                $('#alertModal').modal({'show': true});
+		    },
+        });
+        $('#id_apply').modal('hide');
 	},
-	score : function(){
-    var score = $('#id_score_score').val();
-    $.ajax({ type: 'post', url : '{%url work_score %}', data: {'score': score, 'work_id': "{{work.id}}"}});
-    $('#id_score').modal('hide');
+	score : function(data){
+		$.ajax({
+            url : '{%url ajax_work_grade %}', 
+            type: 'get', 
+            data: data,
+        	success: function(data){
+		    	var data = JSON.parse(data, status);
+		        if (data.state != 'done') {
+					$('#alertModal .modal-body p').text(data.error);
+		            $('#alertModal').modal({'show': true});
+				}
+		    },
+		    error: function(jqXHR, textStatus){
+		    	$('#alertModal .modal-body p').text('something wrong');
+                $('#alertModal').modal({'show': true});
+		    },
+        });
+    	$('#id_score').modal('hide');
 	},
 	notice : {
 		apply : {
