@@ -39,45 +39,6 @@ def register(request):
     return TemplateResponse(request, 'accounts/register.html', {'form': form})
 
 
-@login_required
-def notice(request):
-    action = request.POST.get('type', '')
-    if action == "invite_accept":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.invited.id == request.user.id:
-                invitation.invite_status = 'accept'
-                invitation.save()
-                SkillManager.addexp(request.user, invitation.work.category, 5)
-        except: return HttpResponse("something wrong")
-    elif action == "invite_reject":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.invited.id == request.user.id:
-                invitation.invite_status = 'reject'
-                invitation.save()
-        except: return HttpResponse("something wrong")
-    elif action == "apply_accept":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.work.author.id == request.user.id:
-                invitation.invite_status = 'accept'
-                invitation.save()
-                SkillManager.addexp(invitation.invited, invitation.work.category, 5)
-        except: return HttpResponse("something wrong")
-    elif action == "apply_reject":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.work.author.id == request.user.id:
-                invitation.invite_status = 'reject'
-                invitation.save()
-        except: return HttpResponse("something wrong")
-    return HttpResponse("success")
-
 def profile(request, username):
     user = get_object_or_404(User, username=username)
 
