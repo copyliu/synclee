@@ -180,5 +180,4 @@ if os.path.join(PROJECT_ROOT, 'tools') not in sys.path:
 DEFAULT_FROM_EMAIL = 'webmailer@synclee.net'
 EMAIL_HOST = 'smtp.exmail.qq.com'
 EMAIL_PORT = 25
-EMAIL_HOST_PASSWORD = '4mB@zV4dsnr5'
 EMAIL_HOST_USER = 'webmailer@synclee.net'
