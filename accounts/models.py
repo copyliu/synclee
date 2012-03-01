@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     intro = models.TextField()
     location = models.CharField(max_length = 50, blank = True)
     true_name = models.CharField(max_length = 14, blank = True)
-    email = models.EmailField()
+    #email = models.EmailField()
 
 def create_user_profile(sender = None, instance = None, created = False, **kwargs):
     if created:

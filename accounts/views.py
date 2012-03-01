@@ -84,14 +84,13 @@ def _set_profile(request, profile):
         form = UserProfileForm(request.POST)
         if form.is_valid():
             profile.true_name = form.cleaned_data['true_name']
-            profile.email = form.cleaned_data['email']
             profile.location = form.cleaned_data['location']
             profile.intro = form.cleaned_data['intro']
             if request.FILES.get('avatar', ''):
                 profile.avatar = request.FILES.get('avatar', '')
                 profile.avatar.name = str(request.user.id)+'.'+profile.avatar.name.split('.')[-1]
             profile.save()
-            return HttpResponseRedirect('/accounts/settings/profile/')
+            return HttpResponseRedirect('/settings/profile/')
         else:
             return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':'profile'})
     else:
