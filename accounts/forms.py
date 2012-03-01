@@ -10,7 +10,7 @@ from django.forms.util import ErrorList
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(error_messages = {'required': u'用户名或邮箱不能为空'}, max_length = 30)
-    password = forms.CharField(error_messages = {'required': u'密码不能为空'})
+    password = forms.CharField(widget=forms.PasswordInput, error_messages = {'required': u'密码不能为空'})
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -49,8 +49,8 @@ class LoginForm(AuthenticationForm):
 class RegistrationForm(forms.Form):
     email = forms.EmailField()
     username = forms.RegexField(error_messages = {'required': u'用户名不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是14个字符', 'invalid':u'用户名请以字母开头'}, regex = '^[a-zA-Z]\w*$', min_length = 6, max_length = 14)
-    password = forms.CharField(error_messages = {'required': u'密码不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是16个字符'}, min_length = 6, max_length = 16)
-    confirm_password = forms.CharField(error_messages = {'required': u'确认密码不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是16个字符'}, max_length = 16)
+    password = forms.CharField(widget=forms.PasswordInput, error_messages = {'required': u'密码不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是16个字符'}, min_length = 6, max_length = 16)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, error_messages = {'required': u'确认密码不能为空', 'min_length':u'至少是6个字符', 'max_length':u'最多是16个字符'}, max_length = 16)
     
     def clean_email(self):
         email = self.cleaned_data['email']
