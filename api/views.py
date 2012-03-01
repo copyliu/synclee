@@ -105,7 +105,7 @@ def user_invite_manage(request):
     tem = _my_assert(direction in ['apply', 'invite'], 'wrong direction')
     if tem : return tem
     
-    tem = _my_assert((type == 'invite' and invitation.invited == request.user) or (direction == 'apply' and invitation.work.author == request.user), 'no pri')
+    tem = _my_assert((direction == 'invite' and invitation.invited == request.user) or (direction == 'apply' and invitation.work.author == request.user), 'no pri')
     if tem : return tem
     tem = _my_assert(invitation.invite_status == "noanswer", 'answered')
     if tem : return tem
