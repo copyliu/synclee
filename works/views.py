@@ -143,7 +143,8 @@ def show_element(request, element_id):
     return TemplateResponse(request, 'works/show_element.html', {'element' : element, 'nav' : nav})
 
 def list_works(request):
-    works = Work.objects.all()
+    works = Work.objects.select_related().all()
+
     #分页
     paginator = Paginator(works, 1)
     page = request.GET.get('page', 1)

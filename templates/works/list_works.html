@@ -21,7 +21,12 @@
         <img src="/media/{{work.cover|default:'no_cover.gif'}}" alt="{{work.name}}" width="160" height="120">
       </a></td>
       <td width="470"><a href="{%url show_work work.id %}">{{work.name}}</a><p>{{work.intro}}</p></td>
-      <td><span class="label label-important">主创</span> &nbsp;<a href="/accounts/profile/{{work.author}}">{{work.author}}</a></td>
+      <td>
+          <span class="label label-important">主创</span> &nbsp;<a href="/accounts/profile/{{work.author}}">{{work.author}}</a><br/>
+          {% for v in work.invitation.all %}
+          <span class="label label-success"></span> &nbsp;<a href="/accounts/profile/{{v.invited.username}}">{{v.invited.username}}</a><br/>
+          {% endfor %}
+      </td>
       <td></td>
     </tr>
     {% endfor %}

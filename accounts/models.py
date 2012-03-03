@@ -54,7 +54,7 @@ class Invitation(models.Model):
         (u'accept', u'已接受'),
         (u'reject', u'已拒绝')
     )
-    work = models.ForeignKey(Work, related_name='invitaion')
+    work = models.ForeignKey(Work, related_name='invitation')
     invited = models.ForeignKey(User, related_name='invited')
     role = models.CharField(max_length=8, choices=SKILL_CHOICES)
     reason = models.CharField(max_length = 300)
