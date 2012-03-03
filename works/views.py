@@ -160,8 +160,7 @@ def work_rank(request):
     works = Work.objects.all()
     works = filter(lambda work: WorkScore.objects.filter(work=work).count() > 1, works)
     works = sorted(works, key = lambda work: WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0, reverse = True)
-    for i in works:
-        print i.aver_score()
+    
     #分页
     paginator = Paginator(works, 1)
     page = request.GET.get('page', 1)
@@ -170,7 +169,7 @@ def work_rank(request):
     except:
         page = 1
     works = paginator.page(page)
-    #print page,"+++",works.object_list[0].aver_score()
+    
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/work_rank.html', {'works' : works, 'paginator' : paginator})

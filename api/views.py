@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, get_object_or_404, render_to_response, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 from works.models import Work, WorkScore
-from accounts.models import Invitation
+from accounts.models import Invitation, SKILL_CHOICES_MAP
 from notification import models as notification
 from tools import SkillManager
 import json
@@ -54,6 +55,7 @@ def user_invite(request):
     if tem : return tem
     tem = _my_assert(role in ["image", "word", "other"], 'wrong role')
     if tem : return tem
+    role = SKILL_CHOICES_MAP[role]
     
     reason = request.POST.get('reason', '')
     
@@ -78,6 +80,7 @@ def user_apply(request):
     if tem : return tem
     tem = _my_assert(role in ["image", "word", "other"], 'wrong role')
     if tem : return tem
+    role = SKILL_CHOICES_MAP[role]
     
     reason = request.POST.get('reason', '')
     
@@ -167,4 +170,7 @@ def work_grade(request):
     tmp = WorkScore.objects.get_or_create(work = work, user = request.user)[0]
     tmp.score = score
     tmp.save()
-    return HttpResponse(json.dumps({'state': 'done',}))
+    
+    average_score = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
+    score_count = WorkScore.objects.filter(work=work).count()
+    return HttpResponse(json.dumps({'state': 'done', 'average_score': average_score, 'score_count': score_count}))

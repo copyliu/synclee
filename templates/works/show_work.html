@@ -42,7 +42,7 @@
             </tr>
             <tr>
               <td width="60"><span class="label label-info">评分</span></td>
-              <td>{{average_score}}&nbsp;&nbsp;<small>已有{{score_count}}人评分</small>
+              <td><span id = "id_average_score">{{average_score}}</span>&nbsp;&nbsp;<small>已有<span id = "id_score_count">{{score_count}}</span>人评分</small>
               {% if request.user.is_authenticated %}
               <input type="submit" class="btn primary" id = "id_score_btn" data-toggle="modal" href = "#id_score" data-backdrop="true" data-keyboard="true" value="我来"></td>
               {% endif %}
@@ -285,17 +285,20 @@ var Controller = {
             url : '{%url ajax_work_grade %}', 
             type: 'get', 
             data: data,
-        	success: function(data){
-		    	var data = JSON.parse(data, status);
-		        if (data.state != 'done') {
-					$('#alertModal .modal-body p').text(data.error);
+            success: function(data){
+              var data = JSON.parse(data, status);
+              if (data.state != 'done') {
+                $('#alertModal .modal-body p').text(data.error);
 		            $('#alertModal').modal({'show': true});
-				}
-		    },
-		    error: function(jqXHR, textStatus){
-		    	$('#alertModal .modal-body p').text('something wrong');
-                $('#alertModal').modal({'show': true});
-		    },
+				      } else {
+                $('#id_average_score').text(data.average_score);
+                $('#id_score_count').text(data.score_count);
+              }
+		        },
+		        error: function(jqXHR, textStatus){
+		    	     $('#alertModal .modal-body p').text('something wrong');
+               $('#alertModal').modal({'show': true});
+		        },
         });
     	$('#id_score').modal('hide');
 	},

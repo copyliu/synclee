@@ -32,7 +32,11 @@ SKILL_CHOICES = (
 #    ('onlook',u'围观'),
     ('other', u'其他'),
 )
-
+SKILL_CHOICES_MAP = {
+    'word': u'写手',
+    'image': u'画师',
+    'other': u'其他',
+}
 class Skill(models.Model):
     user = models.ForeignKey(User, related_name='skills')
     skill = models.CharField(max_length=8, choices=SKILL_CHOICES)

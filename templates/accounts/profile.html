@@ -46,7 +46,7 @@
                     {% for work in profile.user.work_set.all%}
                     <div class="span2">
                         <li>
-                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover}}" width="100px" height="100px"> </a>
+                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
                         </li>
                         <li>
                             <a href="{%url show_work work.pk%}"> {{work.name}} </a>
@@ -67,7 +67,7 @@
                     {% for work in followed %}
                     <div class="span2">
                         <li>
-                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover}}" width="100px" height="100px"> </a>
+                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
                         </li>
                         <li>
                             <a href="{%url show_work work.pk%}"> {{work.name}} </a>
