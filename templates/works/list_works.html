@@ -24,7 +24,9 @@
       <td>
           <span class="label label-important">主创</span> &nbsp;<a href="/accounts/profile/{{work.author}}">{{work.author}}</a><br/>
           {% for v in work.invitation.all %}
+          {%if v.invite_status == 'accept'%}
           <span class="label label-success"></span> &nbsp;<a href="/accounts/profile/{{v.invited.username}}">{{v.invited.username}}</a><br/>
+          {%endif%}
           {% endfor %}
       </td>
       <td></td>

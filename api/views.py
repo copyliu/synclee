@@ -55,7 +55,6 @@ def user_invite(request):
     if tem : return tem
     tem = _my_assert(role in ["image", "word", "other"], 'wrong role')
     if tem : return tem
-    role = SKILL_CHOICES_MAP[role]
     
     reason = request.POST.get('reason', '')
     
@@ -63,9 +62,9 @@ def user_invite(request):
     tem = _my_assert(invitation == 0, 'applyed or invited')
     if tem : return tem
     
-    invitation = Invitation.objects.create(work= work, invited= user,
+    invitation = Invitation.objects.create(work= work, invited= user, role = role,
                                       reason = reason, invite_status = 'noanswer')
-    notice = notification.send([user,], "invite_user", {"notice_label": "invite_user", "work": work, "message": reason, "user": request.user, "role":role, "id":invitation.id})
+    notice = notification.send([user,], "invite_user", {"notice_label": "invite_user", "work": work, "message": reason, "user": request.user, "role":SKILL_CHOICES_MAP[role], "id":invitation.id})
     invitation.notice = notice  
     invitation.save()
     return HttpResponse(json.dumps({'state': 'done',}))
@@ -80,7 +79,6 @@ def user_apply(request):
     if tem : return tem
     tem = _my_assert(role in ["image", "word", "other"], 'wrong role')
     if tem : return tem
-    role = SKILL_CHOICES_MAP[role]
     
     reason = request.POST.get('reason', '')
     
@@ -88,9 +86,9 @@ def user_apply(request):
     tem = _my_assert(invitation == 0, 'applyed or invited')
     if tem : return tem
     
-    invitation = Invitation.objects.create(work= work, invited= request.user,
+    invitation = Invitation.objects.create(work= work, invited= request.user, role = role,
                                       reason = reason, invite_status = 'noanswer')
-    notice = notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "message": reason, "user": request.user, "role":role, "id":invitation.id})
+    notice = notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "message": reason, "user": request.user, "role":SKILL_CHOICES_MAP[role], "id":invitation.id})
     invitation.notice = notice  
     invitation.save()
     return HttpResponse(json.dumps({'state': 'done',}))
