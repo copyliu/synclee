@@ -22,10 +22,10 @@
       </a></td>
       <td width="470"><a href="{%url show_work work.id %}">{{work.name}}</a><p>{{work.intro}}</p></td>
       <td>
-          <span class="label label-important">主创</span> &nbsp;<a href="/accounts/profile/{{work.author}}">{{work.author}}</a><br/>
+          <span class="label label-important">主创</span> &nbsp;<a href="{% url profile work.author.username%}">{{work.author.username}}</a><br/>
           {% for v in work.invitation.all %}
           {%if v.invite_status == 'accept'%}
-          <span class="label label-success"></span> &nbsp;<a href="/accounts/profile/{{v.invited.username}}">{{v.invited.username}}</a><br/>
+          <span class="label label-success"></span> &nbsp;<a href="{% url profile v.invited.username%}">{{v.invited.username}}</a><br/>
           {%endif%}
           {% endfor %}
       </td>

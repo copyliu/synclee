@@ -22,13 +22,13 @@
             </tr>
             <tr>
               <td><span class="label label-info">发起人</span></td>
-              <td><a href="/accounts/profile/{{work.author.username}}/">{{work.author.username}}</a></td>
+              <td><a href="{% url profile work.author.username%}">{{work.author.username}}</a></td>
             </tr>
             <tr>
               <td><span class="label label-info">参与人</span></td>
               <td>
               {% for p in participated %}
-              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a></li>
+              <li><a href="{% url profile p.username%}">{{p.username}}</a></li>
               {% endfor %}
               </td>
             </tr>
