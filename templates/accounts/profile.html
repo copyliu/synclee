@@ -35,6 +35,7 @@
         color: #009933;
     }
 </style>
+
 <div class="container">
     <div class="sidebar">
         <div class="well">
@@ -266,11 +267,17 @@ var Controller = {
 		    	var data = JSON.parse(data, status);
 		        if (data.state != 'done') {
 					$('#alertModal .modal-body p').text(data.error);
+					$('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                    $('#alertModal .modal-footer a').text("确定");
 		            $('#alertModal').modal({'show': true});
-				}
+				} else {
+                    alert("invite done");
+                }
 		    },
 		    error: function(jqXHR, textStatus){
 		    	$('#alertModal .modal-body p').text('something wrong');
+		    	$('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
                 $('#alertModal').modal({'show': true});
 		    },
         });

@@ -61,11 +61,17 @@ $(document).ready(function(){
 		    	var data = JSON.parse(data);
 		        if (data.state != 'done') {
 					$('#alertModal .modal-body p').text(data.error);
+          $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
 		            $('#alertModal').modal({'show': true});
+				} else {
+					$('#id_invitation_' + id).remove();
 				}
 		    },
 		    error: function(jqXHR, textStatus){
 		    	$('#alertModal .modal-body p').text('something wrong');
+          $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
                 $('#alertModal').modal({'show': true});
 		    },
         });
@@ -88,6 +94,9 @@ $(document).ready(function(){
            $(this).parent().next().show();
        }
    }) 
+   {%for i in answered%}
+   	$('#id_invitation_{{i}}').remove();
+   {%endfor%}
 });
 </script>
 {% endblock %}

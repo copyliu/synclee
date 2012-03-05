@@ -121,6 +121,8 @@ def _set_notification(request):
     else:
         user  = request.user
         notices = notification.Notice.objects.notices_for(user)
+        answered = [i.invitation_set.all()[0].id for i in notices 
+                        if i.invitation_set.all()[0].invite_status != "noanswer"]
 #        import re
 #        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
 #        for i in xrange(len(notices)):
@@ -131,7 +133,7 @@ def _set_notification(request):
 #                    statue = Invitation.objects.get(pk=int(id[0])).invite_status
 #                
 #                notices[i].message = Template(notices[i].message).render(Context({"statue":statue}))
-        return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
+        return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification', 'answered':answered})
 
 def _set_skill(request, profile):
     skill_list = {}
