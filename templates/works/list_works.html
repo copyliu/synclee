@@ -10,8 +10,8 @@
     <tr>
       <th>封面</th>
       <th>企划名称</th>
-      <th>创建人</th>
-      <th>合作者</th>
+      <th>参与人</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -25,7 +25,7 @@
           <span class="label label-important">主创</span> &nbsp;<a href="{% url profile work.author.username%}">{{work.author.username}}</a><br/>
           {% for v in work.invitation.all %}
           {%if v.invite_status == 'accept'%}
-          <span class="label label-success"></span> &nbsp;<a href="{% url profile v.invited.username%}">{{v.invited.username}}</a><br/>
+          <span class="label label-success">{% if v.role == 'image'%}画师{%endif%}{% if v.role == 'other'%}围观{%endif%}</span> &nbsp;<a href="{% url profile v.invited.username%}">{{v.invited.username}}</a><br/>
           {%endif%}
           {% endfor %}
       </td>

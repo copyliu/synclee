@@ -31,13 +31,13 @@ ul, ol, li { list-style: none; }
 
 body {
     margin:0px; padding:0px;
-    background:#ccc;
-    .images(bg-body, png);
+    //background:#ccc;
+    .images(bg_fhd, jpg);
 }
 a {
     color: #c29864;
     text-decoration: none;
-    .transition;
+    //.transition;
 }
 a:hover {
     text-decoration: none;
@@ -50,6 +50,55 @@ header {
 }
 hr {margin:10px 0 10px; border-color:#e3d4c1;}
 .title {font-size:16px; color:#bf935b;}
+.panel-title {
+    color: #3A87AD;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 16px;
+    padding: 10px 10px 10px;
+    border-bottom: 1px solid #DDD;
+    background-color: #FAFAFA;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), color-stop(25%, white), to(whiteSmoke));
+    background-image: -webkit-linear-gradient(white, white 25%, whiteSmoke);
+    background-image: -moz-linear-gradient(top, white, white 25%, whiteSmoke);
+    background-image: -ms-linear-gradient(white, white 25%, whiteSmoke);
+    background-image: -o-linear-gradient(white, white 25%, whiteSmoke);
+    background-image: linear-gradient(white, white 25%, whiteSmoke);
+    background-repeat: no-repeat;
+}
+.work-title {
+    margin-right: 20px;
+    display: block;
+    border-bottom: 1px solid #E5E5E5;
+    a {
+        color: #3A87AD;
+    }
+    a:hover{
+        color: #F89406;
+        text-decoration: none;
+    }
+}
+
+.work {
+    height: 65px;
+    border-bottom: 1px #ccc solid;
+    margin: 6px 0px;
+    .thumbnail{
+        width:50px; float: left;
+        margin-left:5px;
+    }
+
+    article{
+        margin-left:80px;
+        h6 {
+            border-bottom: 1px #ccc solid;
+            margin-right:20px;
+        }
+        p {
+            margin-top: 5px;
+        }        
+    }
+}
 
 .content{
     article {
@@ -58,6 +107,11 @@ hr {margin:10px 0 10px; border-color:#e3d4c1;}
         }
     }
 
+}
+
+.hot-works, .hot-tags{
+    border: 1px solid #DDD;
+    .corners(3px);
 }
 
 .element {
@@ -80,34 +134,34 @@ fieldset{
 
 #id_story_upload { display:inline;}
 .uploadify:hover .uploadifyButton {
-	background-color: #808080;
+    background-color: #808080;
 }
 .uploadifyQueueItem {
-	background-color: #F5F5F5;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	font: 11px Verdana, Geneva, sans-serif;
-	margin-top: 5px;
-	max-width: 350px;
-	padding: 10px;
+    background-color: #F5F5F5;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font: 11px Verdana, Geneva, sans-serif;
+    margin-top: 5px;
+    max-width: 350px;
+    padding: 10px;
 }
 .uploadifyError {
-	background-color: #FDE5DD !important;
+    background-color: #FDE5DD !important;
 }
 .uploadifyQueueItem .cancel {
-	float: right;
+    float: right;
 }
 .uploadifyQueue .completed {
-	background-color: #E5E5E5;
+    background-color: #E5E5E5;
 }
 .uploadifyProgress {
-	background-color: #E5E5E5;
-	margin-top: 10px;
-	width: 100%;
+    background-color: #E5E5E5;
+    margin-top: 10px;
+    width: 100%;
 }
 .uploadifyProgressBar {
-	background-color: #0099FF;
-	height: 3px;
-	width: 1px;
+    background-color: #0099FF;
+    height: 3px;
+    width: 1px;
 }

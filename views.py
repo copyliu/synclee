@@ -10,7 +10,12 @@ from works.models import Work
 
 def home(request):
     works = Work.objects.all()
-    return TemplateResponse(request, 'home.html', {'works': works})
+    hot_works = Work.objects.all()
+    ctx = {
+        'works' : works,
+        'hot_works' : hot_works
+    }
+    return TemplateResponse(request, 'home.html', ctx)
 
 def unread(request):
     notices = Notice.objects.notices_for(request.user).filter(unseen=1).count()
