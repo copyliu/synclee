@@ -36,14 +36,32 @@
             </div>
             <div class="word-works panel">
                 <div class="panel-title">图片企划 Ranking</div>
+                <div class="row">
+                    <div class="span4">
+                        <div class="work">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                        </div>
+                    </div>
+                    <div class="span4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <div class="work">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="span3" style="width: 270px;">
-            <div>
+            <div class="login-panel panel">
                 <form action="{%url login %}" method="post">
                     {% csrf_token %}
-                    <input name="username" type="text" class="input-medium" placeholder="用户名">
-                    <input name="password" type="password" class="input-medium" placeholder="密码">
+                    <input name="username" type="text" placeholder="用户名">
+                    <input name="password" type="password" placeholder="密码">
                     <button type="submit" class="btn">
                         <i class="icon-user " style="margin-top:2px"></i>登陆
                     </button>
@@ -52,7 +70,7 @@
                     </a>
                 </form>
             </div>
-            <div class="hot-works">
+            <div class="hot-works panel">
                 <div class="panel-title">热门企划 Ranking</div>
                 <article>
                     {% for v in hot_works %}
@@ -61,29 +79,15 @@
                         <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
                     </div>
                     {% endfor %}
-                    </ul>
                 </article>
             </div>
             <div class="banner">
                 
             </div>
-            <div class="hot-tags">
+            <div class="hot-tags panel">
                 <div class="panel-title">今日热门标签 Tags</div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="span3">
-            <ul class="media-grid">
-                <li><a href="#"><img src="/static/images/work_1_cover_3.jpg.420x420_q85.jpg" width="150" /></a></li>
-            </ul>
-        </div>
-        <div class="span10">
-          {% for work in works %}
-          <div><a href="{%url show_work work.id %}">{{work.name}}</a></div>
-          {% endfor %}
-        </div>
-        <div class="span3">111</div>
     </div>
 </div>
 
