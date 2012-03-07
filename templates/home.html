@@ -16,48 +16,33 @@
             <div class="word-works panel">
                 <div class="panel-title">文字企划 Ranking</div>
                 <div class="row">
-                    <div class="span4">
-                        <div class="work">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
-                        </div>
-                    </div>
-                    <div class="span4">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="span8">
-                        <div class="work">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                        {% for v in works.word %}
+                        <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
             <div class="word-works panel">
                 <div class="panel-title">图片企划 Ranking</div>
                 <div class="row">
-                    <div class="span4">
-                        <div class="work">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
-                        </div>
-                    </div>
-                    <div class="span4">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="span8">
-                        <div class="work">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                        {% for v in works.image %}
+                        <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
         <div class="span3" style="width: 270px;">
             <div class="login-panel panel">
+                <h4>欢迎来到新岚，请登录</h4><br/>
                 <form action="{%url login %}" method="post">
                     {% csrf_token %}
                     <input name="username" type="text" placeholder="用户名">
@@ -74,7 +59,7 @@
                 <div class="panel-title">热门企划 Ranking</div>
                 <article>
                     {% for v in hot_works %}
-                    <div class="work">
+                    <div class="work-small">
                         <a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
                         <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
                     </div>

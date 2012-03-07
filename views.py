@@ -9,7 +9,11 @@ from notification.models import Notice
 from works.models import Work
 
 def home(request):
-    works = Work.objects.all()
+    works = {
+        'all' : Work.objects.all(),
+        'word' : Work.objects.filter(category='word')[0:5],
+        'image' : Work.objects.filter(category='image')[0:5],
+             }
     hot_works = Work.objects.all()
     ctx = {
         'works' : works,
