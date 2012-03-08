@@ -122,7 +122,7 @@ def _set_notification(request):
         user  = request.user
         notices = notification.Notice.objects.notices_for(user)
         answered = [i.invitation_set.all()[0].id for i in notices 
-                        if i.invitation_set.all()[0].invite_status != "noanswer"]
+                        if i.invitation_set.all() and i.invitation_set.all()[0].invite_status != "noanswer"]
 #        import re
 #        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
 #        for i in xrange(len(notices)):
