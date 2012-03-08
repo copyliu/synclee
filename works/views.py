@@ -10,16 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
-
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from notification import models as notification
 from tools import SkillManager
 
 from .models import Work, Element, WorkScore, WorkHistory
 from .forms import WorkForm
-
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from accounts.models import *
+from accounts.models import Invitation, Skill
 
 #import string, random
 
@@ -48,61 +46,6 @@ def add_work(request):
         form = WorkForm()
         return TemplateResponse(request, 'works/add_work.html', {'form': form})
 
-
-@login_required
-def apply_for(request):
-    action = request.POST.get('type', '')
-    if action == 'apply_for':
-        role = request.POST.get('role')
-        reason = request.POST.get('reason', '')
-        work_id = request.POST.get('work_id', '-1')
-        work = Work.objects.get(pk=int(work_id))
-        invitation = Invitation.objects.filter(work = work, invited = request.user).exclude(invite_status = 'reject').count()
-                 
-        if invitation > 0:
-            return HttpResponse("already_invite")
-        else:
-            invitation = Invitation.objects.create(work = work, invited = request.user,
-                                          skill = role, reason = reason,
-                                          invite_status = 'goingon')
-            notification.send([work.author,], "apply_work", {"notice_label": "apply_work", "work": work, "user": request.user, "role":role})
-            return HttpResponse("success")
-        
-@csrf_exempt
-def invite(request):
-    username = request.POST.get('username', '')
-    user = get_object_or_404(User, username=username)
-    work_id = request.POST.get('work_id', '-1')
-    role = request.POST.get('role', '-1')
-    reason = request.POST.get('reason', '')
-    try:
-        work = Work.objects.get(pk=int(work_id))
-        invitation = Invitation.objects.filter(work = work, invited = user).exclude(invite_status = 'reject').count()
-        
-        if invitation:
-            return HttpResponse("already_invite")
-        else:
-            invitation = Invitation.objects.create(work = work, invited = user,
-                                      reason = reason,
-                                      invite_status = 'noanswer')
-            notification.send([user,], "invite_work", {"notice_label": "invite_work", "work": work, "user": request.user, "role":role, "invited": user})
-    except Exception as e:
-        print e
-    return HttpResponse('success')
-
-
-@csrf_exempt
-@login_required
-def follow_work(request):
-    action = request.POST.get('action')
-    work = Work.objects.get(pk=request.POST.get('foid', 0))
-    if action == 'fo':
-        work.follower.add(request.user)
-        notification.send([work.author,], "follow_work", {"notice_label": "follow_work", "work": work, "user": request.user})
-        return HttpResponse("success")
-    elif action == 'unfo':
-        work.follower.remove(request.user)
-        return HttpResponse("success")
     
 def show_work(request, work_id):
     work = Work.objects.get(pk=work_id)
@@ -115,11 +58,11 @@ def show_work(request, work_id):
     except:
         elements = None
     
-    followed = (request.user in work.follower.all()) or request.user == work.author
     participated = Invitation.objects.filter(work = work, invite_status = 'accept')
     participated = [i.invited for i in participated]
+    followed = (request.user in work.follower.all()) or request.user == work.author
     history = WorkHistory.objects.filter(work = work)[:10]
-    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'participated':participated, 'history':history}
+    context = {'work': work, 'elements' : elements, 'involved': _involved(work, request.user), 'followed': followed, 'history':history, 'participated':participated}
     
     context['average_score'] = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
     context['score_count'] = WorkScore.objects.filter(work=work).count()
@@ -130,19 +73,6 @@ def show_work(request, work_id):
             context['score'] = WorkScore.objects.get(work = work, user = request.user).score
         except Exception as e:
             context['score'] = 0
-        
-        print context['score'], "!!!!"
-        if work.author.id != request.user.id:
-            skill = UserSkills.objects.filter(user = request.user)
-            skill_list = []
-            for i in skill:
-                for j in SKILL_CHOICES:
-                    if i.skill == j[0]:
-                        skill_list.append((i.skill, i.exp, j[1]))
-            context['skill_list'] = skill_list
-        else:
-            context['apply_set'] = Invitation.objects.filter(work = work, invite_status = 'goingon')
-            print len(context['apply_set']),"####"
     return TemplateResponse(request, 'works/show_work.html', context)
 
 def _involved(work, user):
@@ -213,7 +143,8 @@ def show_element(request, element_id):
     return TemplateResponse(request, 'works/show_element.html', {'element' : element, 'nav' : nav})
 
 def list_works(request):
-    works = Work.objects.all()
+    works = Work.objects.select_related().all()
+
     #分页
     paginator = Paginator(works, 1)
     page = request.GET.get('page', 1)
@@ -230,8 +161,7 @@ def work_rank(request):
     works = Work.objects.all()
     works = filter(lambda work: WorkScore.objects.filter(work=work).count() > 1, works)
     works = sorted(works, key = lambda work: WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0, reverse = True)
-    for i in works:
-        print i.aver_score()
+    
     #分页
     paginator = Paginator(works, 1)
     page = request.GET.get('page', 1)
@@ -240,7 +170,7 @@ def work_rank(request):
     except:
         page = 1
     works = paginator.page(page)
-    #print page,"+++",works.object_list[0].aver_score()
+    
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/work_rank.html', {'works' : works, 'paginator' : paginator})
@@ -264,13 +194,3 @@ def list_works_history(request, work_id):
     request.session['page'] = page
     
     return TemplateResponse(request, 'works/list_works_history.html', {'history' : history, 'paginator' : paginator})
-
-@login_required
-def work_score(request):
-    score = int(request.POST.get('score', '0'))
-    work_id = request.POST.get('work_id', '-1')
-    work = get_object_or_404(Work, pk=int(work_id))
-    
-    tmp = WorkScore.objects.get_or_create(work = work, user = request.user)[0]
-    tmp.score = score
-    tmp.save()

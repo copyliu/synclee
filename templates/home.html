@@ -1,35 +1,78 @@
 {% extends "base.html" %}
-
+{% load string_filter %}
 {% block title %}新岚 - 发起 合作 原创{% endblock %}
 
 {% block content %}
 
 <div class="container">
     <div class="row">
-      <div class="span8">
-        <h2>Welcome to synclee</h2>
-        <p>这里是创作与合作的崭新平台。<br/>
-        你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
-        新岚希望你在这里找回属于自己的创作乐趣。<br/>
-        <p><a href="{%url add_work %}"><button class="btn">开始创作</button></a></p>
-        </p>
-      </div>
-        <div class="span4">
-
+        <div class="span8">
+            <h2>Welcome to synclee</h2>
+            <p>这里是创作与合作的崭新平台。<br/>
+            你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
+            新岚希望你在这里找回属于自己的创作乐趣。<br/>
+            <p><a href="{%url add_work %}"><button class="btn">开始创作</button></a></p>
+            </p>
+            <div class="word-works panel">
+                <div class="panel-title">文字企划 Ranking</div>
+                <div class="row">
+                    <div class="span8">
+                        {% for v in works.word %}
+                        <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="word-works panel">
+                <div class="panel-title">图片企划 Ranking</div>
+                <div class="row">
+                    <div class="span8">
+                        {% for v in works.image %}
+                        <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
+                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="span3">
-            <ul class="media-grid">
-                <li><a href="#"><img src="/static/images/work_1_cover_3.jpg.420x420_q85.jpg" width="150" /></a></li>
-            </ul>
+        <div class="span3" style="width: 270px;">
+            <div class="login-panel panel">
+                <h4>欢迎来到新岚，请登录</h4><br/>
+                <form action="{%url login %}" method="post">
+                    {% csrf_token %}
+                    <input name="username" type="text" placeholder="用户名">
+                    <input name="password" type="password" placeholder="密码">
+                    <button type="submit" class="btn">
+                        <i class="icon-user " style="margin-top:2px"></i>登陆
+                    </button>
+                    <a class="btn btn-primary" href="{%url register %}">
+                        <i class="icon-ok icon-white"></i>注册
+                    </a>
+                </form>
+            </div>
+            <div class="hot-works panel">
+                <div class="panel-title">热门企划 Ranking</div>
+                <article>
+                    {% for v in hot_works %}
+                    <div class="work-small">
+                        <a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
+                        <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                    </div>
+                    {% endfor %}
+                </article>
+            </div>
+            <div class="banner">
+                
+            </div>
+            <div class="hot-tags panel">
+                <div class="panel-title">今日热门标签 Tags</div>
+            </div>
         </div>
-        <div class="span10">
-          {% for work in works %}
-          <div><a href="{%url show_work work.id %}">{{work.name}}</a></div>
-          {% endfor %}
-        </div>
-        <div class="span3">111</div>
     </div>
 </div>
 

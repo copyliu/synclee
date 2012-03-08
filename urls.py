@@ -4,14 +4,14 @@ from django.contrib import admin
 from notification import urls as notification
 
 import settings
-
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'views.home', name='home'),
-    url(r'^unread$', 'views.unread', name='unread'),
     url(r'^', include('tools.urls')),
-    url(r'^accounts/', include('accounts.urls')),
+    url(r'^', include('accounts.urls')),
+    url(r'^api/', include('api.urls')),
+    url(r'^unread$', 'views.unread', name='unread'),
     url(r'^works/', include('works.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -2,23 +2,24 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
+from django.db.transaction import commit_on_success
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect, get_object_or_404, render_to_response, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.paginator import Paginator
+from django.template import Template, Context
 
 from notification import models as notification
 from accounts.forms import RegistrationForm, UserProfileForm, GetPasswordForm, ResetPasswordForm
 from accounts.models import *
-from works.models import Work, TimeLines
 from django.http import Http404, HttpResponseRedirect
 
 import random, datetime, time
 from threading import Thread
-from tools import SkillManager
 
+@commit_on_success
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -28,7 +29,6 @@ def register(request):
             password = form.cleaned_data["password"]
             User.objects.create_user(username = username, email = email, password = password)
             
-            # django bug, must authenticate before login
             user = authenticate(username = username, password = password)
             login(request, user)
             
@@ -38,87 +38,35 @@ def register(request):
 
     return TemplateResponse(request, 'accounts/register.html', {'form': form})
 
-@csrf_exempt
-def follow(request):
-    action = request.POST.get('action')
-    user = User.objects.get(pk=request.POST.get('foid'))
-    if action == 'fo':
-        request.user.relationships.add(user)
-        notification.send([user,], "follow_user", {"notice_label": "follow_user", "user": request.user})
-        return HttpResponse("success")
-    elif action == 'unfo':
-        request.user.relationships.remove(user)
-        return HttpResponse("success")
-
-
-@login_required
-def notice(request):
-    action = request.POST.get('type', '')
-    if action == "invite_accept":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.invited.id == request.user.id:
-                invitation.invite_status = 'accept'
-                invitation.save()
-                SkillManager.addexp(request.user, invitation.work.category, 5)
-        except: return HttpResponse("something wrong")
-    elif action == "invite_reject":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.invited.id == request.user.id:
-                invitation.invite_status = 'reject'
-                invitation.save()
-        except: return HttpResponse("something wrong")
-    elif action == "apply_accept":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.work.author.id == request.user.id:
-                invitation.invite_status = 'accept'
-                invitation.save()
-                SkillManager.addexp(invitation.invited, invitation.work.category, 5)
-        except: return HttpResponse("something wrong")
-    elif action == "apply_reject":
-        try:
-            id = request.POST.get('id', '-1')
-            invitation = Invitation.objects.get(id = int(id))
-            if invitation.work.author.id == request.user.id:
-                invitation.invite_status = 'reject'
-                invitation.save()
-        except: return HttpResponse("something wrong")
-    return HttpResponse("success")
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
 
-    profile = UserProfiles.objects.get(user=user)
-    timeline = TimeLines.objects.filter(user__username=username)
+    profile = UserProfile.objects.get(user=user)
     #invited = Invitation.objects.filter(invited=user, invite_status='noanswer')
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
     joined = [i.work for i in joined]
-    skill_list = UserSkills.objects.filter(user = user, exp__gt = 0)
-            
+    #skill_list = Skill.objects.filter(user = user)
+    
     context = {
         'profile' : profile, 
-        'timeline' : timeline,
+        #'timeline' : timeline,
         #'invited' : invited,
         'joined' : joined,
-        'followed' : user.follow.all(),
-        'skill_list' : skill_list,
+        #'followed' : user.follow.all(),
+        #'skill_list' : skill_list,
     }
     
-    if request.user.is_authenticated():
-        if request.user.id == profile.user_id:
-            context['invitation'] = Invitation.objects.filter(invited = request.user, invite_status = 'noanswer')
+    #if request.user.is_authenticated():
+    #    if request.user.id == profile.user_id:
+    #        context['invitation'] = Invitation.objects.filter(invited = request.user, invite_status = 'noanswer')
     
     return TemplateResponse(request, 'accounts/profile.html', context)
 
 @csrf_exempt
 @login_required
 def settings(request, item):
-    profile = UserProfiles.objects.get(pk=request.user.id)
+    profile = UserProfile.objects.get(pk=request.user.id)
     
     if item == "profile":
         return _set_profile(request, profile)
@@ -136,14 +84,13 @@ def _set_profile(request, profile):
         form = UserProfileForm(request.POST)
         if form.is_valid():
             profile.true_name = form.cleaned_data['true_name']
-            profile.email = form.cleaned_data['email']
             profile.location = form.cleaned_data['location']
             profile.intro = form.cleaned_data['intro']
             if request.FILES.get('avatar', ''):
                 profile.avatar = request.FILES.get('avatar', '')
                 profile.avatar.name = str(request.user.id)+'.'+profile.avatar.name.split('.')[-1]
             profile.save()
-            return HttpResponseRedirect('/accounts/settings/profile/')
+            return HttpResponseRedirect('/settings/profile/')
         else:
             return TemplateResponse(request, 'accounts/setting_profile.html', {'profile':profile, 'form': form, 'active':'profile'})
     else:
@@ -174,23 +121,35 @@ def _set_notification(request):
     else:
         user  = request.user
         notices = notification.Notice.objects.notices_for(user)
-        return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification'})
+        answered = [i.invitation_set.all()[0].id for i in notices 
+                        if i.invitation_set.all() and i.invitation_set.all()[0].invite_status != "noanswer"]
+#        import re
+#        rex = re.compile('<a onclick = "Controller.notice.invite.accept\((\d+)\)">')
+#        for i in xrange(len(notices)):
+#            if notices[i].notice_type.label == u'invite_user':
+#                id = rex.findall(notices[i].message)
+#                statue = 'noanswer'
+#                if len(id):
+#                    statue = Invitation.objects.get(pk=int(id[0])).invite_status
+#                
+#                notices[i].message = Template(notices[i].message).render(Context({"statue":statue}))
+        return TemplateResponse(request, 'accounts/setting_notification.html', {'notices': notices, 'active':'notification', 'answered':answered})
 
 def _set_skill(request, profile):
     skill_list = {}
     for skill in SKILL_CHOICES:
         skill_list[skill[0]] = (skill[1], "")
     
-    for i in UserSkills.objects.filter(user = request.user):
+    for i in Skill.objects.filter(user = request.user):
         skill_list[i.skill] = (skill_list[i.skill][0], "checked")
     
     if request.method == 'POST':
         for i, _ in request.POST.items():
             if i.startswith("skill_"):
                 i = i[6:]
-                cnt = UserSkills.objects.filter(user = request.user, skill = i).count()
+                cnt = Skill.objects.filter(user = request.user, skill = i).count()
                 if cnt == 0:
-                    UserSkills.objects.create(user = request.user, skill = i, exp = 0, today_exp = 0)
+                    Skill.objects.create(user = request.user, skill = i, exp = 0, today_exp = 0)
                 skill_list[i] = (skill_list[i][0], "checked")
         # TODO: 去掉勾选
                  
@@ -208,11 +167,11 @@ def reset_psw(request):
             tmp.save()
             
             #发送邮件
-            print tmp_psw
-            url = r"http://127.0.0.1:8000/accounts/reset/confirm/%s/" % tmp_psw
+            url = r"http://" + request.get_host() + "/reset/confirm/%s/" % tmp_psw
             tr = Thread(target = user.email_user,
                         args = ("重置密码", '请点击 %s' % url))
             tr.start()
+            
             
             return render_to_response('accounts/reset_psw_sended.html', {})
         else:
@@ -251,22 +210,22 @@ def list_user(request):
         cnt = int(cnt)
     except: cnt = 1
     
-    #users = filter(lambda user: UserSkills.objects.get(user=user, skill="other").exp > 0, users)
+    #users = filter(lambda user: Skill.objects.get(user=user, skill="other").exp > 0, users)
     if kind in ["word", "image", "other"]:
-        users = sorted(users, key = lambda user: UserSkills.objects.get(user=user, skill=kind).exp, reverse = True)
+        users = sorted(users, key = lambda user: Skill.objects.get(user=user, skill=kind).exp, reverse = True)
     else:
         kind = "all";
-        users = sorted(users, key = lambda user: UserSkills.objects.get(user=user, skill="word").exp +
-                                                 UserSkills.objects.get(user=user, skill="image").exp +
-                                                 UserSkills.objects.get(user=user, skill="other").exp, reverse = True)
+        users = sorted(users, key = lambda user: Skill.objects.get(user=user, skill="word").exp +
+                                                 Skill.objects.get(user=user, skill="image").exp +
+                                                 Skill.objects.get(user=user, skill="other").exp, reverse = True)
 
         
     users = [{"rank" : i + 1,
               "username" : users[i].username,
-              "avatar" : UserProfiles.objects.get(user = users[i]).avatar.name,
-              "word" : UserSkills.objects.get(user=users[i], skill="word").exp,
-              "image" : UserSkills.objects.get(user=users[i], skill="image").exp,
-              "other" : UserSkills.objects.get(user=users[i], skill="other").exp,
+              "avatar" : UserProfile.objects.get(user = users[i]).avatar.name,
+              "word" : Skill.objects.get(user=users[i], skill="word").exp,
+              "image" : Skill.objects.get(user=users[i], skill="image").exp,
+              "other" : Skill.objects.get(user=users[i], skill="other").exp,
               } for i in xrange(len(users))]
     #分页
     paginator = Paginator(users, cnt)

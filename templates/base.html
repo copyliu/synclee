@@ -23,8 +23,8 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li class="active"><a href="/">首页</a></li>
-            <li><a href="{%url list_works %}">所有企划</a></li>
-            <li><a href="{%url list_user%}">用户排行</a></li>
+            <li><a href="{%url works %}">所有企划</a></li>
+            <li><a href="{%url users%}">用户排行</a></li>
             <li><a href="{%url work_rank %}">排行榜</a></li>
           </ul>
           <!--form class="navbar-search pull-left" action="">
@@ -54,6 +54,11 @@
 {% block extrahead %}{% endblock %}
 
 {% block content %}{% endblock %}
+
+<footer class="modal-footer">
+    
+</footer>
+
 <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-tooltip.js"></script>
 <script>
@@ -65,7 +70,7 @@ $(document).ready(function(){
            data: {uid: {{request.user.id}}},
            success: function(data){
                if (data != 0){
-                   $('.pull-right').children('li:first').tooltip({title: '<a href="/accounts/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
+                   $('.pull-right').children('li:first').tooltip({title: '<a href="/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
                    $('.pull-right').children('li:first').tooltip('show');
                }else{
                    $('.pull-right').children('li:first').tooltip('hide');
@@ -74,6 +79,7 @@ $(document).ready(function(){
        })
 
    };
+   checkUnread();
    setInterval(checkUnread, 15000);
    {% endif %}
 });

@@ -22,13 +22,17 @@
             </tr>
             <tr>
               <td><span class="label label-info">发起人</span></td>
-              <td><a href="/accounts/profile/{{work.author.username}}/">{{work.author.username}}</a></td>
+              <td><a href="{%url profile work.author.username%}">{{work.author.username}}</a></td>
             </tr>
             <tr>
               <td><span class="label label-info">参与人</span></td>
               <td>
               {% for p in participated %}
-              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a></li>
+              <li><a href="{%url profile p.username%}">{{p.username}}</a>
+              	{% if work.author ==  request.user%}
+              	<a class="class_work_quit" data-uid="{{p.id}}">&times;</a>
+              	{% endif %}
+              </li>
               {% endfor %}
               </td>
             </tr>
@@ -38,7 +42,7 @@
             </tr>
             <tr>
               <td width="60"><span class="label label-info">评分</span></td>
-              <td>{{average_score}}&nbsp;&nbsp;<small>已有{{score_count}}人评分</small>
+              <td><span id = "id_average_score">{{average_score}}</span>&nbsp;&nbsp;<small>已有<span id = "id_score_count">{{score_count}}</span>人评分</small>
               {% if request.user.is_authenticated %}
               <input type="submit" class="btn primary" id = "id_score_btn" data-toggle="modal" href = "#id_score" data-backdrop="true" data-keyboard="true" value="我来"></td>
               {% endif %}
@@ -47,14 +51,18 @@
               {% if not involved %}
               <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
               {% else %}
-              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a></td>
+              <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a>
+              {% if work.author !=  request.user%}
+              	<button class="btn primary class_work_quit" data-uid="{{request.user.id}}">退出</button>
+              {% endif %}
+              </td>
 	            {% endif %}
 	            
 	            {% if followed and not involved%}
-	            <td><input type="submit" id="follow_work" class="btn" value="取消" onclick="Controller.follow_work('unfo')"></td>
+	            <td><button type="submit" id="id_follow_btn" data-action="unfollow" class="btn">取消</button></td>
               {% endif %}
               {% if not followed and not involved%}
-              <td><input type="submit" id="follow_work" class="btn primary" value="关注" onclick="Controller.follow_work('fo')"></td>
+              <td><button type="submit" id="id_follow_btn" data-action="follow" class="btn btn-primary">关注</button></td>
               {% endif %}
             </tr>
             <tr> <td colspan="3"> <section>
@@ -89,11 +97,13 @@
     <a class="close" data-dismiss="modal">&times;</a>
     <h3>加入作品</h3>
   </div>
+  <form method="post" action="{%url ajax_work_grade %}">
+        {% csrf_token %}
   <div class="modal-body">
 	<div class="clearfix">
       <label for="normalSelect">选择角色：</label>
 	  <div class="input">
-	    <select name="apply_role" id="id_apply_role">
+	    <select name="role" id="id_apply_role">
 	      <option value = "image">画师</option>
 		  <option value = "word">写手</option>
           <option value = "other">其他</option>
@@ -103,13 +113,28 @@
 	<div class="clearfix">
       <label for="textarea">申请理由：</label>
 	  <div class="input">
-	    <textarea class="large" id="id_apply_reason" name="textarea2" rows="5"></textarea>
+	    <textarea class="large" id="id_apply_reason" name="reason" rows="5"></textarea>
       </div>
       <span class="help-block">最多300个字符</span>
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.apply_for()">Submit</a>
+  	<input type="hidden" name="uid" value="{{work.id}}" />
+    <button class="btn btn-success">发送申请</button>
+  </div>
+  </form>
+</div>
+
+<div class="modal hide fade in" id="alertModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>错误信息</h3>
+  </div>
+  <div class="modal-body">
+    <p> </p>
+  </div>
+  <div class="modal-footer">
+    <a href="/login/?next={%url show_work work.id %}" class="btn btn-success">&gt;&gt;跳转到登录页面</a>
   </div>
 </div>
 
@@ -118,18 +143,37 @@
     <a class="close" data-dismiss="modal">&times;</a>
     <h3>作品评分</h3>
   </div>
+  <form method="post" action="{%url ajax_user_apply %}">
+        {% csrf_token %}
   <div class="modal-body">
 	<div class="control-group">
     <label class="control-label" for="normalSelect">选择评分：</label>
 	  <div class="input">
-	    <select name="normalSelect" id="id_score_score">
-      </select>
+	    <select name="score" id="id_score_score">
+	    	<option value = "1">1</option>
+	    	<option value = "2">2</option>
+	    	<option value = "3">3</option>
+	    	<option value = "4">4</option>
+	    	<option value = "5">5</option>
+	    	<option value = "6">6</option>
+	    	<option value = "7">7</option>
+	    	<option value = "8">8</option>
+	    	<option value = "9">9</option>
+	    	<option value = "10">10</option>
+      	</select>
     </div>
 	</div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn primary" onclick="Controller.score()">Submit</a>
+    <input type="hidden" name="uid" value="{{work.id}}" />
+    <button class="btn btn-success">Submit</button>
   </div>
+  </form>
+</div>
+
+<div id = "id_alert_notice" class="alert fade in">
+  <a class="close" data-dismiss="alert" href="#">&times;</a>
+  <p></p>
 </div>
 {% endblock %}
 
@@ -140,6 +184,23 @@
 <script type="text/javascript" src="/static/js/ajax_csrf.js"></script>
 <script>
 $(document).ready(function(){
+    var wid = {{work.id}};
+    
+    $("#id_follow_btn").click( function(){
+        var action = $(this).data('action');
+        Controller.follow($(this), wid, action);
+    });
+    $('#id_apply form').submit(function(e){
+        var data = $(this).serialize();
+        Controller.apply_for(data);
+        e.preventDefault();
+    });
+    $('#id_score form').submit(function(e){
+        var data = $(this).serialize();
+        Controller.score(data);
+        e.preventDefault();
+    });
+
 	{%for i in apply_set%}
 	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
 	{% endfor %}
@@ -158,24 +219,33 @@ $(document).ready(function(){
     $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
     {% endif %}
   {% endfor %}
-  
-  for (i=1 ; i<=10; i++)
-    if (i == {{score}})
-      $('#id_score_score').append('<option value = "' + i + '" selected="selected">' + i + '</option>');
-    else
-      $('#id_score_score').append('<option value = "' + i + '">' + i + '</option>');
+     
+	$('#id_score_score>option[value={{score}}]').attr('selected', 'selected');
+	
+	$('.class_work_quit').click(function(e){
+		var answer = confirm('确定？');
+		if (answer) {
+        	var uid = $(this).data('uid');
+        	$.ajax({type: 'get', url: '{%url ajax_user_quit %}', data:{'uid': uid, 'wid': {{work.id}}},
+		    	success: function(data){
+					var data = JSON.parse(data);
+				    if (data.state != 'done') {
+  						$('#alertModal .modal-body p').text(data.error);
+  				        $('#alertModal').modal({'show': true});
+  					} else {
+              location.reload();
+            }
+				},
+				error: function(jqXHR, textStatus){
+					$('#alertModal .modal-body p').text('something wrong');
+		            $('#alertModal').modal({'show': true});
+				},
+		    });
+        }
+    });
 })
 
 var View = {
-	apply_for : function(id, applyer, role, reason){
-		return '<div class="alert alert-block alert-error fade in" id = "id_apply_'+ id +'"> <h4 class="alert-heading">申请加入!</h4>' +
-'<p><B> <a href = "/accounts/profile/' + applyer +'/">' + applyer + '</a>' +
-'希望作为' + role + '参加作品的创作</B>' +
-'<li>' + reason + '</li> </p>' +
-'<p><input type="submit" id="follow" class="btn" value="同意" onclick="Controller.notice.apply.accept('+ id +')">' +
-'<input type="submit" id="follow" class="btn" value="拒绝" onclick="Controller.notice.apply.reject('+ id +')"> </p>' +
-				'</div>'
-	},
 	Element : {
     text : function(t_url, content, title){
       return '<div class="row element"><a href="' + t_url +'">'+
@@ -198,39 +268,71 @@ var View = {
   },
 };
 var Controller = {
-	apply_for : function(){
-		var role = $('#id_apply_role').val();
-		var reason = $('#id_apply_reason').val();
-		$.ajax({ type: 'post', url : '{%url apply_for %}', data: {'type': 'apply_for', 'role': role, 'reason': reason, 'work_id': "{{work.id}}"}});
-		$('#id_apply').modal('hide');
+	apply_for : function(data){
+		$.ajax({
+            url : '{%url ajax_user_apply %}', 
+            type: 'post', 
+            data: data,
+        	success: function(data){
+		    	var data = JSON.parse(data, status);
+		        if (data.state != 'done') {
+    					$('#alertModal .modal-body p').text(data.error);
+              $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                    $('#alertModal .modal-footer a').text("确定");
+    		            $('#alertModal').modal({'show': true});
+    				} else {
+              alert("apply done");
+            }
+		    },
+		    error: function(jqXHR, textStatus){
+		    	$('#alertModal .modal-body p').text('something wrong');
+          $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
+                $('#alertModal').modal({'show': true});
+		    },
+        });
+        $('#id_apply').modal('hide');
 	},
-	score : function(){
-    var score = $('#id_score_score').val();
-    $.ajax({ type: 'post', url : '{%url work_score %}', data: {'score': score, 'work_id': "{{work.id}}"}});
-    $('#id_score').modal('hide');
+	score : function(data){
+		$.ajax({
+            url : '{%url ajax_work_grade %}', 
+            type: 'get', 
+            data: data,
+            success: function(data){
+              var data = JSON.parse(data, status);
+              if (data.state != 'done') {
+                $('#alertModal .modal-body p').text(data.error);
+                $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
+		            $('#alertModal').modal({'show': true});
+				      } else {
+                $('#id_average_score').text(data.average_score);
+                $('#id_score_count').text(data.score_count);
+              }
+		        },
+		        error: function(jqXHR, textStatus){
+		    	     $('#alertModal .modal-body p').text('something wrong');
+               $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
+               $('#alertModal').modal({'show': true});
+		        },
+        });
+    	$('#id_score').modal('hide');
 	},
-	notice : {
-		apply : {
-			accept :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_accept', 'id': id}});
-				$('#id_apply_' + id).remove();
-			},
-			reject :function(id){
-				$.ajax({ type: 'post', url : '{%url notice %}', data: {'type': 'apply_reject', 'id': id}});
-				$('#id_apply_' + id).remove();
-			},
-		},
-	},
-	follow_work : function(action){
-		if (action == 'fo'){
-		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
-		  $('#follow_work').val('取消').removeClass('primary').attr('onclick', "Controller.follow_work('unfo')");
-		}
-		if (action ==  'unfo'){
-		  $.ajax({type : 'post', url : '{%url follow_work %}', data : { 'action' : action, 'foid' : {{work.id}}} });
-		  $('#follow_work').val('关注').addClass('primary').attr('onclick', "Controller.follow_work('fo')");
-		}
-	},
+    follow : function(btn, wid, action){
+        $.ajax({type: 'get', url: '{%url ajax_work_follow %}', data:{'wid': wid, 'action': action}, 
+            success: function(data){
+                var data = JSON.parse(data, status);
+                data.action == 'follow' ? btn.text('取消').removeClass('btn-primary').data('action', 'unfollow'):btn.text('关注').addClass('btn-primary').data('action', 'follow');
+            },
+            error: function(jqXHR, textStatus){
+                $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+                $('#alertModal .modal-footer a').attr("href", "/login/?next={%url show_work work.id%}");
+                $('#alertModal .modal-footer a').text(">>跳转到登录页面");
+                $('#alertModal').modal({'show': true});
+            }
+        });
+    },
 };
 </script>
 {% endblock %}

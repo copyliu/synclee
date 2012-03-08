@@ -32,22 +32,60 @@
         </tr>
     </tbody>
 </table>
-        
+
+<div class="modal hide fade in" id="alertModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>错误信息</h3>
+  </div>
+  <div class="modal-body">
+    <p> </p>
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
 <script>
 $(document).ready(function(){
-   $('table tbody tr').find('td:eq(2)').on('click', function(){
-       if ($(this).prev().text() == '未读'){
-           var status = $(this).prev(),
-               id = $(this).prev().prev().find('input').first().data('notifictaionId');
-               console.log(id)
-           $.ajax({type: 'POST', data:{'notice_id': id}, success: function(){
-               status.html('<span class="label">已读</span>');
-               }
-           });
-       };
+    //接受/拒绝
+    $('div.invitation_action').find('a').click(function(e){
+        var id = $(this).data('id'), 
+            action = $(this).data('action'),
+            direction = $(this).data('direction');
+        $.ajax({type: 'get', url: '{%url ajax_user_invite_manage %}', data:{'id': id, 'action': action, 'direction':direction},
+        	success: function(data){
+		    	var data = JSON.parse(data);
+		        if (data.state != 'done') {
+					$('#alertModal .modal-body p').text(data.error);
+          $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
+		            $('#alertModal').modal({'show': true});
+				} else {
+					$('#id_invitation_' + id).remove();
+				}
+		    },
+		    error: function(jqXHR, textStatus){
+		    	$('#alertModal .modal-body p').text('something wrong');
+          $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+                $('#alertModal .modal-footer a').text("确定");
+                $('#alertModal').modal({'show': true});
+		    },
+        });
+    });
+    
+    $('table tbody tr').find('td:eq(2)').on('click', function(){
+        if ($(this).prev().text() == '未读'){
+            var status = $(this).prev(),
+                id = $(this).prev().prev().find('input').first().data('notifictaionId');
+            $.ajax({type: 'POST', data:{'notice_id': id}, success: function(){
+                status.html('<span class="label">已读</span>');
+                }
+            });
+        };
        
        var content = $(this).parent().next();
        if (content.is(":visible")){
@@ -56,6 +94,9 @@ $(document).ready(function(){
            $(this).parent().next().show();
        }
    }) 
+   {%for i in answered%}
+   	$('#id_invitation_{{i}}').remove();
+   {%endfor%}
 });
 </script>
 {% endblock %}

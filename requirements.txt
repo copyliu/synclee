@@ -3,6 +3,5 @@ easy_thumbnails
 django-relationships
 django-notification
 django-taggit
-#registration
 PIL
-south
+django-piston

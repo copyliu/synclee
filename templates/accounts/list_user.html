@@ -9,18 +9,18 @@
 	<li class="dropdown">
   	<a class="dropdown-toggle" data-toggle="dropdown" href="#">排序方式 <b class="caret"></b></a>
 			<ul class="dropdown-menu">
-				<li {%if kind == 'all'%}class="active"{%endif%}><a href="{%url list_user%}?key=all&page={{users.number}}&cnt={{cnt}}">总排行</a></li>
-				<li {%if kind == 'image'%}class="active"{%endif%}><a href="{%url list_user%}?key=image&page={{users.number}}&cnt={{cnt}}">画师</a></li>
-				<li {%if kind == 'word'%}class="active"{%endif%}><a href="{%url list_user%}?key=word&page={{users.number}}&cnt={{cnt}}">写手</a></li>
-				<li {%if kind == 'other'%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt={{cnt}}">围观</a></li>
+				<li {%if kind == 'all'%}class="active"{%endif%}><a href="{%url users%}?key=all&page={{users.number}}&cnt={{cnt}}">总排行</a></li>
+				<li {%if kind == 'image'%}class="active"{%endif%}><a href="{%url users%}?key=image&page={{users.number}}&cnt={{cnt}}">画师</a></li>
+				<li {%if kind == 'word'%}class="active"{%endif%}><a href="{%url users%}?key=word&page={{users.number}}&cnt={{cnt}}">写手</a></li>
+				<li {%if kind == 'other'%}class="active"{%endif%}><a href="{%url users%}?key=other&page={{users.number}}&cnt={{cnt}}">围观</a></li>
 			</ul>
 	</li>
 	<li class="dropdown">
   	<a class="dropdown-toggle" data-toggle="dropdown" href="#">每页显示 <b class="caret"></b></a>
 			<ul class="dropdown-menu">
-				<li {%if cnt == 1%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=1">1</a></li>
-				<li {%if cnt == 5%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=5">5</a></li>
-				<li {%if cnt == 10%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=10">10</a></li>
+				<li {%if cnt == 1%}class="active"{%endif%}><a href="{%url users%}?key=other&page={{users.number}}&cnt=1">1</a></li>
+				<li {%if cnt == 5%}class="active"{%endif%}><a href="{%url users%}?key=other&page={{users.number}}&cnt=5">5</a></li>
+				<li {%if cnt == 10%}class="active"{%endif%}><a href="{%url users%}?key=other&page={{users.number}}&cnt=10">10</a></li>
 			</ul>
 	</li>
 </ul>
