@@ -248,18 +248,18 @@ $(document).ready(function(){
 var View = {
 	Element : {
     text : function(t_url, content, title){
-      return '<div class="row element"><a href="' + t_url +'">'+
+      return '<div class="row element">'+
     '<div class="span1"><span class="label label-success">文字</span></div>'+
     '<h3 class="title">'+title+'</h3>'+
     '<div class="span11">'+content+'</div>'+
-    '</a></div>'},
+    '</div>'},
     image : function(t_url, name, title){
-      return '<div class="row element"><a href="' + t_url +'">'+
+      return '<div class="row element">'+
     '<div class="span1"><span class="label label-success">图片</span></div>'+
     '<h3 class="title">'+title+'</h3>'+
     '<img class="span11" src="/media/'+name+'"></p>'+
     //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
-    '</a></div>'},
+    '</div>'},
     line : function(t_url, name){
       return '<div class="row element"><a href="' + t_url +'">'+
     '<div class="span1"><span class="label success">分割线</span></div>'+

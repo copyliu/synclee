@@ -61,7 +61,7 @@
                     {% for v in hot_works %}
                     <div class="work-small">
                         <a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" width="50" alt="Cover"/></a>
-                        <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
+                        <article><span class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></span><p>{{v.intro|substring:25}}</p></article>
                     </div>
                     {% endfor %}
                 </article>
