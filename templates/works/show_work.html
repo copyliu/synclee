@@ -49,7 +49,7 @@
             </tr>
             <tr>
               {% if not involved %}
-              <td><input type="submit" class="btn primary" id = "id_apply_btn" data-toggle="modal" href = "#id_apply" data-backdrop="true" data-keyboard="true" value="加入"></td>
+              <td><button id="id_apply_btn" class="btn">加入</button></td>
               {% else %}
               <td><a href="{%url edit_work work.id %}"><button class="btn primary">编辑</button></a> <a href="{%url export_work work.id %}"><button class="btn primary">导出</button></a>
               {% if work.author !=  request.user%}
@@ -188,11 +188,29 @@ $(document).ready(function(){
     
     $("#id_follow_btn").click( function(){
         var action = $(this).data('action');
+        {% if request.user.is_authenticated %}
         Controller.follow($(this), wid, action);
+        {% else %}
+        Controller.alert();
+        {% endif %}
     });
+    
+    $('#id_apply_btn').click( function(){
+        {% if request.user.is_authenticated %}
+        $('#id_apply').modal({'show': true});
+        {% else %}
+        Controller.alert();
+        {% endif %}
+    });
+    
     $('#id_apply form').submit(function(e){
         var data = $(this).serialize();
+        {% if request.user.is_authenticated %}
         Controller.apply_for(data);
+        {% else %}
+        $('#id_apply').modal({'show': false});
+        Controller.alert();
+        {% endif %}
         e.preventDefault();
     });
     $('#id_score form').submit(function(e){
@@ -201,25 +219,27 @@ $(document).ready(function(){
         e.preventDefault();
     });
 
-	{%for i in apply_set%}
-	$("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
-	{% endfor %}
-	
-	{% for e in elements %}
-    {% if e.category == 'text' %}
-    $('article').append(View.Element.text("{%url show_element e.id%}", '{{e.content|safe}}', '{{e.title}}'));
-    {% endif %}
+    {%for i in apply_set%}
+        $("#sec_apply").append(View.apply_for({{i.id}}, "{{i.invited.username}}", "{{i.skill}}", "{{i.reason}}"));
+    {% endfor %}
     
-    {% if e.category == 'line' %}
-    $('article').append(View.Element.line("{%url show_element e.id%}" , '{{e.content}}'));
-    {% endif %}
+    //获取所有Elements 	
+    {% for e in elements %}
+        {% if e.category == 'text' %}
+        $('article').append(View.Element.text("{%url show_element e.id%}", '{{e.content|safe}}', '{{e.title}}'));
+        {% endif %}
+        
+        {% if e.category == 'line' %}
+        $('article').append(View.Element.line("{%url show_element e.id%}" , '{{e.content}}'));
+        {% endif %}
+        
+        {% if e.category == 'image' %}
+        var imageSrc = '{{e.content}}'.toString();
+        $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
+        {% endif %}
+    {% endfor %}
+    //Elements 读取结束
     
-    {% if e.category == 'image' %}
-    var imageSrc = '{{e.content}}'.toString();
-    $('article').append(View.Element.image("{%url show_element e.id%}", imageSrc, '{{e.title}}'));
-    {% endif %}
-  {% endfor %}
-     
 	$('#id_score_score>option[value={{score}}]').attr('selected', 'selected');
 	
 	$('.class_work_quit').click(function(e){
@@ -268,7 +288,13 @@ var View = {
   },
 };
 var Controller = {
-	apply_for : function(data){
+    alert : function(){
+        $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+        $('#alertModal .modal-footer a').attr("href", "/login/?next={%url show_work work.id%}");
+        $('#alertModal .modal-footer a').text(">>跳转到登录页面");
+        $('#alertModal').modal({'show': true});
+    },
+    apply_for : function(data){
 		$.ajax({
             url : '{%url ajax_user_apply %}', 
             type: 'post', 
@@ -326,10 +352,7 @@ var Controller = {
                 data.action == 'follow' ? btn.text('取消').removeClass('btn-primary').data('action', 'unfollow'):btn.text('关注').addClass('btn-primary').data('action', 'follow');
             },
             error: function(jqXHR, textStatus){
-                $('#alertModal .modal-body p').text('您还没有登录，请先登录');
-                $('#alertModal .modal-footer a').attr("href", "/login/?next={%url show_work work.id%}");
-                $('#alertModal .modal-footer a').text(">>跳转到登录页面");
-                $('#alertModal').modal({'show': true});
+                Controller.alert();
             }
         });
     },
