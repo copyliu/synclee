@@ -21,7 +21,7 @@ class TimeLine(models.Model):
     created = models.DateTimeField(auto_now_add = True)
 
 def get_image_path(instance, filename):
-    return os.path.join('work', str(instance.id), filename)
+    return os.path.join('works', str(instance.id), filename)
 class Work(models.Model):
     PRIVACY_CHOICES = (
         (u'Pub', u'公开'),

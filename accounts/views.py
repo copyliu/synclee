@@ -47,8 +47,11 @@ def profile(request, username):
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
     joined = [i.work for i in joined]
     #skill_list = Skill.objects.filter(user = user)
-    
+    works = {
+        'main' :  Work.objects.filter(author=user)[0] if Work.objects.filter(author=user).count() else ''
+    }
     context = {
+        'works' : works,
         'profile' : profile, 
         #'timeline' : timeline,
         #'invited' : invited,

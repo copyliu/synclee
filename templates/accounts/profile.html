@@ -37,6 +37,107 @@
 </style>
 
 <div class="container">
+    <div class="row">
+        <div class="span8">
+            <div class="accordion-group">
+                <div class="accordion-heading group-title"> 
+                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"> 
+                      主要作品 | Works 
+                    </a> 
+                </div>
+                <div class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                        {% if works.main %}
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    <img src="/media/{{works.main.cover|default:"no_cover.gif"}}" width="120" style="border-radius: 5px;" />
+                                    <div><b>创建</b>： {{works.main.created|date:"Y/m/d"}}<br/>
+                                        <b>浏览</b>： 1987 <br/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="float:left"><h4><img src="/static/images/icons/icon_2.png"/>{{works.main.name}}</h4></div>
+                                    <div style="float:right"><span class="label label-info">{{works.main.category}}</span> &nbsp;&nbsp; <span class="label label-info">{{works.main.category}}</span></div>
+                                    <div class="clearfix"></div>
+                                    <hr style="margin:0px;"/>
+                                    <div class="pagination" style="margin:15px 20px 10px 0px">
+                                     <ul>
+                                       <li class="active">
+                                         <a href="#">第1章</a>
+                                       </li>
+                                       <li><a href="#">第二章</a></li>
+                                       <li><a href="#">第三章</a></li>
+                                       <li><a href="#">第四章</a></li>
+                                       <li><a href="#">第五章</a></li>
+                                       <li><a href="#">第六章</a></li>
+                                     </ul>
+                                   </div>
+                                </td>
+                            </tr>
+                        </table>
+                        {% else %}暂时没有作品{% endif %}
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="span4">
+            <div class="accordion-group">
+               <div class="accordion-heading group-title">
+                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"> 
+                      相册 <span>Album</span>
+                    </a>   
+               <div class="accordion-inner" style="padding-bottom: 0px;">  
+               
+                  <div id="myCarousel" class="carousel slide"> 
+                     <div class="carousel-inner"> 
+                       <div class="item active fixed-height"> 
+                         <img src="img/sample/carousel/crs_0.jpg" alt=""> 
+                         <div class="carousel-caption"> 
+                           <h4>First Thumbnail label</h4> 
+                           <p>ピカピカぴかりんじゃんけんポン♪</p> 
+                         </div> 
+                       </div> 
+                       <div class="item fixed-height"> 
+                         <img src="img/sample/carousel/crs_1.jpg" alt=""> 
+                         <div class="carousel-caption"> 
+                           <h4>Second Thumbnail label</h4> 
+                           <p>選んでくれてありがとう</p> 
+                         </div> 
+                       </div> 
+                       <div class="item fixed-height"> 
+                         <img src="img/sample/carousel/crs_5.jpg" alt=""> 
+                         <div class="carousel-caption"> 
+                           <h4>Third Thumbnail label</h4> 
+                           <p>戦闘力高そうな学級委員長</p> 
+                         </div> 
+                       </div>
+                       <div class="item fixed-height"> 
+                         <img src="img/sample/carousel/crs_3.jpg" alt=""> 
+                         <div class="carousel-caption"> 
+                           <h4>Third Thumbnail label</h4> 
+                           <p>たまには夜更かししませんか</p> 
+                         </div> 
+                       </div>
+                       <div class="item fixed-height"> 
+                         <img src="img/sample/carousel/crs_4.jpg" alt=""> 
+                         <div class="carousel-caption"> 
+                           <h4>Third Thumbnail label</h4> 
+                           <p>きみとわかちあうささやかなしあわせをこれからも。</p> 
+                         </div> 
+                       </div> 
+                     </div> 
+                     <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a> 
+                     <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a> 
+                   </div> 
+               
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
     <div class="sidebar">
         <div class="well">
             <section id = "work">

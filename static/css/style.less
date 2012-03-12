@@ -1,5 +1,11 @@
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, form, img, dl, dt, dd, table, th, td, blockquote, fieldset, div, strong, label, em { border: 0 none; margin: 0; padding: 0; }
 ul, ol, li { list-style: none; }
+
+.clearfix:after {content: ".";display: block;height: 0; clear: both; visibility: hidden;}
+.clearfix{display: inline-block;}
+* html .clearfix{height: 1%;}
+.clearfix{display: block;}
+
 .images (@name, @format: jpg) {
     @url: "/static/images/" ;
     background: url("@{url}@{name}.@{format}");
