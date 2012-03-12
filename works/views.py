@@ -108,10 +108,9 @@ def edit_work(request, work_id):
         raise Http404("no privilege")
     if request.method == 'POST':
         if request.POST.get('action') == 'delete':
-            work = Work.objects.get(pk=work_id, author=request.user)
+            work = Work.objects.get(pk=work_id)
             elements = Element.objects.filter(work=work)
             elements.delete()
-            
             WorkHistory.objects.create(work = work, user = request.user)
             return HttpResponse('delete_success')
         category = request.POST.get('category', '')
