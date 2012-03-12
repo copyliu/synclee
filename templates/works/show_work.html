@@ -226,7 +226,7 @@ $(document).ready(function(){
     //获取所有Elements 	
     {% for e in elements %}
         {% if e.category == 'text' %}
-        $('article').append(View.Element.text("{%url show_element e.id%}", '{{e.content|safe}}', '{{e.title}}'));
+        $('article').append(View.Element.text("{%url show_element e.id%}", '{{e.content|safe|cut:"'"}}', '{{e.title}}'));
         {% endif %}
         
         {% if e.category == 'line' %}

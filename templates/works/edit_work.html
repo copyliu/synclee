@@ -99,7 +99,7 @@ $(document).ready(function(){
   
   {% for e in elements %}
     {% if e.category == 'text' %}
-    $('article').append(View.Element.text('{{e.content|safe}}', '{{e.title}}'));
+    $('article').append(View.Element.text('{{e.content|safe|cut:"'"}}', '{{e.title}}'));
     {% endif %}
     
     {% if e.category == 'line' %}
