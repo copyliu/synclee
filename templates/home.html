@@ -19,8 +19,8 @@
                     <div class="span8">
                         {% for v in works.word %}
                         <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
+                            <a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
                         </div>
                         {% endfor %}
                     </div>
@@ -32,8 +32,8 @@
                     <div class="span8">
                         {% for v in works.image %}
                         <div class="{%if forloop.counter > 2 %}work-small{%else%}work-medium{%endif%}" style="float: left; border:0px; {%if forloop.counter > 2 %} width:205px; {% endif %}">
-                            <a class="thumbnail" href=""><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
-                            <article><span class="work-title"><a href="#">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
+                            <a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a>
+                            <article><span class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></span><p>{{v.intro|substring:15}}</p></article>
                         </div>
                         {% endfor %}
                     </div>
