@@ -55,7 +55,6 @@
 </div>
 
 
-
 <div id="id_add_text" class="modal hide fade">
   <div class="modal-header">
     <a href="javascript:void(0)" class="close" data-dismiss="modal">&times;</a>
@@ -194,7 +193,7 @@ var Controller = {
       document.addNicEditor.nicInstances[0].saveContent();
       var content = $('#id_add_text_content').val();
       var title = $('#id_add_text_title').val();
-      $('article').append(View.Element.text(content, title));
+      $('article').append(content);
       $('#id_add_text_title').val('');
       $('#id_add_text_content').val('');
       $('#id_add_text_content').prev().children('div').html('');

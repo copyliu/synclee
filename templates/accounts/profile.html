@@ -1,41 +1,7 @@
 {% extends "base.html"  %}
 {% load relationship_tags %}
-{% block title %}{{profile.user.username}}{% endblock %}
-{% block content %}<style type='text/css'>
-    .container > .sidebar {
-        position: absolute;
-        right: 20px;
-        width: 360px;
-        left: auto;
-    }
-    .container > .content {
-        margin-right: 240px;
-    }
-    .hero-unit {
-        padding: 0;
-    }
-    .abilities {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-    .abilities li {
-        width: 50%;
-        float: left;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    .abilities li strong {
-        font-size: 14px;
-    }
-    .abilities li.shui {
-        color: #ff6600;
-    }
-    .abilities li.prog {
-        color: #009933;
-    }
-</style>
-
+{% block title %}{{profile.user.username}} {% endblock %}
+{% block content %}
 <div class="container">
     
     <div class="row">
