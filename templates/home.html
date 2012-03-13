@@ -42,6 +42,17 @@
         </div>
         <div class="span3" style="width: 270px;">
             <div class="login-panel panel">
+                {% if user.is_authenticated %}
+                <h4>欢迎回来，{{request.user.username}}</h4><br/>
+                <img src="/media/{{request.user.get_profile.avatar.name}}" width="50" height="60" style="float: left;" />
+                <div class="span2" style="border-left:1px solid #CCC; float: right; padding-left: 10px; ">
+                    <label>人气：</label> 
+                    <label>关注：</label>
+                    <label>粉丝：</label>
+                </div>
+                <div class="clearfix"></div>
+                
+                {% else %}
                 <h4>欢迎来到新岚，请登录</h4><br/>
                 <form action="{%url login %}" method="post">
                     {% csrf_token %}
@@ -54,6 +65,7 @@
                         <i class="icon-ok icon-white"></i>注册
                     </a>
                 </form>
+                {% endif %}
             </div>
             <div class="hot-works panel">
                 <div class="panel-title">热门企划 Ranking</div>
