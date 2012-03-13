@@ -368,7 +368,7 @@
     </div>
     <div class="modal-footer">
         <input type="hidden" name="uid" value="{{profile.user.id}}" />
-        <button class="btn btn-success">发送邀请</button>
+        <input type="submit" class="btn btn-success" value="发送邀请">
     </div>
     </form>
 </div>
@@ -376,7 +376,7 @@
 <div class="modal hide fade in" id="alertModal">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
-    <h3>错误信息</h3>
+    <h3></h3>
   </div>
   <div class="modal-body">
     <p> </p>
@@ -394,23 +394,25 @@
 
 <script>
 $(document).ready(function(){
-    var uid = {{profile.user.id}};
-    
-    $('#id_follow_btn').on('click', function(){
-        var action = $(this).data('action');
-        Controller.follow($(this) ,uid, action);
+    {% if not user.is_authenticated %}
+    var uid = 0;
+    $('#id_follow_btn, #id_invite_btn').on('click', function(){
+        Controller.alert.noLogin();
     });
-    
-    $('#id_invite_btn').click(function(e){
-        {% if request.user.work_set.count %}
-        $('#id_invite').modal('show');
-        {% else %}
-        $('#alertModal .modal-body p').text('您还没有作品，无法邀请');
-        $('#alertModal .modal-footer a').attr("href", "{%url add_work%}");
-        $('#alertModal .modal-footer a').text(">>跳转到创建作品页面");
-        $('#alertModal').modal({'show': true});
-        {% endif %}
-    });
+    {% else %}
+        var uid = {{profile.user.id}};
+        $('#id_follow_btn').on('click', function(){
+            var action = $(this).data('action');
+            Controller.follow($(this) ,uid, action);
+        });
+        $('#id_invite_btn').click(function(e){
+            {% if request.user.work_set.count %}
+            $('#id_invite').modal('show');
+            {% else %}
+            Controller.alert.noWorks();
+            {% endif %}
+        });
+    {% endif %}
         
     $('#id_invite form').submit(function(e){
         var data = $(this).serialize();
@@ -418,7 +420,6 @@ $(document).ready(function(){
         Controller.invite(data);
         e.preventDefault();
     });
-    
 });
 var Controller = {
     invite : function(data){
@@ -426,23 +427,10 @@ var Controller = {
             url : '{%url ajax_user_invite %}', 
             type: 'post', 
             data: data,
-        	success: function(data){
-		    	var data = JSON.parse(data, status);
-		        if (data.state != 'done') {
-					$('#alertModal .modal-body p').text(data.error);
-					$('#alertModal .modal-footer a').attr("data-dismiss", "modal");
-                    $('#alertModal .modal-footer a').text("确定");
-		            $('#alertModal').modal({'show': true});
-				} else {
-                    alert("invite done");
-                }
-		    },
-		    error: function(jqXHR, textStatus){
-		    	$('#alertModal .modal-body p').text('something wrong');
-		    	$('#alertModal .modal-footer a').attr("data-dismiss", "modal");
-                $('#alertModal .modal-footer a').text("确定");
-                $('#alertModal').modal({'show': true});
-		    },
+            success: function(data){
+                var data = JSON.parse(data, status);
+                Controller.alert.invited();
+            }
         });
         $('#id_invite').modal('hide');
     },
@@ -451,15 +439,32 @@ var Controller = {
             success: function(data){
                 var data = JSON.parse(data, status);
                 data.action == 'follow' ? btn.html('<i class="icon-bookmark icon-dark-grey" style="margin-top: 2px;"></i>取消').removeClass('btn-primary').data('action', 'unfollow'):btn.html('<i class="icon-bookmark icon-white" style="margin-top: 2px;"></i>关注').addClass('btn-primary').data('action', 'follow');
-            },
-            error: function(jqXHR, textStatus){
-                $('#alertModal .modal-body p').text('您还没有登录，请先登录');
-                $('#alertModal .modal-footer a').attr("href", "/login/?next={%url profile profile.user.username%}");
-                $('#alertModal .modal-footer a').text(">>跳转到登录页面");
-                $('#alertModal').modal({'show': true});
             }
         });
     },
+    alert : {
+        noLogin : function(){
+            $('#alertModal .modal-header h3').text('错误信息');
+            $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+            $('#alertModal .modal-footer a').attr("href", "/login/?next={%url profile profile.user.username%}");
+            $('#alertModal .modal-footer a').text(">>跳转到登录页面");
+            $('#alertModal').modal({'show': true});
+        },
+        noWorks : function(){
+            $('#alertModal .modal-header h3').text('错误信息');
+            $('#alertModal .modal-body p').text('您还没有作品，无法邀请');
+            $('#alertModal .modal-footer a').attr("href", "{%url add_work%}");
+            $('#alertModal .modal-footer a').text(">>跳转到创建作品页面");
+            $('#alertModal').modal({'show': true});
+        },
+        invited : function(){
+            $('#alertModal .modal-header h3').text('操作成功');
+            $('#alertModal .modal-body p').text('您的邀请已经成功发送');
+            $('#alertModal .modal-footer a').attr("data-dismiss", "modal");
+            $('#alertModal .modal-footer a').text("确定");
+            $('#alertModal').modal({'show': true});
+        }
+    }
 };
 </script>
 {% endblock %}
