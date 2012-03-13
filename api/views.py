@@ -172,3 +172,9 @@ def work_grade(request):
     average_score = WorkScore.objects.filter(work=work).aggregate(average_score=Avg('score'))['average_score'] or 0
     score_count = WorkScore.objects.filter(work=work).count()
     return HttpResponse(json.dumps({'state': 'done', 'average_score': average_score, 'score_count': score_count}))
+
+
+@csrf_exempt
+@login_required
+def get_element(request, work_id, element_id):
+    pass

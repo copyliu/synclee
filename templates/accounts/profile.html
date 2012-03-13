@@ -37,6 +37,102 @@
 </style>
 
 <div class="container">
+    
+    <div class="row">
+        <div class="span3">
+            <a href="javascript:void(0)" class="thumbnail"><img src="/media/{{profile.avatar.name}}" width="200" height="250" /></a>
+        </div>
+        <div class="span9">
+            <div class="row">
+                <div class="span6"><h1>{{profile.user.username}}</h1><p>{{profile.intro}}</p></div>
+                <div class="span2" style="border-left:1px solid #CCC; float: right; padding-left: 10px; ">
+                    <label>人气：</label>
+                    <label>关注：</label>
+                    <label>粉丝：</label>
+                </div>
+            </div>
+            <hr style="margin: 0px;"/>
+            
+            <div class="tabbable tabs-below">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="A">
+                    <div class="skill-list">
+                        <ul>
+                           <li>
+                             <span class="heading">
+                                <div class="image"><img src="/static/images/icons/icon_artist.png"> </div>
+                                画师 Lv.8
+                             </span>
+                           </li>
+                           <li><span class="active">素描</span></li>
+                           <li><span>厚涂</span></li>
+                           <li><span>学院派</span></li>
+                           <li><span>达芬奇流</span></li>
+                           <li><span>油画</span></li>
+                           <li><span>水彩</span></li>
+                           <li><span>粉笔</span></li>
+                           <li><span class="active">印象派</span></li>
+                           <li><span>幼儿园画派</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="skill-list">
+                        <ul>
+                            <li>
+                                <span class="heading">
+                                    <div class="image"><img src="/static/images/icons/icon_music.png"> </div>
+                                    写手 Lv.1
+                                </span>
+                            </li>
+                            <li><span>YYC</span></li>
+                            <li><span>HYZ</span></li>
+                            <li><span class="active">Miss</span></li>
+                            <li><span>YYM</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-list">
+                        <ul>
+                            <li>
+                                <span class="heading">
+                                    <div class="image"><img src="/static/images/icons/icon_project.png"> </div>
+                                    围观 Lv.1
+                                </span>
+                            </li>
+                            <li><span>YYC</span></li>
+                            <li><span>HYZ</span></li>
+                            <li><span class="active">Miss</span></li>
+                            <li><span>YYM</span></li>
+                        </ul>
+                    </div>
+
+                  </div>
+                  <div class="tab-pane" id="B">
+                    <p>Howdy, I'm in Section B.</p>
+                  </div>
+                </div>
+                <ul class="nav nav-tabs" style="float: left;">
+                  <li class="active"><a href="#A" data-toggle="tab">信息 | Info</a></li>
+                  <li><a href="#B" data-toggle="tab">技能 | Skill</a></li>
+                </ul>
+                {% if request.user.id != profile.user_id %}
+                <div class="span4 cfont-msf-yahei" style="float: right; margin-right: -50px;">
+                    
+                        {% if_relationship request.user profile.user "following" %}
+                    <button id="id_follow_btn" class="btn btn-error" data-action="unfollow" data-user-id="{{profile.user.id}}"><i class="icon-bookmark icon-dark-grey" style="margin-top: 2px;"></i>取消</button>
+                        {% else %}
+                    <button id="id_follow_btn" class="btn btn-primary" data-action="follow" data-user-id="{{profile.user.id}}"><i class="icon-bookmark icon-white" style="margin-top: 2px;"></i>关注</button>
+                        {% endif_relationship %}
+                    <button class="btn" id="id_invite_btn" data-toggle="modal" data-backdrop="true" data-keyboard="true"><i class="icon-random icon-dark-grey" style="margin-top: 2px;"></i>邀请</button>
+                    <button class="btn"><i class="icon-comment icon-dark-grey" style="margin-top: 2px;"></i> 留言</button>
+                </div>
+                {% endif %}
+            </div>
+            
+            
+        </div>
+    </div>
+    
     <div class="row">
         <div class="span8">
             <div class="accordion-group">
@@ -64,7 +160,7 @@
                                     <div class="pagination" style="margin:15px 20px 10px 0px">
                                      <ul>
                                        <li class="active">
-                                         <a href="#">第1章</a>
+                                         <a href="{%url ajax_get_element 1 1 %}">第1章</a>
                                        </li>
                                        <li><a href="#">第二章</a></li>
                                        <li><a href="#">第三章</a></li>
@@ -72,6 +168,7 @@
                                        <li><a href="#">第五章</a></li>
                                        <li><a href="#">第六章</a></li>
                                      </ul>
+                                     <p>{{works.main.elements}}</p>
                                    </div>
                                 </td>
                             </tr>
@@ -80,47 +177,122 @@
                     </div>
                 </div> 
             </div>
+            
+            <div class="accordion-group"> 
+              <div class="accordion-heading group-title"> 
+                <a class="accordion-toggle" data-toggle="collapse" href="#original"> 
+                  主创企划 | Impossible Original
+             <span style="float: right;"><i class="icon-th-list icon-light-blue"></i></span>
+                </a> 
+              </div> 
+              <div id="original" class="accordion-body in collapse" style="height: auto; "> 
+                <div class="accordion-inner">
+                    <ul class="thumbnails"> 
+                    {% for work in profile.user.work_set.all%}
+                        <li class="span2" style="width: 120px">
+                            <dl>
+                                <dt><a href="{%url show_work work.pk%}" class="thumbnail"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="110px" height="110px"> </a></dt>
+                                <dd><a href="{%url show_work work.pk%}">{{work.name}}</a></dd>
+                            </dl>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div> 
+              </div> 
+            </div>
+            
+            <div class="accordion-group"> 
+              <div class="accordion-heading group-title"> 
+                <a class="accordion-toggle" data-toggle="collapse" href="#joined"> 
+                  参与企划 | Impossible Original
+             <span style="float: right;"><i class="icon-th-list icon-light-blue"></i></span>
+                </a> 
+              </div> 
+              <div id="joined" class="accordion-body in collapse" style="height: auto; "> 
+                <div class="accordion-inner">
+                    {% if joined %}
+                    <ul class="thumbnails"> 
+                    {% for work in joined%}
+                        <li class="span2" style="width: 120px">
+                            <dl>
+                                <dt><a href="{%url show_work work.pk%}" class="thumbnail"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="110px" height="110px"> </a></dt>
+                                <dd><a href="{%url show_work work.pk%}">{{work.name}}</a></dd>
+                            </dl>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    暂时没有参与的企划
+                    {% endif %}
+                </div> 
+              </div> 
+            </div>
+            
+            <div class="accordion-group"> 
+              <div class="accordion-heading group-title"> 
+                <a class="accordion-toggle" data-toggle="collapse" href="#followed">关注企划 | Impossible Original<span style="float: right;"><i class="icon-th-list icon-light-blue"></i></span></a> 
+              </div> 
+              <div id="followed" class="accordion-body in collapse" style="height: auto; "> 
+                <div class="accordion-inner">
+                    {% if followed %}
+                    <ul class="thumbnails"> 
+                    {% for work in followed%}
+                        <li class="span2" style="width: 120px">
+                            <dl>
+                                <dt><a href="{%url show_work work.pk%}" class="thumbnail"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="110px" height="110px"> </a></dt>
+                                <dd><a href="{%url show_work work.pk%}">{{work.name}}</a></dd>
+                            </dl>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    暂时没有关注的企划
+                    {% endif %}
+                </div> 
+              </div> 
+            </div>
         </div>
+        
         <div class="span4">
             <div class="accordion-group">
-               <div class="accordion-heading group-title">
+                <div class="accordion-heading group-title">
                     <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"> 
                       相册 <span>Album</span>
-                    </a>   
-               <div class="accordion-inner" style="padding-bottom: 0px;">  
-               
+                    </a>
+                </div>
+                <div class="accordion-inner" style="padding-bottom: 0px;">
                   <div id="myCarousel" class="carousel slide"> 
                      <div class="carousel-inner"> 
                        <div class="item active fixed-height"> 
-                         <img src="img/sample/carousel/crs_0.jpg" alt=""> 
+                         <img src="/static/images/sample/carousel/crs_0.jpg" alt=""> 
                          <div class="carousel-caption"> 
                            <h4>First Thumbnail label</h4> 
                            <p>ピカピカぴかりんじゃんけんポン♪</p> 
                          </div> 
                        </div> 
                        <div class="item fixed-height"> 
-                         <img src="img/sample/carousel/crs_1.jpg" alt=""> 
+                         <img src="/static/images/sample/carousel/crs_1.jpg" alt=""> 
                          <div class="carousel-caption"> 
                            <h4>Second Thumbnail label</h4> 
                            <p>選んでくれてありがとう</p> 
                          </div> 
                        </div> 
                        <div class="item fixed-height"> 
-                         <img src="img/sample/carousel/crs_5.jpg" alt=""> 
+                         <img src="/static/images/sample/carousel/crs_5.jpg" alt=""> 
                          <div class="carousel-caption"> 
                            <h4>Third Thumbnail label</h4> 
                            <p>戦闘力高そうな学級委員長</p> 
                          </div> 
                        </div>
                        <div class="item fixed-height"> 
-                         <img src="img/sample/carousel/crs_3.jpg" alt=""> 
+                         <img src="/static/images/sample/carousel/crs_3.jpg" alt=""> 
                          <div class="carousel-caption"> 
                            <h4>Third Thumbnail label</h4> 
                            <p>たまには夜更かししませんか</p> 
                          </div> 
                        </div>
                        <div class="item fixed-height"> 
-                         <img src="img/sample/carousel/crs_4.jpg" alt=""> 
+                         <img src="/static/images/sample/carousel/crs_4.jpg" alt=""> 
                          <div class="carousel-caption"> 
                            <h4>Third Thumbnail label</h4> 
                            <p>きみとわかちあうささやかなしあわせをこれからも。</p> 
@@ -130,134 +302,24 @@
                      <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a> 
                      <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a> 
                    </div> 
-               
                </div>
             </div>
-        </div>
+
+        </div><!-- END sidebar -->
+        
     </div>
+
 </div>
 
-<div class="container">
-    <div class="sidebar">
-        <div class="well">
-            <section id = "work">
-                <div class="page-header">
-                    <h3>主创作品</h3>
-                </div>
-                <div class="row">
-                    {% for work in profile.user.work_set.all%}
-                    <div class="span2">
-                        <li>
-                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
-                        </li>
-                        <li>
-                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
-                        </li>
-                        <li>
-                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
-                        </li>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            <!-- section work -->
-            <section id = "focus">
-                <div class="page-header">
-                    <h3>关注作品</h3>
-                </div>
-                <div class="row">
-                    {% for work in followed %}
-                    <div class="span2">
-                        <li>
-                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
-                        </li>
-                        <li>
-                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
-                        </li>
-                        <li>
-                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
-                        </li>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            <!-- section focus -->
-            <section id = "related">
-                <div class="page-header">
-                    <h3>参与创作</h3>
-                </div>
-                <div class="row">
-                    {% for work in joined %}
-                    <div class="span2">
-                        <li>
-                            <a href="{%url show_work work.pk%}"> <img src="/media/{{work.cover|default:"no_cover.gif"}}" width="100px" height="100px"> </a>
-                        </li>
-                        <li>
-                            <a href="{%url show_work work.pk%}"> {{work.name}} </a>
-                        </li>
-                        <li>
-                            <a href="{%url profile work.author.username%}"> by {{work.author.username}} </a>
-                        </li>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            <!-- section related -->
-        </div>
-    </div>
-    <div class="content">
-        <div class="hero-unit">
-            <div class="row">
-                <div class="span13">
-                    <a href = "{%url profile profile.user.username%}">
-                    <div class="row ">
-                        <div class="span1">
-                            <img src="/media/{{profile.avatar.name}}" width="55px" height="55px" />
-                        </div>
-                        <div class="span2">
-                            <h3>{{profile.user}}</h3>
-                        </div>
-                    </div> </a>
-                    <div class="row">
-                        <div class="span1">
-                            {% if request.user.id != profile.user_id %}
-                                {% if_relationship request.user profile.user "following" %}
-                            <button id="id_follow_btn" class="btn btn-error" data-action="unfollow" data-user-id="{{profile.user.id}}">取消</button>
-                                {% else %}
-                            <button id="id_follow_btn" class="btn btn-primary" data-action="follow" data-user-id="{{profile.user.id}}">关注</button>
-                                {% endif_relationship %}
-                            <input type="submit" class="btn btn-primary" id="id_invite_btn" data-toggle="modal" data-backdrop="true" data-keyboard="true" value="邀请">
-                            {% else %}
-                            <input type="submit" class="btn primary" value="权限">
-                            {% endif %}
-                        </div>
-                        <div class="span4">
-                            <h4>介绍</h4>
-                            <span>{{profile.intro}}</span>
-                        </div>
-                        <div class="span4">
-                            <h4>技能</h4>
-                            <ul class="abilities">
+
+
                                 {% for skill in skill_list%}
                                 <li class="{{skill.skill}}">
                                     {{skill.skill}} <strong>exp{{skill.exp}}</strong>
                                 </li>
                                 {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="span4 offset1">
-                            <h4>位置</h4>
-                            <span>{{profile.location}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Example row of columns -->
-        <section id = "news">
-            <div class="page-header">
+
+            <!--div class="page-header">
                 <h1>新鲜事</h1>
                 <ul>
                     {% for e in timeline %}
@@ -266,11 +328,9 @@
                     </li>
                     {% endfor %}
                 </ul>
-            </div>
-        </section>
-        <!-- section news -->
-    </div>
-</div>
+            </div-->
+            
+
 <div id="id_invite" class="modal hide fade">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
@@ -330,6 +390,8 @@
 
 {% block script %}
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap/bootstrap-collapse.js"></script>
+
 <script>
 $(document).ready(function(){
     var uid = {{profile.user.id}};
@@ -388,7 +450,7 @@ var Controller = {
         $.ajax({type: 'get', url: '{%url ajax_user_follow %}', data:{'uid': uid, 'action': action}, 
             success: function(data){
                 var data = JSON.parse(data, status);
-                data.action == 'follow' ? btn.text('取消').removeClass('btn-primary').data('action', 'unfollow'):btn.text('关注').addClass('btn-primary').data('action', 'follow');
+                data.action == 'follow' ? btn.html('<i class="icon-bookmark icon-dark-grey" style="margin-top: 2px;"></i>取消').removeClass('btn-primary').data('action', 'unfollow'):btn.html('<i class="icon-bookmark icon-white" style="margin-top: 2px;"></i>关注').addClass('btn-primary').data('action', 'follow');
             },
             error: function(jqXHR, textStatus){
                 $('#alertModal .modal-body p').text('您还没有登录，请先登录');
