@@ -8,7 +8,7 @@ ul, ol, li { list-style: none; }
 
 .images (@name, @format: jpg) {
     @url: "/static/images/" ;
-    background: url("@{url}@{name}.@{format}");
+    background: url("@{url}@{name}.@{format}") no-repeat;
 }
 
 .corners (@radius: 5px) {
@@ -141,7 +141,7 @@ hr {margin:10px 0 10px; border-color:#e3d4c1;}
 .element {
   margin:10px 0px;
   border-bottom:1px inset;
-  toolbar { height:30px; margin:10px 0px 5px 25px;}
+  .toolbar { height:30px; margin:10px 0px 5px 25px;}
 }
 
 fieldset{
@@ -189,6 +189,7 @@ fieldset{
     height: 3px;
     width: 1px;
 }
+#id_story_upload_queue { width: 460px;}
 
 .skill-list {
   height: 36px;

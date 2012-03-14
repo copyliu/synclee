@@ -72,12 +72,12 @@ class Element(models.Model):
     title = models.CharField(max_length=64, blank=True)
     content = models.TextField()
     work = models.ForeignKey(Work)
-    
-def element_event(sender = None, instance = None, created = False, **kwargs):
-    if created:
-        TimeLines.objects.create(user = instance.work.author, instance = instance)
-   
-models.signals.post_save.connect(element_event, sender = Element)
+
+#TODO: 显示事件
+#def element_event(sender = None, instance = None, created = False, **kwargs):
+#    if created:
+#        TimeLine.objects.create(user = instance.work.author, instance = instance)  
+#models.signals.post_save.connect(element_event, sender = Element)
 
 class WorkScore(models.Model):
     work = models.ForeignKey(Work)
