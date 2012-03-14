@@ -22,13 +22,13 @@
             </tr>
             <tr>
               <td><span class="label label-info">发起人</span></td>
-              <td><a href="/accounts/profile/{{work.author.username}}/">{{work.author.username}}</a></td>
+              <td><a href="{% url profile work.author.username%}">{{work.author.username}}</a></td>
             </tr>
             <tr>
               <td><span class="label label-info">参与人</span></td>
               <td>
               {% for p in participated %}
-              <li><a href="/accounts/profile/{{p.username}}/">{{p.username}}</a></li>
+              <a href="{% url profile p.username%}">{{p.username}}</a>, &nbsp;
               {% endfor %}
               </td>
             </tr>
@@ -40,20 +40,20 @@
         </table>
       </div>
       <div class="span9">
-        <article>
-        </article>
-        <div class="well" id="tool_bar">
-            <a class="btn btn-success" type="submit">提交</a>
-            <a id="id_add_text_button" href="#id_add_text" class="btn" data-toggle="modal" data-backdrop="true" data-keyboard="true">添加文字</a>
-            <input type="file" name="story_upload" id="id_story_upload"/>
+        <div id="elements"></div>
+            <div class="well row" id="tool_bar">
+            <div class="span2" style="margin:0px;"><a class="btn btn-success" type="submit">提交企划</a></div>
+            <div class="span2" style="margin:0px;">
+                <a id="id_add_text_button" href="#id_add_text" class="btn" data-toggle="modal" data-backdrop="true" data-keyboard="true">添加文字</a>
+            </div>
+            <div class="span2" style="margin:0px;"><input type="file" name="story_upload" id="id_story_upload"/></div>
             <!--input type="text" id="id_line_name" /><button class="btn">添加分割线</button-->
-          </div>
+            </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 
 <div id="id_add_text" class="modal hide fade">
@@ -97,10 +97,10 @@
 
 <script>
 $(document).ready(function(){
-	document.addNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_add_text_content');
-  document.editNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_edit_text_content');
+    document.addNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_add_text_content');
+    document.editNicEditor = new nicEditor({buttonList : ['fontSize','bold','italic','indent','forecolor','left','center','right']}).panelInstance('id_edit_text_content');
 
-  $("article" ).sortable();
+    $("#elements" ).sortable();
   
   /* ——未使用 鼠标悬停显示工具条
   $("article .element").live('mouseover', function(){
@@ -109,160 +109,151 @@ $(document).ready(function(){
     $(this).children("toolbar").hide()
   }) */
   
-  $('article .element toolbar [name="delete"]').live('click',function(){
-    var answer = confirm('确定要删除吗?');
-    if (answer) $(this).parent().parent().remove();
-  })
+    $('#elements .element .toolbar [name="delete"]').live('click',function(){
+        var answer = confirm('确定要删除吗?');
+        if (answer) $(this).parent().parent().remove();
+    });
   
-  $('article .element toolbar [name="edit"]').live('click',function(){
-    var type = $(this).parent().parent().children('.span1').text();
-    switch(type) {
-      case '分割线':
-        var dom = $(this).parent().parent().children('p');
-        Controller.editElement.line(dom);
-        break;
-      case '文字':
-        window.tempTextElement = {
-          content : $(this).parent().parent().children('div .span11'),
-          title :  $(this).parent().parent().children('.title')
-        }
-        $('#id_edit_text_title').val(window.tempTextElement['title'].text());
-        //$('#id_edit_text_content').text(window.tempTextElement['content'].html());
-        document.editNicEditor.nicInstances[0].setContent(window.tempTextElement['content'].html());
-        break;
-      default: 
-        break;
-    };
-  });
+    $('#elements .element .toolbar [name="edit"]').live('click',function(){
+        var type = $(this).parent().parent().children('.span1').text();
+        switch(type) {
+            case '分割线':
+                var dom = $(this).parent().parent().children('p');
+                Controller.editElement.line(dom);
+                break;
+            case '文字':
+                window.tempTextElement = {
+                  content : $(this).parent().parent().children('div .span11'),
+                  title :  $(this).parent().parent().children('.title')
+                }
+                $('#id_edit_text_title').val(window.tempTextElement['title'].text());
+            //$('#id_edit_text_content').text(window.tempTextElement['content'].html());
+                document.editNicEditor.nicInstances[0].setContent(window.tempTextElement['content'].html());
+                break;
+            default: 
+                break;
+            };
+    });
   
-  $('#tool_bar .btn-success').click(function(){
-    Controller.submitWork();
-  });
+    $('#tool_bar .btn-success').click(function(){
+        Controller.submitWork();
+    });
   
-  $("#id_line_name").next().click(function(){
-    Controller.addElement.line();
-  });
+    $("#id_line_name").next().click(function(){
+        Controller.addElement.line();
+    });
   
     //批量上传按钮
-	$('#id_story_upload').uploadify ({
-		'swf'		: '/static/uploadify.swf',
-		'uploader' 	: '{%url upload_image work.id %}', 
-		'cancelImage' : '/static/images/icons/cancel.png',
-    'buttonClass' : 'btn',
-    'width'       : 90,
-		'checkExisting' : '{%url check_existing %}',
-		'removeCompleted': true,
-    'fileTypeExts'     : '*.jpg;*.gif;*.png',
-		'multi'		: true,
-    'auto'    : true,
-		'buttonText': '添加图片',
-		'onUploadSuccess' : function (file, data, response) {
-      Controller.addElement.image(data);
-		}
-	});
+    $('#id_story_upload').uploadify ({
+        'swf'		: '/static/uploadify.swf',
+        'uploader' 	: '{%url upload_image work.id %}', 
+        'cancelImage' : '/static/images/icons/cancel.png',
+        'buttonClass' : 'btn',
+        'width'       : 90,
+        'checkExisting' : '{%url check_existing %}',
+        'removeCompleted': true,
+        'fileTypeExts'     : '*.jpg;*.gif;*.png',
+        'multi'		: true,
+        'auto'    : true,
+        'buttonText': '添加图片',
+        'onUploadSuccess' : function (file, data, response) {
+            Controller.addElement.image(data);
+        }
+    });
 })
 
 var View = {
-  Element : {
-    text : function(content, title){
-      return '<div class="row element">'+
-    '<div class="span1"><span class="label label-success">文字</span></div>'+
-    '<h3 class="title">'+title+'</h3>'+
-    '<div class="span11">'+content+'</div>'+
-    '<toolbar class="span4"><a href="#id_edit_text" name="edit" data-toggle="modal" data-backdrop="true" data-keyboard="true"><i class="icon-edit"></i>编辑</a> <a name="delete" href="#"><i class="icon-trash"></i> 删除</a>'+
-    '</div>'},
-    image : function(name){
-      return '<div class="row element">'+
-    '<div class="span1"><span class="label label-success">图片</span></div>'+
-    '<input class="title" placeholder="图片标题"/>'+
-    '<img class="span11" src="/media/works/{{work.id}}/'+name+'"></p>'+
-    //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
-    '<toolbar class="span4"><a href="#"><i class="icon-trash"></i> 删除</a></toolbar>'+
-    '</div>'},
-    line : function(name){
-      return '<div class="row element">'+
-    '<div class="span1"><span class="label success">分割线</span></div>'+
-    '<p class="span11">'+name+'</p>'+
-    '<toolbar class="span11" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
-    '</div>'},
-  }
+    Element : {
+        text : function(title, content){
+            return '<div class="row element">'+
+            '<div class="span1"><span class="label label-success">文字</span></div>'+
+            '<h3 class="title">'+title+'</h3>'+
+            '<div class="span11">'+content+'</div>'+
+            '<div class="span4 toolbar"><a href="#id_edit_text" name="edit" data-toggle="modal" data-backdrop="true" data-keyboard="true"><i class="icon-edit"></i>编辑</a> <a name="delete" href="#"><i class="icon-trash"></i> 删除</a></div>'+
+            '</div>'},
+        image : function(name){
+            return '<div class="row element">'+
+            '<div class="span1"><span class="label label-success">图片</span></div>'+
+            '<input class="title" placeholder="图片标题"/>'+
+            '<img class="span11" src="/media/works/{{work.id}}/'+name+'"></p>'+
+            //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+            '<div class="span4 toolbar"><a href="#"><i class="icon-trash"></i> 删除</a></div>'+
+            '</div>'},
+        line : function(name){
+            return '<div class="row element">'+
+            '<div class="span1"><span class="label success">分割线</span></div>'+
+            '<p class="span11">'+name+'</p>'+
+            '<toolbar class="span11" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
+            '</div>'}
+    }
 }
 
 var Controller = {
-  addElement : {
-    text : function(){
-      document.addNicEditor.nicInstances[0].saveContent();
-      var content = $('#id_add_text_content').val();
-      var title = $('#id_add_text_title').val();
-      $('article').append(View.Element.text(content, title));
-      $('#id_add_text_title').val('');
-      $('#id_add_text_content').val('');
-      $('#id_add_text_content').prev().children('div').html('');
-      $('#id_add_text').modal('hide');
+    addElement : {
+        text : function(){
+            document.addNicEditor.nicInstances[0].saveContent();
+            var content = $('#id_add_text_content').val();
+            var title = $('#id_add_text_title').val();
+            $('#elements').append(View.Element.text(title, content));
+            $('#id_add_text_title').val('');
+            $('#id_add_text_content').val('');
+            $('#id_add_text_content').prev().children('div').html('');
+            $('#id_add_text').modal('hide');
+        },
+        image : function(name){
+            $('#elements').append(View.Element.image(name));
+        },
+        line : function(){
+            var v = $('#id_line_name').val();
+            $('article').append(View.Element.line(v));
+        }
     },
-    image : function(name){
-      $('article').append(View.Element.image(name));
-    },
-    line : function(){
-      var v = $('#id_line_name').val();
-      $('article').append(View.Element.line(v));
-    }
-  },
-  editElement : {
-    text : function(){
-      document.editNicEditor.nicInstances[0].saveContent();
+    editElement : {
+        text : function(){
+        document.editNicEditor.nicInstances[0].saveContent();
       //document.editNicEditor.nicInstances[0].getContent();
-      var content = $('#id_edit_text_content').val();
-      var title = $('#id_edit_text_title').val();
-      window.tempTextElement['title'].text(title);
-      window.tempTextElement['content'].html(content);
-      $('#id_edit_text').modal('hide');
+        var content = $('#id_edit_text_content').val();
+        var title = $('#id_edit_text_title').val();
+        window.tempTextElement['title'].text(title);
+        window.tempTextElement['content'].html(content);
+        $('#id_edit_text').modal('hide');
     },
     line : function(dom){
-      var text = dom.text();
-      window.editLineSubmit = function(button){
-        var changeText = button.prev().val();
-        dom.empty().text(changeText);
-      };
-      dom.html('<textarea>'+text+'</textarea> <button class="btn" onclick="editLineSubmit($(this))">Submit</button>');
-    }
-  },
-  submitWork : function(){
-    $(".element").each(function(i){
-      var type = $(".element").eq(i).children('.span1').text();
-      var content = '';
-      switch(type) {
-        case '分割线':
-          title = '';
-          content = $(".element").eq(i).children('p').text();
-          type = 'line';
-          break;
-        case '文字':
-          title = $(".element").eq(i).children('.title').text();
-          content = $(".element").eq(i).children('.span11').html();
-          type = 'text';
-          break;
-        case '图片':
-          title = $(".element").eq(i).children('input').val();
-          content = $(".element").eq(i).children('img').attr('src').replace('/media/','');
-          type = 'image';
-          break;
-	      default: 
-		      default_statement;
-      }
-      
-      $.ajax({ type: 'post', data: {'category': type, 'content': content, 'title': title}});
-    })
-    location.href = '{%url show_work work.id %}';
-  },
-  get : {
-    type : function(){
-      
+        var text = dom.text();
+        window.editLineSubmit = function(button){
+            var changeText = button.prev().val();
+            dom.empty().text(changeText);
+            };
+            dom.html('<textarea>'+text+'</textarea> <button class="btn" onclick="editLineSubmit($(this))">Submit</button>');
+        }
     },
-    content : function(){
-      
+    submitWork : function(){
+        $("#elements .element").each(function(i){
+            var type = $(".element").eq(i).children('.span1').text();
+            var content = '';
+            switch(type) {
+                case '分割线':
+                    title = '';
+                    content = $(".element").eq(i).children('p').text();
+                    type = 'line';
+                    break;
+                case '文字':
+                    title = $(".element").eq(i).children('.title').text();
+                    content = $(".element").eq(i).children('.span11').html();
+                    type = 'text';
+                    break;
+                case '图片':
+                    title = $(".element").eq(i).children('input').val();
+                    content = $(".element").eq(i).children('img').attr('src').replace('/media/','');
+                    type = 'image';
+                    break;
+                default: 
+                    break;
+            }
+            $.ajax({ type: 'post', data: {'category': type, 'content': content, 'title': title}});
+        })
+        location.href = '{%url show_work work.id %}';
     }
-  }
 }
 
 

@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}用户排行榜{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
 {% block content %}
 
 <div class="container">
 <ul class="nav nav-tabs">
-	<li class="dropdown">
-  	<a class="dropdown-toggle" data-toggle="dropdown" href="#">排序方式 <b class="caret"></b></a>
-			<ul class="dropdown-menu">
-				<li {%if kind == 'all'%}class="active"{%endif%}><a href="{%url list_user%}?key=all&page={{users.number}}&cnt={{cnt}}">总排行</a></li>
-				<li {%if kind == 'image'%}class="active"{%endif%}><a href="{%url list_user%}?key=image&page={{users.number}}&cnt={{cnt}}">画师</a></li>
-				<li {%if kind == 'word'%}class="active"{%endif%}><a href="{%url list_user%}?key=word&page={{users.number}}&cnt={{cnt}}">写手</a></li>
-				<li {%if kind == 'other'%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt={{cnt}}">围观</a></li>
-			</ul>
-	</li>
-	<li class="dropdown">
-  	<a class="dropdown-toggle" data-toggle="dropdown" href="#">每页显示 <b class="caret"></b></a>
-			<ul class="dropdown-menu">
-				<li {%if cnt == 1%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=1">1</a></li>
-				<li {%if cnt == 5%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=5">5</a></li>
-				<li {%if cnt == 10%}class="active"{%endif%}><a href="{%url list_user%}?key=other&page={{users.number}}&cnt=10">10</a></li>
-			</ul>
-	</li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">排序方式 <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li {%if kind == 'all'%}class="active"{%endif%}><a href="?key=all&page={{users.number}}&cnt={{cnt}}{{get_extra}}">总排行</a></li>
+                <li {%if kind == 'image'%}class="active"{%endif%}><a href="?key=image&page={{users.number}}&cnt={{cnt}}{{get_extra}}">画师</a></li>
+                <li {%if kind == 'word'%}class="active"{%endif%}><a href="?key=word&page={{users.number}}&cnt={{cnt}}{{get_extra}}">写手</a></li>
+                <li {%if kind == 'other'%}class="active"{%endif%}><a href="?key=other&page={{users.number}}&cnt={{cnt}}{{get_extra}}">围观</a></li>
+            </ul>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">每页显示 <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li {%if cnt == 1%}class="active"{%endif%}><a href="?key=other&page={{users.number}}&cnt=1{{get_extra}}">1</a></li>
+            <li {%if cnt == 5%}class="active"{%endif%}><a href="?key=other&page={{users.number}}&cnt=5{{get_extra}}">5</a></li>
+            <li {%if cnt == 10%}class="active"{%endif%}><a href="?key=other&page={{users.number}}&cnt=10{{get_extra}}">10</a></li>
+        </ul>
+    </li>
 </ul>
 
 <table class="table table-striped">
   <thead>
     <tr>
-    	<th>排名</th>
-    	<th></th>
+        <th>排名</th>
+        <th></th>
       <th>用户名</th>
       <th>画师</th>
       <th>写手</th>
@@ -39,8 +39,8 @@
   <tbody>
     {% for user in users.object_list %}
     <tr>
-    	<td width=34px><p>{{user.rank}}.</p></td>
-    	<td width=24px><a href="{%url profile user.username %}">
+        <td width=34px><p>{{user.rank}}.</p></td>
+        <td width=24px><a href="{%url profile user.username %}">
         <img src="/media/{{user.avatar}}" width="24px" height="24px" />
       </a></td>
       <td><a href="{%url profile user.username %}">
@@ -56,13 +56,13 @@
 <div class="pagination">
   <ul>
     {% if users.has_previous %}
-    <li><a href="?key={{kind}}&page={{ users.previous_page_number }}&cnt={{cnt}}">上一页</a></li>
+    <li><a href="?key={{kind}}&page={{ users.previous_page_number }}&cnt={{cnt}}{{get_extra}}">上一页</a></li>
     {% endif %} 
     {% for i in paginator.page_range %}
-    <li><a href="?key={{kind}}&page={{i}}&cnt={{cnt}}">{{i}}</a></li>
+    <li><a href="?key={{kind}}&page={{i}}&cnt={{cnt}}{{get_extra}}">{{i}}</a></li>
     {% endfor %}
     {% if users.has_next %}
-    <li><a href="?key={{kind}}&page={{ users.next_page_number }}&cnt={{cnt}}">下一页</a></li>
+    <li><a href="?key={{kind}}&page={{ users.next_page_number }}&cnt={{cnt}}{{get_extra}}">下一页</a></li>
     {% endif %}
   </ul>
 </div>

@@ -3,8 +3,8 @@
 <html lang="zh-cn">
 {% block header %}
 <head>
-	<meta charset="UTF-8">
-	<title>{% block title %}{% endblock %} | [Synclee]</title>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - 新岚 Synclee - 发起 合作 原创</title>
     <link type="text/css" rel="stylesheet/less" href="/static/css/style.less"/>
     <link rel="stylesheet/less" type="text/css" href="/static/css/bootstrap/bootstrap.less">
     <script type="text/javascript" src="/static/js/less-1.1.5.min.js"></script>
@@ -23,8 +23,8 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li class="active"><a href="/">首页</a></li>
-            <li><a href="{%url list_works %}">所有企划</a></li>
-            <li><a href="{%url list_user%}">用户排行</a></li>
+            <li><a href="{%url works %}">所有企划</a></li>
+            <li><a href="{%url users%}">用户排行</a></li>
             <li><a href="{%url work_rank %}">排行榜</a></li>
           </ul>
           <!--form class="navbar-search pull-left" action="">
@@ -48,36 +48,40 @@
     </div><!-- /navbar-inner -->
   </div>
 </header>
-
 {% endblock %}
-
 {% block extrahead %}{% endblock %}
-
 {% block content %}{% endblock %}
-<script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+
+<footer class="modal-footer">
+    <div class="container">
+        <div class="span6"><p>&copy;&nbsp;Copyright 2012 Synclee Team.</p></div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap/bootstrap-tooltip.js"></script>
+{% if user.is_authenticated %}
 <script>
 $(document).ready(function(){
-   {% if user.is_authenticated %}
    function checkUnread(){
        $.ajax({	
            url: '{%url unread %}',
            data: {uid: {{request.user.id}}},
            success: function(data){
                if (data != 0){
-                   $('.pull-right').children('li:first').tooltip({title: '<a href="/accounts/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
+                   $('.pull-right').children('li:first').tooltip({title: '<a href="/settings/notification/">你有'+data+'条未读的提醒</a>', placement: 'bottom', trigger: 'manual'});
                    $('.pull-right').children('li:first').tooltip('show');
                }else{
                    $('.pull-right').children('li:first').tooltip('hide');
                }
            }
        })
-
    };
+   checkUnread();
    setInterval(checkUnread, 15000);
-   {% endif %}
 });
 </script>
+{% endif %}
 {% block script %}{% endblock %}
 </body>
 </html>

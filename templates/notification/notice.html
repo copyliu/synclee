@@ -7,9 +7,19 @@
 {% endif %}
 
 {% if notice_label ==  'apply_work' %}
-<a href="{%url profile user.username %}">{{user.username}}</a> 希望能作为 [{{role}}] 加入你的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>] [<a href = "{%url show_work work.id %}">现在处理</a>]。
+<a href="{%url profile user.username %}">{{user.username}}</a> 希望能作为 [{{role}}] 加入你的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>]
+<blockquote style="margin-top: 10px">{{message}}</blockquote>
+<div class="invitation_action" id = "id_invitation_{{id}}">
+    <a data-action="accept" data-direction="apply" data-id={{id}}>[同意]</a>
+    <a data-action="reject" data-direction="apply" data-id={{id}}>[拒绝]</a>
+</div>
 {% endif %}
 
-{% if notice_label ==  'invite_work' %}
-<a href="{%url profile user.username %}">{{user.username}}</a> 邀请你作为 [{{role}}] 加入他的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>] [<a href = "{%url profile invited.username %}">现在处理</a>]。
+{% if notice_label ==  'invite_user' %}
+<a href="{%url profile user.username %}">{{user.username}}</a> 邀请你作为 [{{role}}] 加入他的企划： [<a href="{%url show_work work.id %}">{{work.name}}</a>] 
+<blockquote style="margin-top: 10px">{{message}}</blockquote>
+<div class="invitation_action" id = "id_invitation_{{id}}">
+    <a data-action="accept" data-direction="invite" data-id={{id}}>[同意]</a>
+    <a data-action="reject" data-direction="invite" data-id={{id}}>[拒绝]</a>
+</div>
 {% endif %}

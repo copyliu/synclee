@@ -135,8 +135,10 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'relationships',
     'notification',
+    #'tastypie',
     
     'accounts',
+    'api',
     'works',
 )
 
@@ -163,9 +165,9 @@ LOGGING = {
     }
 }
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfiles'
-LOGIN_REDIRECT_URL = '/accounts/settings/profile/'
-
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+LOGIN_REDIRECT_URL = '/settings/profile/'
+LOGIN_URL = '/login/'
 try:
     execfile(os.path.join(PROJECT_ROOT, 'custom_settings.py'))
 except IOError:
@@ -173,3 +175,9 @@ except IOError:
 
 if os.path.join(PROJECT_ROOT, 'tools') not in sys.path:
     sys.path.append(os.path.join(PROJECT_ROOT, 'tools'))
+    sys.path.append(os.path.join(PROJECT_ROOT, 'api'))
+
+DEFAULT_FROM_EMAIL = 'webmailer@synclee.net'
+EMAIL_HOST = 'smtp.exmail.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'webmailer@synclee.net'

@@ -2,24 +2,34 @@
 from django.db import models
 from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
-
+from notification import models as notification
 from works.models import Work
 
-class UserProfiles(models.Model):
+
+class UserProfile(models.Model):
     user = models.ForeignKey(User, related_name='profile')
-    avatar = ThumbnailerImageField(upload_to='avatar', default='avatar/default_avatar.jpg', resize_source=dict(size=(200, 200), crop='big'),)
+    avatar = ThumbnailerImageField(upload_to='avatar', default='avatar/default_avatar.jpg', resize_source=dict(size=(200, 250), crop='big'),)
     website = models.URLField(blank = True)
     intro = models.TextField()
     location = models.CharField(max_length = 50, blank = True)
     true_name = models.CharField(max_length = 14, blank = True)
-    email = models.EmailField()
+    #email = models.EmailField()
 
+class Visitor(models.Model):
+    user = models.ForeignKey(User, related_name='visite')
+    profile = models.ForeignKey(UserProfile, related_name='popularity')
+    datetime = models.DateTimeField(auto_now_add = True)
+    comment = models.CharField(max_length = 20, blank = True)
+
+    class Meta:
+        ordering = ['-datetime']
+    
 def create_user_profile(sender = None, instance = None, created = False, **kwargs):
     if created:
-        UserProfiles.objects.create(user=instance)
-        UserSkills.objects.create(user=instance, skill='word')
-        UserSkills.objects.create(user=instance, skill='image')
-        UserSkills.objects.create(user=instance, skill='other')
+        UserProfile.objects.create(user=instance)
+        Skill.objects.create(user=instance, skill='word')
+        Skill.objects.create(user=instance, skill='image')
+        Skill.objects.create(user=instance, skill='other')
         
 models.signals.post_save.connect(create_user_profile, sender = User)
 
@@ -32,8 +42,12 @@ SKILL_CHOICES = (
 #    ('onlook',u'围观'),
     ('other', u'其他'),
 )
-
-class UserSkills(models.Model):
+SKILL_CHOICES_MAP = {
+    'word': u'写手',
+    'image': u'画师',
+    'other': u'其他',
+}
+class Skill(models.Model):
     user = models.ForeignKey(User, related_name='skills')
     skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
     exp = models.IntegerField(default = 0)
@@ -47,12 +61,12 @@ class AccountTempPassword(models.Model):
 class Invitation(models.Model):
     INVITE_CHOICES = (
         (u'noanswer', u'未响应'),
-        (u'goingon', u'申请中'),
         (u'accept', u'已接受'),
         (u'reject', u'已拒绝')
     )
-    work = models.ForeignKey(Work, related_name='invitaion')
+    work = models.ForeignKey(Work, related_name='invitation')
     invited = models.ForeignKey(User, related_name='invited')
-    skill = models.CharField(max_length=8, choices=SKILL_CHOICES)
+    role = models.CharField(max_length=8, choices=SKILL_CHOICES)
     reason = models.CharField(max_length = 300)
     invite_status = models.CharField(max_length=8, choices=INVITE_CHOICES)
+    notice = models.ForeignKey(notification.Notice, default=0)

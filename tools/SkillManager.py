@@ -1,10 +1,10 @@
 from django.db import transaction, models
-from accounts.models import UserSkills
+from accounts.models import Skill
 from works.models import Work
 
 @transaction.commit_on_success
 def addexp(user, category, x):
-    tem = UserSkills.objects.get(user = user, skill = category)
+    tem = Skill.objects.get(user = user, skill = category)
     tem.exp += x
     tem.save()
 

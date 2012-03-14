@@ -1,35 +1,109 @@
 {% extends "base.html" %}
-
-{% block title %}新岚 - 发起 合作 原创{% endblock %}
+{% load string_filter %}
+{% block title %}首页{% endblock %}
 
 {% block content %}
 
 <div class="container">
     <div class="row">
-      <div class="span8">
-        <h2>Welcome to synclee</h2>
-        <p>这里是创作与合作的崭新平台。<br/>
-        你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
-        新岚希望你在这里找回属于自己的创作乐趣。<br/>
-        <p><a href="{%url add_work %}"><button class="btn">开始创作</button></a></p>
-        </p>
-      </div>
-        <div class="span4">
-
+        <div class="span8">
+            <h2>Welcome to synclee</h2>
+            <p>这里是创作与合作的崭新平台。<br/>
+            你可以公开自己的作品，并邀请好友一同进行创作。合绘，接龙，还有其他更有趣的玩法等你来开发。<br/>
+            新岚希望你在这里找回属于自己的创作乐趣。<br/>
+            <p><a href="{%url add_work %}" class="btn">开始创作</a></p>
+            </p>
+            <div class="word-works panel">
+                <div class="panel-title">文字企划 Ranking</div>
+                <div class="row">
+                    <div class="span8">
+                        {% for v in works.word %}
+                        <table style="float:left; margin:10px;">
+                            <tr>
+                                <td {%if forloop.counter > 2 %} width="55" {%else%} width="75" {%endif%}><a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a></td>
+                                <td width="10"></td>
+                                <td {%if forloop.counter > 2 %} width="120" {%else%} width="200" {%endif%}>
+                                    <h5 class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></h5>
+                                    <p>{%if forloop.counter > 2 %} {{v.intro|substring:15}} {%else%} {{v.intro|substring:30}} {%endif%}</p>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="word-works panel">
+                <div class="panel-title">图片企划 Ranking</div>
+                <div class="row">
+                    <div class="span8">
+                        {% for v in works.image %}
+                        <table style="float:left; margin:10px;">
+                            <tr>
+                                <td {%if forloop.counter > 2 %} width="55" {%else%} width="75" {%endif%}><a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a></td>
+                                <td width="10"></td>
+                                <td {%if forloop.counter > 2 %} width="120" {%else%} width="200" {%endif%}>
+                                    <h5 class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></h5>
+                                    <p>{%if forloop.counter > 2 %} {{v.intro|substring:15}} {%else%} {{v.intro|substring:30}} {%endif%}</p>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="span3">
-            <ul class="media-grid">
-                <li><a href="#"><img src="/static/images/work_1_cover_3.jpg.420x420_q85.jpg" width="150" /></a></li>
-            </ul>
+        <div class="span3" style="width: 270px;">
+            <div class="login-panel panel">
+                {% if user.is_authenticated %}
+                <h4>欢迎回来，{{request.user.username}}</h4><br/>
+                <img src="/media/{{request.user.get_profile.avatar.name}}" width="50" height="60" style="float: left;" />
+                <div class="span2" style="border-left:1px solid #CCC; float: right; padding-left: 10px; ">
+                    <label>人气：{{request.user.profile.all.0.popularity.all.count}}</label> 
+                    <label>关注：<a href = "{%url list_follow_user%}?user={{request.user}}&direction=following">{{request.user.relationships.following.count}}</a></label>
+                    <label>粉丝：<a href = "{%url list_follow_user%}?user={{request.user}}&direction=follower">{{request.user.relationships.followers.count}}</a></label>
+                </div>
+                <div class="clearfix"></div>
+                
+                {% else %}
+                <h4>欢迎来到新岚，请登录</h4><br/>
+                <form action="{%url login %}" method="post">
+                    {% csrf_token %}
+                    <input name="username" type="text" placeholder="用户名">
+                    <input name="password" type="password" placeholder="密码">
+                    <button type="submit" class="btn">
+                        <i class="icon-user " style="margin-top:2px"></i>登陆
+                    </button>
+                    <a class="btn btn-primary" href="{%url register %}">
+                        <i class="icon-ok icon-white"></i>注册
+                    </a>
+                </form>
+                {% endif %}
+            </div>
+            <div class="hot-works panel">
+                <div class="panel-title">热门企划 Ranking</div>
+                <article>
+                    {% for v in hot_works %}
+                        <table style="margin:5px;">
+                            <tr>
+                                <td width="55"><a class="thumbnail" href="{%url show_work v.id %}"><img src="/media/{{v.cover|default:"no_cover.gif"}}" {%if forloop.counter > 2 %} width="50" {%else%}width="70" {%endif%} alt="Cover"/></a></td>
+                                <td width="10"></td>
+                                <td width="200">
+                                    <h5 class="work-title"><a href="{%url show_work v.id %}">{{v.name}}</a></h5>
+                                    <p>{{v.intro|substring:30}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="margin:0px;">
+                    {% endfor %}
+                </article>
+            </div>
+            <div class="banner">
+                
+            </div>
+            <div class="hot-tags panel">
+                <div class="panel-title">今日热门标签 Tags</div>
+            </div>
         </div>
-        <div class="span10">
-          {% for work in works %}
-          <div><a href="{%url show_work work.id %}">{{work.name}}</a></div>
-          {% endfor %}
-        </div>
-        <div class="span3">111</div>
     </div>
 </div>
 
