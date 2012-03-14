@@ -253,6 +253,7 @@ def list_follow_user(request):
         users = user.relationships.following()
     else:
         users = user.relationships.followers()
+    get_extra = "&user=" + username + "&direction=" + request.GET.get("direction", "following")
     kind = request.GET.get('key', "all")
     cnt = request.GET.get('cnt', "1")
     try:
@@ -287,4 +288,4 @@ def list_follow_user(request):
     #print page,"+++",works.object_list[0].aver_score()
     request.session['page'] = page
     
-    return TemplateResponse(request, 'accounts/list_user.html', {'title':u"relationships", 'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator})
+    return TemplateResponse(request, 'accounts/list_user.html', {'title':u"relationships", 'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator, 'get_extra':get_extra})
