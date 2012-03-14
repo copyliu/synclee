@@ -5,6 +5,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from notification import models as notification
 from works.models import Work
 
+
 class UserProfile(models.Model):
     user = models.ForeignKey(User, related_name='profile')
     avatar = ThumbnailerImageField(upload_to='avatar', default='avatar/default_avatar.jpg', resize_source=dict(size=(200, 250), crop='big'),)
@@ -14,6 +15,15 @@ class UserProfile(models.Model):
     true_name = models.CharField(max_length = 14, blank = True)
     #email = models.EmailField()
 
+class Visitor(models.Model):
+    user = models.ForeignKey(User, related_name='visite')
+    profile = models.ForeignKey(UserProfile, related_name='popularity')
+    datetime = models.DateTimeField(auto_now_add = True)
+    comment = models.CharField(max_length = 20, blank = True)
+
+    class Meta:
+        ordering = ['-datetime']
+    
 def create_user_profile(sender = None, instance = None, created = False, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)

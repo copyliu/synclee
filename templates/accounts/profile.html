@@ -12,9 +12,9 @@
             <div class="row">
                 <div class="span6"><h1>{{profile.user.username}}</h1><p>{{profile.intro}}</p></div>
                 <div class="span2" style="border-left:1px solid #CCC; float: right; padding-left: 10px; ">
-                    <label>人气：</label>
-                    <label>关注：</label>
-                    <label>粉丝：</label>
+                    <label>人气：{{profile.popularity.all.count}}</label>
+                    <label>关注：<a href = "{%url list_follow_user%}?user={{profile.user}}&direction=following">{{profile.user.relationships.following.count}}</a></label>
+                    <label>粉丝：<a href = "{%url list_follow_user%}?user={{profile.user}}&direction=follower">{{profile.user.relationships.followers.count}}</a></label>
                 </div>
             </div>
             <hr style="margin: 0px;"/>

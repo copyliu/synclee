@@ -11,4 +11,5 @@ urlpatterns = patterns('accounts.views',
     url(r'^reset/confirm/(?P<tmp_psw>\w+)/$', 'reset_psw_confirm', name = 'reset_psw_confirm'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'home.html', 'next_page': '/login/'}, name='logout'),
     url(r'^users/$', 'list_user', name='users'),
+    url(r'^list_follow_user/$', 'list_follow_user', name='list_follow_user'),
 )

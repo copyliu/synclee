@@ -46,9 +46,9 @@
                 <h4>欢迎回来，{{request.user.username}}</h4><br/>
                 <img src="/media/{{request.user.get_profile.avatar.name}}" width="50" height="60" style="float: left;" />
                 <div class="span2" style="border-left:1px solid #CCC; float: right; padding-left: 10px; ">
-                    <label>人气：</label> 
-                    <label>关注：</label>
-                    <label>粉丝：</label>
+                    <label>人气：{{request.user.profile.all.0.popularity.all.count}}</label> 
+                    <label>关注：<a href = "{%url list_follow_user%}?user={{request.user}}&direction=following">{{request.user.relationships.following.count}}</a></label>
+                    <label>粉丝：<a href = "{%url list_follow_user%}?user={{request.user}}&direction=follower">{{request.user.relationships.followers.count}}</a></label>
                 </div>
                 <div class="clearfix"></div>
                 
