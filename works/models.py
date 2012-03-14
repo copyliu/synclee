@@ -43,6 +43,9 @@ class Work(models.Model):
     
     follower = models.ManyToManyField(User, related_name='follow')
     
+    def __unicode__(self):
+        return self.name
+    
     def aver_score(self):
         return WorkScore.objects.filter(work=self).aggregate(average_score=models.Avg('score'))['average_score'] or 0
 #def work_event(sender = None, instance = None, created = False, **kwargs):
