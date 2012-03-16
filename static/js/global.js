@@ -1,50 +1,11 @@
+window.SL = SL;
+SL.Controller = {};
 
-
-var Model = {
-    'topmenu' : [
-        {"name":"News", "url" : "news.htm"},
-        {"name":"About", "url" : "about.htm"},
-        {"name":"Contact", "url" : "2"},
-        {"name":"Projects", "url" : "2"}
-    ]
-}
-
-var mainViewModel = function(){
-    this.getArticle = function(name){
-        return $.ajax({url: '/article/'+name+'.txt',success: function(data){
-           return data;
-        }});
+SL.Controller.alert = {
+    noLogin : function(){
+        $('#alertModal .modal-body p').text('您还没有登录，请先登录');
+        $('#alertModal .modal-footer a').attr("href", "/login/?next={%url profile profile.user.username%}");
+        $('#alertModal .modal-footer a').text(">>跳转到登录页面");
+        $('#alertModal').modal({'show': true});
     }
-};
-
-var Controller = {};
-Controller.getArticle = function(name){
-    $.ajax({url: '/data/'+name+'.txt',success: function(data){
-        $('article p').text(data);
-    }});
 }
-Controller.editArticle = function(name){
-    $.ajax({
-        type : 'POST',
-        url : '/main.php',
-        data : {'name': name, 'content': $('article p').text()},
-        success : function(data){
-            console.log(data);
-            location.reload();
-        }
-    })
-}
-$(document).ready(function(){
-    $.ajax({
-        type: 'GET',
-        url: '/views/header.htm',
-        success: function(data){
-           $('header').html(data)
-        }
-    })
-
-if (document.cookie == 'username=admin'){
-    $('.content article p').attr('contentEditable','true');
-    $('.content article p').after('<button class="btn success" onclick="Controller.editArticle(\'about\')">Submit</button>');
-}
-});

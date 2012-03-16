@@ -21,7 +21,7 @@ class TimeLine(models.Model):
     created = models.DateTimeField(auto_now_add = True)
 
 def get_image_path(instance, filename):
-    return os.path.join('work', str(instance.id), filename)
+    return os.path.join('works', str(instance.id), filename)
 class Work(models.Model):
     PRIVACY_CHOICES = (
         (u'Pub', u'公开'),
@@ -42,6 +42,9 @@ class Work(models.Model):
     intro = models.TextField(blank=True)
     
     follower = models.ManyToManyField(User, related_name='follow')
+    
+    def __unicode__(self):
+        return self.name
     
     def aver_score(self):
         return WorkScore.objects.filter(work=self).aggregate(average_score=models.Avg('score'))['average_score'] or 0
@@ -72,12 +75,12 @@ class Element(models.Model):
     title = models.CharField(max_length=64, blank=True)
     content = models.TextField()
     work = models.ForeignKey(Work)
-    
-def element_event(sender = None, instance = None, created = False, **kwargs):
-    if created:
-        TimeLines.objects.create(user = instance.work.author, instance = instance)
-   
-models.signals.post_save.connect(element_event, sender = Element)
+
+#TODO: 显示事件
+#def element_event(sender = None, instance = None, created = False, **kwargs):
+#    if created:
+#        TimeLine.objects.create(user = instance.work.author, instance = instance)  
+#models.signals.post_save.connect(element_event, sender = Element)
 
 class WorkScore(models.Model):
     work = models.ForeignKey(Work)
@@ -90,4 +93,4 @@ class WorkHistory(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']

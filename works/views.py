@@ -108,10 +108,9 @@ def edit_work(request, work_id):
         raise Http404("no privilege")
     if request.method == 'POST':
         if request.POST.get('action') == 'delete':
-            work = Work.objects.get(pk=work_id, author=request.user)
+            work = Work.objects.get(pk=work_id)
             elements = Element.objects.filter(work=work)
             elements.delete()
-            
             WorkHistory.objects.create(work = work, user = request.user)
             return HttpResponse('delete_success')
         category = request.POST.get('category', '')
@@ -146,7 +145,7 @@ def list_works(request):
     works = Work.objects.select_related().all()
 
     #分页
-    paginator = Paginator(works, 1)
+    paginator = Paginator(works, 5)
     page = request.GET.get('page', 1)
     try:
         page = int(page)

@@ -9,4 +9,5 @@ urlpatterns = patterns('api.views',
     url(r'^work/apply/add/$', 'user_apply', name="ajax_user_apply"),
     url(r'^work/quit/$', 'user_quit', name="ajax_user_quit"),
     url(r'^work/grade/$', 'work_grade', name="ajax_work_grade"),
+    url(r'^work/element/(?P<work_id>\d+)/(?P<element_id>\d+)/$', 'get_element', name="ajax_get_element")
 )

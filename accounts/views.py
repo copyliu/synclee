@@ -47,20 +47,26 @@ def profile(request, username):
     joined = Invitation.objects.filter(invited=user, invite_status='accept')
     joined = [i.work for i in joined]
     #skill_list = Skill.objects.filter(user = user)
-    
+    works = {
+        'main' :  Work.objects.filter(author=user)[0] if Work.objects.filter(author=user).count() else ''
+    }
     context = {
+        'works' : works,
         'profile' : profile, 
         #'timeline' : timeline,
         #'invited' : invited,
         'joined' : joined,
-        #'followed' : user.follow.all(),
+        'followed' : user.follow.all(),
         #'skill_list' : skill_list,
     }
     
-    #if request.user.is_authenticated():
-    #    if request.user.id == profile.user_id:
-    #        context['invitation'] = Invitation.objects.filter(invited = request.user, invite_status = 'noanswer')
-    
+    if request.user.is_authenticated():
+        if request.user.id != profile.user_id:
+            visite = Visitor.objects.filter(profile = profile, user = request.user)[:1]
+            if len(visite) != 0:
+                delta = time.mktime(datetime.datetime.now().timetuple()) - time.mktime(visite[0].datetime.timetuple())
+            if  len(visite) == 0 or delta > 10 * 60:
+                Visitor.objects.create(profile = profile, user = request.user)
     return TemplateResponse(request, 'accounts/profile.html', context)
 
 @csrf_exempt
@@ -205,6 +211,50 @@ def reset_psw_confirm(request, tmp_psw):
 def list_user(request):
     users = User.objects.all()
     kind = request.GET.get('key', "all")
+    cnt = request.GET.get('cnt', "5")
+    try:
+        cnt = int(cnt)
+    except: cnt = 1
+    
+    #users = filter(lambda user: Skill.objects.get(user=user, skill="other").exp > 0, users)
+    if kind in ["word", "image", "other"]:
+        users = sorted(users, key = lambda user: Skill.objects.get(user=user, skill=kind).exp, reverse = True)
+    else:
+        kind = "all";
+        users = sorted(users, key = lambda user: Skill.objects.get(user=user, skill="word").exp +
+                                                 Skill.objects.get(user=user, skill="image").exp +
+                                                 Skill.objects.get(user=user, skill="other").exp, reverse = True)
+
+        
+    users = [{"rank" : i + 1,
+              "username" : users[i].username,
+              "avatar" : UserProfile.objects.get(user = users[i]).avatar.name,
+              "word" : Skill.objects.get(user=users[i], skill="word").exp,
+              "image" : Skill.objects.get(user=users[i], skill="image").exp,
+              "other" : Skill.objects.get(user=users[i], skill="other").exp,
+              } for i in xrange(len(users))]
+    #分页
+    paginator = Paginator(users, cnt)
+    page = request.GET.get('page', 1)
+    try:
+        page = int(page)
+    except:
+        page = 1
+    users = paginator.page(page)
+    #print page,"+++",works.object_list[0].aver_score()
+    request.session['page'] = page
+    
+    return TemplateResponse(request, 'accounts/list_user.html', {'title':u"用户排行榜", 'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator})
+
+def list_follow_user(request):
+    username = request.GET.get("user", "")
+    user = User.objects.get(username = username)
+    if request.GET.get("direction", "following") == "following":
+        users = user.relationships.following()
+    else:
+        users = user.relationships.followers()
+    get_extra = "&user=" + username + "&direction=" + request.GET.get("direction", "following")
+    kind = request.GET.get('key', "all")
     cnt = request.GET.get('cnt', "1")
     try:
         cnt = int(cnt)
@@ -238,4 +288,4 @@ def list_user(request):
     #print page,"+++",works.object_list[0].aver_score()
     request.session['page'] = page
     
-    return TemplateResponse(request, 'accounts/list_user.html', {'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator})
+    return TemplateResponse(request, 'accounts/list_user.html', {'title':u"relationships", 'cnt':cnt, 'kind':kind, 'users' : users, 'paginator' : paginator, 'get_extra':get_extra})
