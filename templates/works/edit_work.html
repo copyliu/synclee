@@ -118,9 +118,10 @@ $(document).ready(function(){
 
     $("#elements" ).sortable();
   
-    $('#elements .element .toolbar [name="delete"]').live('click',function(){
+    $('#elements .element .toolbar [name="delete"]').live('click',function(e){
         var answer = confirm('确定要删除吗?');
         if (answer) $(this).parent().parent().remove();
+        return false;
     });
   
     $('#elements .element .toolbar [name="edit"]').live('click',function(){
@@ -187,7 +188,7 @@ var View = {
             '<input class="title" placeholder="图片标题"/>'+
             '<img class="span11" src="/media/works/{{work.id}}/'+name+'"></p>'+
             //'<toolbar class="span11" name="toolbar" style="display:none;"><a href="#" name="edit">编辑</a> <a href="#" name="delete">删除</a></toolbar>'+
-            '<div class="span4 toolbar"><a href="#"><i class="icon-trash"></i> 删除</a></div>'+
+            '<div class="span4 toolbar"><a name="delete" href="#"><i class="icon-trash"></i> 删除</a></div>'+
             '</div>'},
         line : function(name){
             return '<div class="row element">'+
