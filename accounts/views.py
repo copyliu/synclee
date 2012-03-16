@@ -211,7 +211,7 @@ def reset_psw_confirm(request, tmp_psw):
 def list_user(request):
     users = User.objects.all()
     kind = request.GET.get('key', "all")
-    cnt = request.GET.get('cnt', "1")
+    cnt = request.GET.get('cnt', "5")
     try:
         cnt = int(cnt)
     except: cnt = 1

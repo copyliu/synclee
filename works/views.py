@@ -145,7 +145,7 @@ def list_works(request):
     works = Work.objects.select_related().all()
 
     #分页
-    paginator = Paginator(works, 1)
+    paginator = Paginator(works, 5)
     page = request.GET.get('page', 1)
     try:
         page = int(page)
