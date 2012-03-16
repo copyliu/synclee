@@ -3,7 +3,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-
+from synclee.settings import PROJECT_ROOT
 import os, time, random
 
 @csrf_exempt
@@ -15,13 +15,13 @@ def check_existing(request):
 
 @csrf_exempt
 def upload_image(request, work_id):
-    file_ext = str(request.FILES['Filedata'].name).split('.')[-1]
+    file_ext = unicode(request.FILES['Filedata'].name).split('.')[-1]
     
     # dont use Django save_FOO_file, defined a new filename
     file_name = time.strftime('%Y%m%d%H%M%S')
     file_name = file_name + '_%d' % random.randint(0,100)
     
-    upload_path = os.path.join('media', 'works')
+    upload_path = os.path.join(PROJECT_ROOT,'media', 'works')
     user_upload_folder = os.path.join(upload_path, work_id)
     
     if not os.path.exists(upload_path):
