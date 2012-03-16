@@ -214,7 +214,7 @@ def list_user(request):
     cnt = request.GET.get('cnt', "5")
     try:
         cnt = int(cnt)
-    except: cnt = 1
+    except: cnt = 5
     
     #users = filter(lambda user: Skill.objects.get(user=user, skill="other").exp > 0, users)
     if kind in ["word", "image", "other"]:
@@ -255,10 +255,10 @@ def list_follow_user(request):
         users = user.relationships.followers()
     get_extra = "&user=" + username + "&direction=" + request.GET.get("direction", "following")
     kind = request.GET.get('key', "all")
-    cnt = request.GET.get('cnt', "1")
+    cnt = request.GET.get('cnt', "5")
     try:
         cnt = int(cnt)
-    except: cnt = 1
+    except: cnt = 5
     
     #users = filter(lambda user: Skill.objects.get(user=user, skill="other").exp > 0, users)
     if kind in ["word", "image", "other"]:
